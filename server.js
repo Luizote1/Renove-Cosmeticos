@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 // ==============================
 // IMPORTAÇÕES
 // ==============================
@@ -106,6 +108,10 @@ global.CAMINHO_IMG_ABS = __dirname + "/public/img/produtos/";
 // INICIALIZAÇÃO DO SERVIDOR
 // ==============================
 
-server.listen(5000, "0.0.0.0", function () {
-    console.log("Servidor funcionando!");
-});
+if (process.env.NODE_ENV !== "production") {
+    server.listen(5000, "0.0.0.0", function () {
+        console.log("Servidor funcionando!");
+    });
+}
+
+module.exports = server;
