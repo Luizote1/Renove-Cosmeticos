@@ -406,3 +406,113 @@ label {
         width: 105px !important;
     }
 }
+
+/* =========================================================
+   FIX FINAL NAVBAR LOGIN
+   Logo esquerda + links direita igual Produtos/Home
+========================================================= */
+
+.navbar .container-fluid {
+    max-width: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+}
+
+.navbar-brand {
+    width: 160px !important;
+    height: 48px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+}
+
+.navbar-brand img,
+.navbar-brand .images,
+.images {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+}
+
+.navbar-collapse {
+    flex-grow: 0 !important;
+    justify-content: flex-end !important;
+}
+
+.navbar-nav {
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.navbar-nav .nav-link {
+    color: #2c3e50 !important;
+    font-weight: 600 !important;
+    padding: 0.6rem 1rem !important;
+    border-radius: 12px !important;
+    transition: 0.25s !important;
+}
+
+.navbar-nav .nav-link:hover {
+    background: rgba(102, 126, 234, 0.10) !important;
+    color: #667eea !important;
+}
+
+.navbar-nav .nav-link.active {
+    background: linear-gradient(135deg, #70a0f8 0%, #4b58a2 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.30) !important;
+}
+
+/* Desktop: formulário continua centralizado */
+.page {
+    justify-content: center !important;
+}
+
+@media (max-width: 992px) {
+    .navbar .container-fluid {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+        flex-wrap: wrap !important;
+    }
+
+    .navbar-brand {
+        width: 135px !important;
+        height: 42px !important;
+    }
+
+    .navbar-toggler {
+        margin-left: auto !important;
+    }
+
+    .navbar-collapse {
+        flex-basis: 100% !important;
+        width: 100% !important;
+        margin-top: 1rem !important;
+        padding-top: 0 !important;
+    }
+
+    .navbar-nav {
+        width: 100% !important;
+        gap: 0 !important;
+    }
+
+    .navbar-nav .nav-link {
+        width: 100% !important;
+        text-align: center !important;
+        margin: 0.25rem 0 !important;
+        padding: 0.65rem 1rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-brand {
+        width: 115px !important;
+    }
+}
