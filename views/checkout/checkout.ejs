@@ -8,12 +8,9 @@
   <title>Renove | Finalizar Compra</title>
 
   <link rel="icon" href="/img/logo.png">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/themes.css?v=90">
-
+  <link rel="stylesheet" href="/css/themes.css?v=120">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
   <style>
@@ -26,32 +23,107 @@
       z-index: 100000 !important;
     }
 
-    .sticky-top {
-      z-index: 1 !important;
+    .checkout-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-left: 22px;
+      padding-right: 22px;
     }
 
-    .card {
+    .checkout-card,
+    .checkout-summary-card {
+      border-radius: 22px;
+      border: none;
+      overflow: hidden;
       position: relative;
       z-index: 1;
     }
 
+    .checkout-card-header {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+    }
+
+    .checkout-form .form-control,
+    .checkout-form .form-select {
+      height: 52px;
+      border: 2px solid #dbe3ef;
+      border-radius: 12px;
+      background: #ffffff;
+      font-size: 16px;
+    }
+
+    .checkout-form .form-control:focus,
+    .checkout-form .form-select:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.18);
+    }
+
+    .checkout-form label {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 7px;
+    }
+
+    .checkout-summary-card {
+      top: 24px;
+    }
+
+    @media (max-width: 991px) {
+      .checkout-wrapper {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .checkout-summary-card {
+        position: static !important;
+        margin-top: 18px;
+      }
+    }
+
     @media (max-width: 768px) {
-      .checkout-title {
-        font-size: 1.35rem;
-      }
-
-      .checkout-card-header h4,
-      .checkout-card-header h5 {
-        font-size: 1rem;
-      }
-
-      .container {
+      .checkout-wrapper {
         padding-left: 14px;
         padding-right: 14px;
       }
 
-      .card-body {
-        padding: 1rem;
+      .checkout-wrapper .row {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      .checkout-wrapper .col-lg-8,
+      .checkout-wrapper .col-lg-4,
+      .checkout-wrapper .col-md-4,
+      .checkout-wrapper .col-md-6,
+      .checkout-wrapper .col-md-8,
+      .checkout-wrapper .col-12 {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .checkout-card .card-body,
+      .checkout-summary-card .card-body {
+        padding: 22px;
+      }
+
+      .checkout-title {
+        font-size: 1.25rem;
+      }
+
+      .checkout-card-header h4,
+      .checkout-card-header h5 {
+        font-size: 1.1rem;
+      }
+
+      .checkout-form .form-control,
+      .checkout-form .form-select {
+        height: 56px;
+        font-size: 16px;
       }
 
       #creditCardFields .row {
@@ -63,12 +135,51 @@
         padding-left: 0;
         padding-right: 0;
       }
-
-      .sticky-top {
-        position: static !important;
-        margin-top: 20px;
-      }
     }
+
+    .payment-method-toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .payment-method-toggle .form-check {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+
+    .payment-method-toggle .form-check-input {
+      width: 18px !important;
+      height: 18px !important;
+      min-width: 18px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 1px solid #b8c7db !important;
+      border-radius: 50% !important;
+      appearance: auto !important;
+      -webkit-appearance: radio !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    .payment-method-toggle .form-check-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      color: #2c3e50;
+      cursor: pointer;
+    }
+
+    .payment-method-toggle i {
+      color: #4f7bce;
+      font-size: 1rem;
+    }
+
   </style>
 </head>
 
@@ -82,30 +193,18 @@
     </svg>
   </div>
 
-  <!-- NAVBAR -->
+  <!-- NAVBAR SEM CARRINHO -->
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
 
-      <!-- LOGO -->
       <a class="navbar-brand" href="/">
         <img class="images" src="/img/logotipo.png" alt="Renove">
       </a>
 
-      <!-- MOBILE RIGHT -->
-      <div class="d-flex align-items-center gap-2 ms-auto d-lg-none">
+      <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <button class="btn cart-navbar-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
-          <i class="bi bi-cart3"></i>
-          <span class="cart-navbar-count" id="cartCountMobile">0</span>
-        </button>
-
-      </div>
-
-      <!-- MENU COLLAPSE -->
       <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -153,15 +252,13 @@
                   </a>
                 </li>
 
-                <% if(tipoLogado=="usuario"){ %>
-
+                <% if(tipoLogado == "usuario"){ %>
                   <li>
                     <a class="dropdown-item" href="/usuario">
                       <i class="bi bi-gear"></i>
                       Sistema
                     </a>
                   </li>
-
                 <% } %>
 
                 <li>
@@ -183,41 +280,30 @@
 
         </ul>
 
-        <!-- DESKTOP CARRINHO -->
-        <div class="d-none d-lg-flex ms-3">
-
-          <button class="btn cart-navbar-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
-            <i class="bi bi-cart3"></i>
-            <span class="cart-navbar-count" id="cartCount">0</span>
-          </button>
-
-        </div>
-
       </div>
 
     </div>
   </nav>
 
   <!-- CONTEÚDO CHECKOUT -->
-  <div class="container mt-4 mb-5">
+  <div class="checkout-wrapper mt-4 mb-5">
 
-    <div class="row g-4">
+    <div class="row g-4 align-items-start">
 
       <div class="col-lg-8">
 
-        <div class="card shadow-sm" style="border-radius: 20px; border: none;">
+        <div class="card shadow-sm checkout-card">
 
-          <div class="card-header checkout-card-header"
-            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 20px 20px 0 0; border: none;">
+          <div class="card-header checkout-card-header">
             <h4 class="mb-0 checkout-title">
               <i class="bi bi-credit-card me-2"></i>
               Informações de Pagamento
             </h4>
           </div>
 
-          <div class="card-body">
+          <div class="card-body p-4">
 
-            <form id="checkoutForm">
+            <form id="checkoutForm" class="checkout-form">
 
               <!-- ENDEREÇO -->
               <div class="row mb-4">
@@ -276,29 +362,32 @@
 
                 <div class="col-12 mb-3">
 
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="credit"
-                      checked>
-                    <label class="form-check-label" for="creditCard">
-                      <i class="bi bi-credit-card me-2"></i>
-                      Cartão de Crédito
-                    </label>
-                  </div>
+                  <div class="payment-method-toggle">
 
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="paymentMethod" id="pix" value="pix">
-                    <label class="form-check-label" for="pix">
-                      <i class="bi bi-qr-code me-2"></i>
-                      PIX
-                    </label>
-                  </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="credit" checked>
+                      <label class="form-check-label" for="creditCard">
+                        <i class="bi bi-credit-card"></i>
+                        Cartão de Crédito
+                      </label>
+                    </div>
 
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="paymentMethod" id="boleto" value="boleto">
-                    <label class="form-check-label" for="boleto">
-                      <i class="bi bi-upc-scan me-2"></i>
-                      Boleto Bancário
-                    </label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="paymentMethod" id="pix" value="pix">
+                      <label class="form-check-label" for="pix">
+                        <i class="bi bi-qr-code"></i>
+                        PIX
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="paymentMethod" id="boleto" value="boleto">
+                      <label class="form-check-label" for="boleto">
+                        <i class="bi bi-receipt"></i>
+                        Boleto Bancário
+                      </label>
+                    </div>
+
                   </div>
 
                 </div>
@@ -308,8 +397,7 @@
 
                   <div class="col-12 mb-3">
                     <label for="cardNumber" class="form-label">Número do Cartão *</label>
-                    <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456"
-                      maxlength="18">
+                    <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="18">
                   </div>
 
                   <div class="row">
@@ -363,17 +451,16 @@
       <!-- RESUMO -->
       <div class="col-lg-4">
 
-        <div class="card shadow-sm sticky-top" style="top: 2rem; border-radius: 20px; border: none;">
+        <div class="card shadow-sm sticky-top checkout-summary-card">
 
-          <div class="card-header checkout-card-header"
-            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 20px 20px 0 0; border: none;">
+          <div class="card-header checkout-card-header">
             <h5 class="mb-0">
               <i class="bi bi-cart-check me-2"></i>
               Resumo do Pedido
             </h5>
           </div>
 
-          <div class="card-body">
+          <div class="card-body p-4">
 
             <div id="orderSummary">
               <!-- Resumo será carregado dinamicamente -->
@@ -408,63 +495,6 @@
           </div>
 
         </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- CARRINHO -->
-  <div class="offcanvas offcanvas-end cart-panel" tabindex="-1" id="cartOffcanvas">
-
-    <div class="offcanvas-header border-bottom">
-
-      <div class="d-flex align-items-center gap-2">
-        <i class="bi bi-cart3 fs-4 text-primary"></i>
-
-        <div>
-          <h5 class="mb-0 fw-bold">Seu Carrinho</h5>
-          <small class="text-muted">Seus produtos selecionados</small>
-        </div>
-      </div>
-
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-
-    </div>
-
-    <div class="offcanvas-body">
-
-      <div id="cartItems">
-        <div class="text-center py-4">
-          <i class="bi bi-cart3 display-4 text-muted"></i>
-          <p class="mt-2 text-muted">Seu carrinho está vazio</p>
-        </div>
-      </div>
-
-      <div class="cart-footer">
-
-        <div class="d-flex justify-content-between mb-2">
-          <span>Subtotal</span>
-          <strong id="cartSubtotal">R$ 0,00</strong>
-        </div>
-
-        <div class="d-flex justify-content-between mb-3">
-          <span>Frete</span>
-          <strong>Grátis</strong>
-        </div>
-
-        <hr>
-
-        <div class="d-flex justify-content-between fs-5">
-          <strong>Total</strong>
-          <strong class="text-primary" id="cartTotal">R$ 0,00</strong>
-        </div>
-
-        <button class="btn btn-primary w-100 mt-4 py-3" onclick="window.location.href='/checkout'">
-          <i class="bi bi-credit-card me-2"></i>
-          Finalizar Compra
-        </button>
 
       </div>
 
@@ -556,72 +586,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/checkout.js"></script>
   <script src="/js/site.js"></script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-      function formatarMoeda(valor) {
-        return "R$ " + Number(valor).toFixed(2).replace(".", ",");
-      }
-
-      function carregarCarrinhoNavbar() {
-        let carrinho = [];
-
-        try {
-          carrinho = JSON.parse(localStorage.getItem("cart")) || [];
-        } catch (erro) {
-          carrinho = [];
-        }
-
-        const totalItens = carrinho.reduce((soma, item) => soma + Number(item.quantity || 0), 0);
-        const subtotal = carrinho.reduce((soma, item) => soma + (Number(item.price || 0) * Number(item.quantity || 0)), 0);
-
-        const cartCount = document.getElementById("cartCount");
-        const cartCountMobile = document.getElementById("cartCountMobile");
-        const cartItems = document.getElementById("cartItems");
-        const cartSubtotal = document.getElementById("cartSubtotal");
-        const cartTotal = document.getElementById("cartTotal");
-
-        if (cartCount) cartCount.textContent = totalItens;
-        if (cartCountMobile) cartCountMobile.textContent = totalItens;
-
-        if (cartSubtotal) cartSubtotal.textContent = formatarMoeda(subtotal);
-        if (cartTotal) cartTotal.textContent = formatarMoeda(subtotal);
-
-        if (!cartItems) return;
-
-        if (carrinho.length === 0) {
-          cartItems.innerHTML = `
-            <div class="text-center py-4">
-              <i class="bi bi-cart3 display-4 text-muted"></i>
-              <p class="mt-2 text-muted">Seu carrinho está vazio</p>
-            </div>
-          `;
-          return;
-        }
-
-        cartItems.innerHTML = carrinho.map(item => `
-          <div class="cart-item">
-            <div class="d-flex align-items-center gap-3">
-              <img src="${item.image || "/img/produtos/produto-sem-imagem.png"}" alt="${item.name || "Produto"}">
-
-              <div class="flex-grow-1">
-                <h6>${item.name || "Produto"}</h6>
-
-                <p>${formatarMoeda(item.price || 0)}</p>
-
-                <small class="text-muted">
-                  Qtd: ${item.quantity || 1}
-                </small>
-              </div>
-            </div>
-          </div>
-        `).join("");
-      }
-
-      carregarCarrinhoNavbar();
-    });
-  </script>
 
 </body>
 
