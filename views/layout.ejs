@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Renove Sistemas</title>
+
+  <link rel="icon" href="/img/logo.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=fallback">
+  <link rel="stylesheet" href="/css/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/css/adminlte.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f4f7fb;
+      color: #07172f;
+      overflow-x: hidden;
+    }
+
+    .app-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      background: linear-gradient(180deg, #07172f 0%, #0b2346 100%);
+      z-index: 1050;
+      overflow-y: auto;
+      overflow-x: hidden;
+      transition: width .25s ease, left .25s ease;
+    }
+
+    .sidebar-collapsed .app-sidebar {
+      width: 78px;
+    }
+
+    .brand-link-custom {
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      text-decoration: none;
+    }
+
+    .logo-aberta {
+      width: 155px;
+      max-width: 155px;
+      height: auto;
+      display: block;
+    }
+
+    .logo-fechada {
+      width: 46px;
+      max-width: 46px;
+      height: auto;
+      display: none;
+    }
+
+    .sidebar-collapsed .logo-aberta {
+      display: none;
+    }
+
+    .sidebar-collapsed .logo-fechada {
+      display: block;
+    }
+
+    .user-panel-custom {
+      background: rgba(255, 255, 255, .07);
+      margin: 18px;
+      padding: 16px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .user-panel-custom img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fff;
+      object-fit: cover;
+      flex: 0 0 auto;
+    }
+
+    .user-panel-custom strong,
+    .user-panel-custom small {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-panel-custom strong {
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .user-panel-custom small {
+      color: #9fb3d1;
+      font-size: 12px;
+    }
+
+    .sidebar-collapsed .user-panel-custom {
+      width: 52px;
+      height: 52px;
+      margin: 15px auto;
+      padding: 5px;
+      justify-content: center;
+    }
+
+    .sidebar-collapsed .user-panel-custom img {
+      width: 42px;
+      height: 42px;
+    }
+
+    .sidebar-collapsed .user-info-custom {
+      display: none;
+    }
+
+    .menu-custom {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .menu-header {
+      color: #9fb3d1;
+      padding: 18px 22px 8px;
+      font-size: 13px;
+      letter-spacing: .8px;
+      font-weight: 600;
+    }
+
+    .menu-link {
+      color: #cbd6e6;
+      border-radius: 14px;
+      margin: 6px 14px;
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      transition: background .2s, color .2s;
+    }
+
+    .menu-link:hover {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .menu-link i {
+      width: 22px;
+      text-align: center;
+      color: #7fb4ff;
+      font-size: 17px;
+      flex: 0 0 auto;
+    }
+
+    .menu-link span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-collapsed .menu-header {
+      display: none;
+    }
+
+    .sidebar-collapsed .menu-link {
+      width: 52px;
+      height: 52px;
+      margin: 8px auto;
+      padding: 0;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .sidebar-collapsed .menu-link span {
+      display: none;
+    }
+
+    .sidebar-collapsed .menu-link i {
+      width: auto;
+      margin: 0;
+    }
+
+    .app-main {
+      margin-left: 280px;
+      min-height: 100vh;
+      background: #f4f7fb;
+      transition: margin-left .25s ease;
+    }
+
+    .sidebar-collapsed .app-main {
+      margin-left: 78px;
+    }
+
+    .app-header {
+      height: 70px;
+      background: #fff;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-menu {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 12px;
+      background: #f1f5ff;
+      color: #0d6efd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .system-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #07172f;
+    }
+
+    .top-user {
+      background: #f1f5ff;
+      border-radius: 50px;
+      padding: 8px 16px;
+      color: #0d6efd;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .app-content {
+      padding: 25px;
+    }
+
+    .content-area {
+      background: #fff;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, .07);
+      min-height: calc(100vh - 120px);
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 22px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, .07);
+      overflow: hidden;
+    }
+
+    .card-body {
+      overflow-x: auto;
+    }
+
+    .table {
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    .table thead {
+      background: #eef4ff;
+      color: #07172f;
+    }
+
+    .table td,
+    .table th {
+      vertical-align: middle !important;
+      padding: 16px !important;
+      white-space: nowrap;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .form-control,
+    .form-select {
+      height: 52px !important;
+      border-radius: 16px !important;
+      font-size: 16px !important;
+      padding: 12px 18px !important;
+      border: 1px solid #d6dbe4 !important;
+      box-shadow: none !important;
+    }
+
+    textarea.form-control {
+      min-height: 120px !important;
+      height: auto !important;
+    }
+
+    select.form-control,
+    select.form-select {
+      appearance: auto !important;
+      padding-right: 45px !important;
+      line-height: normal !important;
+    }
+
+    .btn {
+      border-radius: 14px !important;
+      padding: 10px 18px !important;
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      background: #0d6efd !important;
+      border-color: #0d6efd !important;
+    }
+
+    .form-check-input {
+      width: 18px;
+      height: 18px;
+      margin-top: 4px;
+    }
+
+    .form-check-label {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .mobile-overlay {
+      display: none;
+    }
+
+    @media(max-width: 768px) {
+      .app-sidebar {
+        left: -280px;
+        width: 260px;
+      }
+
+      body.mobile-sidebar-open .app-sidebar {
+        left: 0;
+      }
+
+      .sidebar-collapsed .app-sidebar {
+        width: 260px;
+      }
+
+      .sidebar-collapsed .logo-aberta {
+        display: block;
+        width: 140px;
+      }
+
+      .sidebar-collapsed .logo-fechada {
+        display: none;
+      }
+
+      .sidebar-collapsed .user-panel-custom {
+        width: auto;
+        height: auto;
+        margin: 18px;
+        padding: 16px;
+        justify-content: flex-start;
+      }
+
+      .sidebar-collapsed .user-panel-custom img {
+        width: 48px;
+        height: 48px;
+      }
+
+      .sidebar-collapsed .user-info-custom {
+        display: block;
+      }
+
+      .sidebar-collapsed .menu-header {
+        display: block;
+      }
+
+      .sidebar-collapsed .menu-link {
+        width: auto;
+        height: auto;
+        margin: 6px 14px;
+        padding: 12px 15px;
+        justify-content: flex-start;
+        gap: 12px;
+      }
+
+      .sidebar-collapsed .menu-link span {
+        display: inline;
+      }
+
+      .app-main,
+      .sidebar-collapsed .app-main {
+        margin-left: 0;
+      }
+
+      .app-header {
+        height: 68px;
+        padding: 0 14px;
+      }
+
+      .system-title {
+        display: none;
+      }
+
+      .top-user {
+        font-size: 14px;
+        padding: 8px 12px;
+        max-width: 135px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .app-content {
+        padding: 12px;
+      }
+
+      .content-area {
+        padding: 20px;
+        border-radius: 18px;
+        min-height: calc(100vh - 90px);
+      }
+
+      h1 {
+        font-size: 32px;
+        line-height: 1.1;
+      }
+
+      .btn {
+        width: 100%;
+        margin-bottom: 12px;
+      }
+
+      .card-body {
+        padding: 0 !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .table {
+        min-width: 760px;
+      }
+
+      .mobile-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, .45);
+        z-index: 1040;
+      }
+
+      body.mobile-sidebar-open .mobile-overlay {
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <aside class="app-sidebar">
+
+    <a href="/" class="brand-link-custom">
+      <img class="logo-aberta" src="/img/logotipo.png" alt="Renove">
+      <img class="logo-fechada" src="/img/logo.png" alt="Renove">
+    </a>
+
+    <div class="user-panel-custom">
+      <img src="/img/user.png" alt="Usuário">
+
+      <div class="user-info-custom">
+        <strong>Administrador</strong>
+        <small>Renove Sistemas</small>
+      </div>
+    </div>
+
+    <ul class="menu-custom">
+
+      <li>
+        <a href="/" class="menu-link">
+          <i class="fas fa-home"></i>
+          <span>Início</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/usuario" class="menu-link">
+          <i class="fas fa-user-shield"></i>
+          <span>Usuários</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/produtos/listar" class="menu-link">
+          <i class="fas fa-box-open"></i>
+          <span>Produtos</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/tipoproduto" class="menu-link">
+          <i class="fas fa-tags"></i>
+          <span>Tipos de Produtos</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/cliente" class="menu-link">
+          <i class="fas fa-users"></i>
+          <span>Clientes</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/laboratorio" class="menu-link">
+          <i class="fas fa-flask"></i>
+          <span>Laboratórios</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/servico" class="menu-link">
+          <i class="fas fa-calendar-check"></i>
+          <span>Serviços</span>
+        </a>
+      </li>
+
+      <li class="menu-header">OPERAÇÕES</li>
+
+      <li>
+        <a href="/pedido" class="menu-link">
+          <i class="fas fa-calendar-check"></i>
+          <span>Pedidos</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/recebimento" class="menu-link">
+          <i class="fas fa-truck-loading"></i>
+          <span>Recebimentos</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/descarte" class="menu-link">
+          <i class="fas fa-trash-alt"></i>
+          <span>Descartes</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/promocao" class="menu-link">
+          <i class="fas fa-percent"></i>
+          <span>Promoções</span>
+        </a>
+      </li>
+
+      <li class="menu-header">CONTA</li>
+
+      <li>
+        <a href="/perfil" class="menu-link">
+          <i class="fas fa-id-card"></i>
+          <span>Perfil</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/login/logout" class="menu-link">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </a>
+      </li>
+
+    </ul>
+
+  </aside>
+
+  <main class="app-main">
+
+    <header class="app-header">
+      <div class="header-left">
+        <button type="button" class="btn-menu" id="btnMenu">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <span class="system-title">Painel Administrativo</span>
+      </div>
+
+      <div class="top-user">
+        <i class="fas fa-user-circle"></i>
+        <span>Usuário</span>
+      </div>
+    </header>
+
+    <div class="app-content">
+      <section class="content-area">
+        <%- body %>
+      </section>
+    </div>
+
+  </main>
+
+  <script src="/js/jquery/jquery.min.js"></script>
+  <script src="/js/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const body = document.body;
+      const btnMenu = document.getElementById("btnMenu");
+      const overlay = document.getElementById("mobileOverlay");
+
+      function isMobile() {
+        return window.innerWidth <= 768;
+      }
+
+      btnMenu.addEventListener("click", function () {
+        if (isMobile()) {
+          body.classList.toggle("mobile-sidebar-open");
+        } else {
+          body.classList.toggle("sidebar-collapsed");
+        }
+      });
+
+      overlay.addEventListener("click", function () {
+        body.classList.remove("mobile-sidebar-open");
+      });
+
+      window.addEventListener("resize", function () {
+        if (!isMobile()) {
+          body.classList.remove("mobile-sidebar-open");
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

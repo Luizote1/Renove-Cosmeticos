@@ -1,0 +1,38 @@
+<script src="/js/usuario/cadastrar.js"></script>
+<div>
+    <h1>Cadastro de Usuários</h1>
+
+    <div>
+        <div class="form-group">
+            <label>Nome:</label>
+            <input id="nome" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>E-mail:</label>
+            <input id="email" type="email" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Senha:</label>
+            <input id="senha" type="password" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Perfil:</label>
+            <select id="perfil" class="form-control">
+                <option value="0">-- Selecione --</option>
+                <% for(let i = 0; i<listaPerfil.length; i++) { %>
+                    <option value="<%= listaPerfil[i].perfilId %>">
+                        <%= listaPerfil[i].perfilDescricao %>
+                    </option>
+                <% } %>
+            </select>
+        </div>
+        <div class="form-group">
+            <label><input id="ativo" type="checkbox"> Ativo</label>
+        </div>
+
+        <div>
+            <button id="btnGravar" class="btn btn-primary">Gravar</button>
+            <a href="/usuario" class="btn btn-default">Voltar</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<script src="/js/tipoProduto/alterar.js"></script>
+
+<div>
+    <h1>Alterar Tipo</h1>
+
+    <input type="hidden" id="id" value="<%= tipo.tipId %>">
+
+    <div class="form-group">
+        <label>Descrição</label>
+        <input id="descricao" class="form-control" value="<%= tipo.tipDescricao %>">
+    </div>
+
+    <div class="form-check">
+        <input id="ativo" type="checkbox" <%= tipo.tipAtivo == "s" ? "checked" : "" %>>
+        <label>Ativo</label>
+    </div>
+
+    <br>
+
+    <button id="btnAlterar" class="btn btn-primary">Salvar</button>
+    <a href="/tipoproduto" class="btn btn-secondary">Voltar</a>
+</div>

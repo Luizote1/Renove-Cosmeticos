@@ -1,0 +1,49 @@
+<script src="/js/categoria/listar.js"></script>
+
+<div>
+    <h1>Categorias</h1>
+
+    <a href="/categoria/cadastrar" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Nova Categoria
+    </a>
+
+    <br><br>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descrição</th>
+                <th>Ativo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% for(let i = 0; i < lista.length; i++) { %>
+                <tr>
+                    <td><%= lista[i].catId %></td>
+                    <td><%= lista[i].catDescricao %></td>
+
+                    <td>
+                        <% if(lista[i].catAtivo == 's') { %>
+                            <span class="badge bg-success">Sim</span>
+                        <% } else { %>
+                            <span class="badge bg-danger">Não</span>
+                        <% } %>
+                    </td>
+
+                    <td>
+                        <a href="/categoria/alterar/<%= lista[i].catId %>" class="btn btn-primary">
+                            <i class="fas fa-pen"></i>
+                        </a>
+
+                        <button data-id="<%= lista[i].catId %>" class="btn btn-danger btnExcluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>

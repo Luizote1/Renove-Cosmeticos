@@ -1,0 +1,54 @@
+<script src="/js/descarte/cadastrar.js"></script>
+
+<div>
+    <h1>Novo Descarte</h1>
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="form-group">
+                <label>Produto</label>
+                <select id="produto" class="form-control">
+                    <option value="">Selecione</option>
+
+                    <% for(let i = 0; i < produtos.length; i++) { %>
+                        <option value="<%= produtos[i].proCodigo %>">
+                            <%= produtos[i].proNome %> - Estoque: <%= produtos[i].proEstoque %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Quantidade</label>
+                <input id="quantidade" type="number" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Data</label>
+                <input id="data" type="date" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Motivo</label>
+                <select id="motivo" class="form-control">
+                    <option value="">Selecione</option>
+                    <option value="Produto vencido">Produto vencido</option>
+                    <option value="Produto danificado">Produto danificado</option>
+                    <option value="Embalagem violada">Embalagem violada</option>
+                    <option value="Perda operacional">Perda operacional</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Observação</label>
+                <textarea id="observacao" class="form-control"></textarea>
+            </div>
+
+            <button id="btnGravar" class="btn btn-primary">Gravar</button>
+            <a href="/descarte" class="btn btn-secondary">Voltar</a>
+
+        </div>
+    </div>
+</div>

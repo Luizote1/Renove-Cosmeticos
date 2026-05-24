@@ -1,0 +1,49 @@
+<script src="/js/tipoProduto/lista.js"></script>
+
+<div>
+    <h1>Tipos de Produtos</h1>
+
+    <a href="/tipoproduto/cadastrar" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Novo Tipo
+    </a>
+
+    <br><br>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descrição</th>
+                <th>Ativo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% for(let i = 0; i < lista.length; i++) { %>
+                <tr>
+                    <td><%= lista[i].tipId %></td>
+                    <td><%= lista[i].tipDescricao %></td>
+
+                    <td>
+                        <% if(lista[i].tipAtivo == 's') { %>
+                            <span class="badge bg-success">Sim</span>
+                        <% } else { %>
+                            <span class="badge bg-danger">Não</span>
+                        <% } %>
+                    </td>
+
+                    <td>
+                        <a href="/tipoproduto/alterar/<%= lista[i].tipId %>" class="btn btn-primary">
+                            <i class="fas fa-pen"></i>
+                        </a>
+
+                        <button data-id="<%= lista[i].tipId %>" class="btn btn-danger btnExcluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>

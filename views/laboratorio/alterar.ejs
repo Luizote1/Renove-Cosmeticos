@@ -1,0 +1,32 @@
+<script src="/js/laboratorio/alterar.js"></script>
+
+<div>
+    <h1>Alterar Laboratório</h1>
+
+    <input type="hidden" id="id" value="<%= laboratorio.labId %>">
+
+    <div class="form-group">
+        <label for="nome">Nome</label>
+        <input id="nome" class="form-control" value="<%= laboratorio.labNome %>">
+    </div>
+
+    <div class="form-group">
+        <label for="telefone">Telefone</label>
+        <input id="telefone" class="form-control" value="<%= laboratorio.labTelefone %>">
+    </div>
+
+    <div class="form-group">
+        <label for="email">E-mail</label>
+        <input id="email" class="form-control" value="<%= laboratorio.labEmail %>">
+    </div>
+
+    <div class="form-check">
+        <input id="ativo" type="checkbox" <%= laboratorio.labAtivo == "s" ? "checked" : "" %>>
+        <label for="ativo">Ativo</label>
+    </div>
+
+    <br>
+
+    <button id="btnAlterar" class="btn btn-primary">Salvar</button>
+    <a href="/laboratorio" class="btn btn-secondary">Voltar</a>
+</div>

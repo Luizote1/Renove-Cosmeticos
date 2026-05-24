@@ -1,0 +1,152 @@
+<title>Renove | Meus Pedidos</title>
+
+<link rel="icon" href="/img/logo.png">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/themes.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<body>
+
+<nav class="navbar navbar-expand-lg">
+
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="/">
+            <img class="images" src="/img/logotipo.png">
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarTogglerDemo02"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Início</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/produtos">Produtos</a>
+                </li>
+
+                <% if(!usuarioLogado){ %>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cadastro">Registrar</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+
+                <% } else { %>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i>
+                            Minha Conta
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+                            <li>
+                                <a class="dropdown-item" href="/perfil">
+                                    <i class="bi bi-person"></i>
+                                    Meu Perfil
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item active" href="/pedido/meus-pedidos">
+                                    <i class="bi bi-bag-check"></i>
+                                    Meus Pedidos
+                                </a>
+                            </li>
+
+                            <% if(tipoLogado == "usuario"){ %>
+                                <li>
+                                    <a class="dropdown-item" href="/usuario">
+                                        <i class="bi bi-gear"></i>
+                                        Sistema
+                                    </a>
+                                </li>
+                            <% } %>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <button class="dropdown-item text-danger" type="button" onclick="window.location='/login/logout'">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    Sair
+                                </button>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                <% } %>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<main class="container mt-5 mb-5">
+
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-primary">Meus Pedidos</h1>
+        <p class="text-muted">Acompanhe suas compras realizadas na Renove.</p>
+    </div>
+
+    <div class="card shadow-sm" style="border-radius: 20px; border: none;">
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-striped align-middle" id="tabelaMeusPedidos">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Pedido</th>
+                            <th>Data</th>
+                            <th>Produto</th>
+                            <th>Qtd</th>
+                            <th>Valor Unit.</th>
+                            <th>Total Item</th>
+                            <th>Total Pedido</th>
+                            <th>Pagamento</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/pedido/meus-pedidos.js"></script>
+
+</body>

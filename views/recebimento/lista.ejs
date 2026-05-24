@@ -1,0 +1,52 @@
+<script src="/js/recebimento/lista.js"></script>
+
+<div>
+    <h1>Recebimentos</h1>
+
+    <a href="/recebimento/cadastrar" class="btn btn-primary mb-3">
+        <i class="fas fa-plus"></i> Novo Recebimento
+    </a>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Data</th>
+                        <th>Lote</th>
+                        <th>Validade</th>
+                        <th>Observação</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% for(let i = 0; i < lista.length; i++) { %>
+                        <tr>
+                            <td><%= lista[i].rec_id %></td>
+                            <td><%= lista[i].pro_nome %></td>
+                            <td><%= lista[i].rec_quantidade %></td>
+                            <td><%= lista[i].rec_data %></td>
+                            <td><%= lista[i].rec_lote || "---" %></td>
+                            <td><%= lista[i].rec_validade || "---" %></td>
+                            <td><%= lista[i].rec_observacao || "---" %></td>
+
+                            <td>
+                                <a href="/recebimento/alterar/<%= lista[i].rec_id %>" class="btn btn-primary">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+
+                                <button data-id="<%= lista[i].rec_id %>" class="btn btn-danger btnExcluir">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

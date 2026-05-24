@@ -1,0 +1,31 @@
+{
+  "name": "renove_3.0",
+  "version": "1.0.0",
+  "description": "Renove é um sistema de gestão para farmácias desenvolvido para auxiliar no controle de produtos, categorias e estoque. A aplicação permite o registro seguro de operações e atualização automática das informações, proporcionando organização, eficiência e maior confiabilidade nos processos administrativos.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luizote1/Renove_3.0.git"
+  },
+  "author": "Luiz Gustavo Sá da Silva, Lucas Aparecido Fernandes Ribeiro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Luizote1/Renove_3.0/issues"
+  },
+  "homepage": "https://github.com/Luizote1/Renove_3.0#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.3.1",
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.19.0",
+    "multer": "^2.1.1",
+    "mysql2": "^3.20.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
+  }
+}

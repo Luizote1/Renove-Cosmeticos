@@ -1,0 +1,50 @@
+<script src="/js/promocao/cadastrar.js"></script>
+
+<div>
+    <h1>Nova Promoção</h1>
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="form-group">
+                <label>Produto</label>
+                <select id="produto" class="form-control">
+                    <option value="">Selecione</option>
+
+                    <% for(let i = 0; i < produtos.length; i++) { %>
+                        <option value="<%= produtos[i].proCodigo %>">
+                            <%= produtos[i].proNome %> - R$
+                            <%= Number(produtos[i].proPreco).toFixed(2).replace(".", ",") %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Desconto (%)</label>
+                <input id="desconto" type="number" step="0.01" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Data de Início</label>
+                <input id="dataInicio" type="date" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Data de Fim</label>
+                <input id="dataFim" type="date" class="form-control">
+            </div>
+
+            <div class="form-check">
+                <input id="ativo" type="checkbox" checked>
+                <label for="ativo">Ativo</label>
+            </div>
+
+            <br>
+
+            <button id="btnGravar" class="btn btn-primary">Gravar</button>
+            <a href="/promocao" class="btn btn-secondary">Voltar</a>
+
+        </div>
+    </div>
+</div>

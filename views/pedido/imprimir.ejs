@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório do Pedido</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            color: #222;
+        }
+
+        .cabecalho {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .cabecalho h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .info {
+            margin-bottom: 25px;
+        }
+
+        .info p {
+            margin: 6px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #333;
+            color: white;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total {
+            margin-top: 25px;
+            text-align: right;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .rodape {
+            margin-top: 40px;
+            font-size: 12px;
+            text-align: center;
+            color: #666;
+        }
+
+        @media print {
+            button {
+                display: none;
+            }
+
+            body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cabecalho">
+        <h1>Relatório do Pedido #<%= pedido[0].ped_id %></h1>
+        <p>Renove</p>
+    </div>
+
+    <div class="info">
+        <h3>Dados do Pedido</h3>
+
+        <p><strong>Data:</strong> <%= new Date(pedido[0].ped_data).toLocaleDateString("pt-BR") %></p>
+        <p><strong>Status:</strong> <%= pedido[0].ped_status %></p>
+        <p><strong>Pagamento:</strong> <%= pedido[0].ped_pagamento || "Não informado" %></p>
+    </div>
+
+    <div class="info">
+        <h3>Dados do Cliente</h3>
+
+        <p><strong>Nome:</strong> <%= pedido[0].cli_nome %></p>
+        <p><strong>CPF:</strong> <%= pedido[0].cli_cpf %></p>
+        <p><strong>Email:</strong> <%= pedido[0].cli_email %></p>
+        <p><strong>Telefone:</strong> <%= pedido[0].cli_telefone %></p>
+    </div>
+
+    <div class="info">
+        <h3>Endereço de Entrega</h3>
+
+        <p>
+            <%= pedido[0].end_rua %>, 
+            <%= pedido[0].end_numero %> -
+            <%= pedido[0].end_bairro %>
+        </p>
+
+        <p>
+            <%= pedido[0].end_cidade %> /
+            <%= pedido[0].end_estado %> -
+            CEP: <%= pedido[0].end_cep %>
+        </p>
+
+        <% if (pedido[0].end_complemento) { %>
+            <p><strong>Complemento:</strong> <%= pedido[0].end_complemento %></p>
+        <% } %>
+    </div>
+
+    <h3>Itens do Pedido</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Valor Unitário</th>
+                <th>Total Item</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% pedido.forEach(item => { %>
+                <tr>
+                    <td><%= item.pro_nome %></td>
+                    <td><%= item.pit_quantidade %></td>
+                    <td>R$ <%= Number(item.pit_valorunidade).toFixed(2).replace(".", ",") %></td>
+                    <td>R$ <%= Number(item.pit_valortotal).toFixed(2).replace(".", ",") %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <div class="total">
+        Total do Pedido:
+        R$ <%= Number(pedido[0].ped_valortotal).toFixed(2).replace(".", ",") %>
+    </div>
+
+    <div class="rodape">
+        Relatório gerado automaticamente pelo sistema Renove.
+    </div>
+
+    <script>
+        window.onload = function () {
+            window.print();
+        };
+    </script>
+
+</body>
+</html>

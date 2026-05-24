@@ -1,0 +1,57 @@
+document.addEventListener("DOMContentLoaded", function() {
+
+    let btn = document.getElementById("btnGravar");
+
+    btn.addEventListener("click", function() {
+
+        let produto = document.getElementById("produto");
+        let quantidade = document.getElementById("quantidade");
+        let data = document.getElementById("data");
+        let lote = document.getElementById("lote");
+        let validade = document.getElementById("validade");
+        let observacao = document.getElementById("observacao");
+
+        produto.style.borderColor = "#ced4da";
+        quantidade.style.borderColor = "#ced4da";
+        data.style.borderColor = "#ced4da";
+
+        let listaValidacao = [];
+
+        if (produto.value == "") listaValidacao.push("produto");
+        if (quantidade.value == "" || quantidade.value <= 0) listaValidacao.push("quantidade");
+        if (data.value == "") listaValidacao.push("data");
+
+        if (listaValidacao.length == 0) {
+
+            fetch("/recebimento/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    produto: produto.value,
+                    quantidade: quantidade.value,
+                    data: data.value,
+                    lote: lote.value,
+                    validade: validade.value,
+                    observacao: observacao.value
+                })
+            })
+            .then(r => r.json())
+            .then(c => {
+                alert(c.msg);
+
+                if (c.ok) {
+                    window.location.href = "/recebimento";
+                }
+            });
+
+        } else {
+            for (let i = 0; i < listaValidacao.length; i++) {
+                document.getElementById(listaValidacao[i]).style.borderColor = "red";
+            }
+
+            alert("Preencha os campos obrigatórios.");
+        }
+    });
+});

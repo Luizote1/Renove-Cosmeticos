@@ -1,0 +1,55 @@
+<script src="/js/recebimento/alterar.js"></script>
+
+<div>
+    <h1>Alterar Recebimento</h1>
+
+    <input type="hidden" id="id" value="<%= recebimento.rec_id %>">
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="form-group">
+                <label>Produto</label>
+                <select id="produto" class="form-control">
+                    <option value="">Selecione</option>
+
+                    <% for(let i = 0; i < produtos.length; i++) { %>
+                        <option value="<%= produtos[i].proCodigo %>"
+                            <%= produtos[i].proCodigo == recebimento.pro_codigo ? "selected" : "" %>>
+                            <%= produtos[i].proNome %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Quantidade</label>
+                <input id="quantidade" type="number" class="form-control" value="<%= recebimento.rec_quantidade %>">
+            </div>
+
+            <div class="form-group">
+                <label>Data</label>
+                <input id="data" type="date" class="form-control" value="<%= recebimento.rec_data %>">
+            </div>
+
+            <div class="form-group">
+                <label>Lote</label>
+                <input id="lote" class="form-control" value="<%= recebimento.rec_lote || '' %>">
+            </div>
+
+            <div class="form-group">
+                <label>Validade</label>
+                <input id="validade" type="date" class="form-control" value="<%= recebimento.rec_validade || '' %>">
+            </div>
+
+            <div class="form-group">
+                <label>Observação</label>
+                <textarea id="observacao" class="form-control"><%= recebimento.rec_observacao || "" %></textarea>
+            </div>
+
+            <button id="btnAlterar" class="btn btn-primary">Salvar</button>
+            <a href="/recebimento" class="btn btn-secondary">Voltar</a>
+
+        </div>
+    </div>
+</div>

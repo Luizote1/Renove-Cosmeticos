@@ -1,0 +1,168 @@
+<script src="/js/produto/alterar.js"></script>
+
+<div>
+    <h1>Alterar Produto</h1>
+</div>
+
+<div>
+    <form>
+
+        <input type="hidden" id="inputCodigoAtual" value="<%= produto.proCodigo %>">
+
+        <div class="form-group">
+            <label>Código</label>
+            <input class="form-control" id="inputCodigo" value="<%= produto.proCodigo %>">
+        </div>
+
+        <div class="form-group">
+            <label>Nome</label>
+            <input class="form-control" id="inputNome" value="<%= produto.proNome %>">
+        </div>
+
+        <div class="form-group">
+            <label>Descrição</label>
+            <textarea class="form-control" id="inputDescricao"><%= produto.proDescricao %></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Preço</label>
+            <input class="form-control" id="inputPreco" value="<%= produto.proPreco %>">
+        </div>
+
+        <div class="form-group">
+            <label>Estoque</label>
+            <input class="form-control" id="inputEstoque" value="<%= produto.proEstoque %>">
+        </div>
+
+        <div class="form-group">
+            <label>Validade</label>
+
+            <% let dataValidade="" ; %>
+
+                <% if(produto.proDataValidade){ %>
+                    <% dataValidade=produto.proDataValidade.toISOString().split('T')[0]; %>
+                        <% } %>
+
+                            <input type="date" class="form-control" id="inputValidade" value="<%= dataValidade %>">
+        </div>
+
+        <div class="form-group">
+            <label>Ativo</label>
+
+            <select class="form-control" id="selAtivo">
+
+                <% if(produto.proAtivo=='s' ){ %>
+                    <option selected value="s">Sim</option>
+                    <option value="n">Não</option>
+                    <% } else { %>
+                        <option value="s">Sim</option>
+                        <option selected value="n">Não</option>
+                        <% } %>
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Categoria</label>
+
+            <select class="form-control" id="selCategoria">
+
+                <option value="0">--Selecione--</option>
+
+                <% for(let i=0; i < listaCategorias.length; i++) { %>
+
+                    <% if(listaCategorias[i].catId==produto.catId) { %>
+
+                        <option selected value="<%= listaCategorias[i].catId %>">
+                            <%= listaCategorias[i].catDescricao %>
+                        </option>
+
+                        <% } else { %>
+
+                            <option value="<%= listaCategorias[i].catId %>">
+                                <%= listaCategorias[i].catDescricao %>
+                            </option>
+
+                            <% } %>
+
+                                <% } %>
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Tipo</label>
+
+            <select class="form-control" id="selTipo">
+
+                <option value="0">--Selecione--</option>
+
+                <% for(let i=0; i < listaTipos.length; i++) { %>
+
+                    <% if(listaTipos[i].tipId==produto.tipId) { %>
+
+                        <option selected value="<%= listaTipos[i].tipId %>">
+                            <%= listaTipos[i].tipDescricao %>
+                        </option>
+
+                        <% } else { %>
+
+                            <option value="<%= listaTipos[i].tipId %>">
+                                <%= listaTipos[i].tipDescricao %>
+                            </option>
+
+                            <% } %>
+
+                                <% } %>
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Laboratório</label>
+
+            <select class="form-control" id="selLaboratorio">
+
+                <option value="0">--Selecione--</option>
+
+                <% for(let i=0; i < listaLaboratorios.length; i++) { %>
+
+                    <% if(listaLaboratorios[i].labId==produto.labId) { %>
+
+                        <option selected value="<%= listaLaboratorios[i].labId %>">
+                            <%= listaLaboratorios[i].labNome %>
+                        </option>
+
+                        <% } else { %>
+
+                            <option value="<%= listaLaboratorios[i].labId %>">
+                                <%= listaLaboratorios[i].labNome %>
+                            </option>
+
+                            <% } %>
+
+                                <% } %>
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Imagem do Produto:</label>
+            <input class="form-control" type="file" id="inputImagem">
+        </div>
+
+        <div class="form-group" id="divPrevia">
+            <label>Prévia da Imagem</label>
+            <div>
+                <img width="250" id="previaImagem" src="<%= produto.proImagem %>">
+            </div>
+        </div>
+
+        <div>
+            <button class="btn btn-primary" type="button" id="btnAlterar">Alterar</button>
+
+            <a href="/produtos/listar" class="btn btn-default">Voltar</a>
+        </div>
+
+    </form>
+</div>

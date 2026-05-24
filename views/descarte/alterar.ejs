@@ -1,0 +1,72 @@
+<script src="/js/descarte/alterar.js"></script>
+
+<div>
+    <h1>Alterar Descarte</h1>
+
+    <input type="hidden" id="id" value="<%= descarte.des_id %>">
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="form-group">
+                <label>Produto</label>
+                <select id="produto" class="form-control">
+                    <option value="">Selecione</option>
+
+                    <% for(let i = 0; i < produtos.length; i++) { %>
+                        <option value="<%= produtos[i].proCodigo %>"
+                            <%= produtos[i].proCodigo == descarte.pro_codigo ? "selected" : "" %>>
+                            <%= produtos[i].proNome %> - Estoque: <%= produtos[i].proEstoque %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Quantidade</label>
+                <input id="quantidade" type="number" class="form-control" value="<%= descarte.des_quantidade %>">
+            </div>
+
+            <div class="form-group">
+                <label>Data</label>
+                <input id="data" type="date" class="form-control" value="<%= descarte.des_data %>">
+            </div>
+
+            <div class="form-group">
+                <label>Motivo</label>
+                <select id="motivo" class="form-control">
+                    <option value="">Selecione</option>
+
+                    <option value="Produto vencido" <%= descarte.des_motivo == "Produto vencido" ? "selected" : "" %>>
+                        Produto vencido
+                    </option>
+
+                    <option value="Produto danificado" <%= descarte.des_motivo == "Produto danificado" ? "selected" : "" %>>
+                        Produto danificado
+                    </option>
+
+                    <option value="Embalagem violada" <%= descarte.des_motivo == "Embalagem violada" ? "selected" : "" %>>
+                        Embalagem violada
+                    </option>
+
+                    <option value="Perda operacional" <%= descarte.des_motivo == "Perda operacional" ? "selected" : "" %>>
+                        Perda operacional
+                    </option>
+
+                    <option value="Outro" <%= descarte.des_motivo == "Outro" ? "selected" : "" %>>
+                        Outro
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Observação</label>
+                <textarea id="observacao" class="form-control"><%= descarte.des_observacao || "" %></textarea>
+            </div>
+
+            <button id="btnAlterar" class="btn btn-primary">Salvar</button>
+            <a href="/descarte" class="btn btn-secondary">Voltar</a>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<script src="/js/promocao/alterar.js"></script>
+
+<div>
+    <h1>Alterar Promoção</h1>
+
+    <input type="hidden" id="id" value="<%= promocao.prom_id %>">
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="form-group">
+                <label>Produto</label>
+                <select id="produto" class="form-control">
+                    <option value="">Selecione</option>
+
+                    <% for(let i = 0; i < produtos.length; i++) { %>
+                        <option value="<%= produtos[i].proCodigo %>"
+                            <%= produtos[i].proCodigo == promocao.pro_codigo ? "selected" : "" %>>
+                            <%= produtos[i].proNome %> - R$
+                            <%= Number(produtos[i].proPreco).toFixed(2).replace(".", ",") %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Desconto (%)</label>
+                <input id="desconto" type="number" step="0.01" class="form-control" value="<%= promocao.prom_desconto %>">
+            </div>
+
+            <div class="form-group">
+                <label>Data de Início</label>
+                <input id="dataInicio" type="date" class="form-control" value="<%= promocao.prom_data_inicio %>">
+            </div>
+
+            <div class="form-group">
+                <label>Data de Fim</label>
+                <input id="dataFim" type="date" class="form-control" value="<%= promocao.prom_data_fim %>">
+            </div>
+
+            <div class="form-check">
+                <input id="ativo" type="checkbox" <%= promocao.prom_ativo == "s" ? "checked" : "" %>>
+                <label for="ativo">Ativo</label>
+            </div>
+
+            <br>
+
+            <button id="btnAlterar" class="btn btn-primary">Salvar</button>
+            <a href="/promocao" class="btn btn-secondary">Voltar</a>
+
+        </div>
+    </div>
+</div>

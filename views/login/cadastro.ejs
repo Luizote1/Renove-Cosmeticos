@@ -1,0 +1,191 @@
+<title>Renove | Cadastro</title>
+<link rel="icon" href="/img/logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+  crossorigin="anonymous">
+<link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/themes.css">
+<link rel="stylesheet" href="/css/cadastro.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<body class="theme-light">
+
+  <!-- LOADING -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <svg class="pill-loader-svg" viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
+      <path class="pill-half-filled" d="M50 0 L15 0 A15 15 0 0 0 15 30 L50 30 Z" />
+      <path class="pill-half-outline" d="M50 0 L85 0 A15 15 0 0 1 85 30 L50 30 Z" />
+    </svg>
+  </div>
+  <!-- LOADING -->
+   
+  <nav class="navbar navbar-expand-lg">
+
+    <div class="container-fluid">
+
+      <a class="navbar-brand" href="/">
+        <img class="images" src="/img/logotipo.png">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02">
+
+        <span class="navbar-toggler-icon"></span>
+
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <li class="nav-item">
+            <a class="nav-link " href="/">Início</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/produtos">Produtos</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link active" href="/cadastro">
+              Registrar
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link " href="/login">
+              Login
+            </a>
+          </li>
+      </div>
+
+    </div>
+
+  </nav>
+
+  <main class="page">
+    <section class="wizard">
+      <div class="step-header">
+        <div class="step-text" id="stepLabel">Passo 1 de 2</div>
+        <div class="progress" id="progressBar">
+          <span class="active"></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <form id="cadastroForm">
+          <div class="step active" data-step="1">
+            <h1>Vamos começar?</h1>
+            <p class="subtitle">Complete os dados e crie seu cadastro.</p>
+
+            <div class="form-group">
+              <label for="cpf">CPF</label>
+              <input class="input" id="cpf" type="text" maxlength="14" placeholder="000.000.000-00">
+              <div class="helper-error" id="cpfError">Digite um CPF válido.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="nome">Nome completo</label>
+              <input class="input" id="nome" type="text" placeholder="Seu nome completo">
+              <div class="helper-error" id="nomeError">Digite nome e sobrenome.</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nascimento">Data de nascimento</label>
+                <input class="input" id="nascimento" type="date">
+                <div class="helper-error" id="nascimentoError">Informe uma data de nascimento válida.</div>
+              </div>
+
+              <div class="form-group">
+                <label for="genero">Gênero</label>
+                <select class="select" id="genero">
+                  <option value="">Selecione</option>
+                  <option>Masculino</option>
+                  <option>Feminino</option>
+                  <option>Não informar</option>
+                  <option>Outro</option>
+                </select>
+                <div class="helper-error" id="generoError">Selecione uma opção.</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="telefone">Telefone celular</label>
+              <input class="input" id="telefone" type="text" maxlength="15" placeholder="(00) 00000-0000">
+              <div class="helper-error" id="telefoneError">Digite um celular válido com DDD.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Seu e-mail</label>
+              <input class="input" id="email" type="email" placeholder="seuemail@exemplo.com">
+              <div class="helper-error" id="emailError">Digite um e-mail válido.</div>
+            </div>
+
+            <label class="checkbox-group">
+              <input type="checkbox" id="termos">
+              <span>Li e aceito os <a href="#">Termos de uso</a> e <a href="#">Políticas de privacidade</a>.</span>
+            </label>
+            <div class="helper-error" id="termosError">Você precisa aceitar os termos para continuar.</div>
+
+            <button class="btn btn-primary" type="button" onclick="nextStep(1)">Continuar</button>
+            <div class="bottom-link">Já tem conta? <a href="/login">Entrar</a></div>
+          </div>
+
+          <div class="step" data-step="2">
+            <h1>Informações de acesso</h1>
+            <p class="subtitle">Usado para entrar no aplicativo e no site.</p>
+
+            <div class="form-group">
+              <label for="senha">Sua senha</label>
+              <div class="password-wrapper">
+                <input class="input" id="senha" type="password" placeholder="Digite sua senha">
+                <button type="button" class="toggle-pass" data-target="senha">👁</button>
+              </div>
+              <div class="helper-error" id="senhaError">Sua senha não atende aos requisitos.</div>
+            </div>
+
+            <div class="password-rules">
+              <p>A senha deve conter:</p>
+              <ul>
+                <li id="rule-length">○ Entre 8 e 25 caracteres</li>
+                <li id="rule-number">○ No mínimo 1 número</li>
+                <li id="rule-upper">○ No mínimo 1 letra maiúscula</li>
+                <li id="rule-lower">○ No mínimo 1 letra minúscula</li>
+              </ul>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmarSenha">Confirme sua senha</label>
+              <div class="password-wrapper">
+                <input class="input" id="confirmarSenha" type="password" placeholder="Digite novamente sua senha">
+                <button type="button" class="toggle-pass" data-target="confirmarSenha">👁</button>
+              </div>
+              <div class="helper-error" id="confirmarSenhaError">As senhas precisam ser iguais.</div>
+            </div>
+
+            <button class="btn btn-primary" type="button" onclick="nextStep(2)">Continuar</button>
+            <button class="btn btn-outline" type="button" onclick="prevStep(2)">Voltar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/registrar.js"></script>
+  <script src="/js/theme-manager.js"></script>
+  <script src="/js/site.js"></script>
+</body>

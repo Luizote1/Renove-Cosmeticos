@@ -1,0 +1,53 @@
+<script src="/js/laboratorio/lista.js"></script>
+
+<div>
+    <h1>Laboratórios</h1>
+
+    <a href="/laboratorio/cadastrar" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Novo Laboratório
+    </a>
+
+    <br><br>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th>Ativo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% for(let i = 0; i < lista.length; i++) { %>
+                <tr>
+                    <td><%= lista[i].labId %></td>
+                    <td><%= lista[i].labNome %></td>
+                    <td><%= lista[i].labTelefone %></td>
+                    <td><%= lista[i].labEmail %></td>
+                    <td>
+                        <% if(lista[i].labAtivo == "s") { %>
+                            <span class="badge bg-success">Sim</span>
+                        <% } else { %>
+                            <span class="badge bg-danger">Não</span>
+                        <% } %>
+                    </td>
+                    <td>
+                        <a href="/laboratorio/alterar/<%= lista[i].labId %>" class="btn btn-primary btn-sm">
+                            <i class="fas fa-pen"></i>
+                        </a>
+
+                        <button type="button"
+                                class="btn btn-danger btn-sm btnExcluir"
+                                data-id="<%= lista[i].labId %>">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
