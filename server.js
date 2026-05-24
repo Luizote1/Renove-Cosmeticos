@@ -7,6 +7,7 @@ require("dotenv").config();
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 const AuthMiddleware = require("./middlewares/authMiddleware");
 
 
@@ -45,14 +46,25 @@ const server = express();
 
 server.set("view engine", "ejs");
 server.set("layout", "./layout");
-server.set("views", "./views");
+
+// CORREÇÃO PARA VERCEL
+server.set(
+    "views",
+    path.join(__dirname, "views")
+);
 
 
 // ==============================
 // MIDDLEWARES
 // ==============================
 
-server.use(express.static("public"));
+// CORREÇÃO PARA VERCEL
+server.use(
+    express.static(
+        path.join(__dirname, "public")
+    )
+);
+
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 server.use(expressLayouts);
@@ -76,7 +88,10 @@ server.use("/perfil", perfilRoute);
 
 let auth = new AuthMiddleware();
 
-server.use(auth.verificarUsuarioLogado);
+// CORREÇÃO CONTEXT BIND
+server.use(
+    auth.verificarUsuarioLogado.bind(auth)
+);
 
 
 // ==============================
@@ -101,17 +116,35 @@ server.use("/pedido", pedidoRoute);
 // ==============================
 
 global.CAMINHO_IMG = "/img/produtos/";
-global.CAMINHO_IMG_ABS = __dirname + "/public/img/produtos/";
+
+// CORREÇÃO PARA VERCEL
+global.CAMINHO_IMG_ABS =
+    path.join(
+        __dirname,
+        "public",
+        "img",
+        "produtos"
+    ) + path.sep;
 
 
 // ==============================
 // INICIALIZAÇÃO DO SERVIDOR
 // ==============================
 
+// LOCALHOST
 if (process.env.NODE_ENV !== "production") {
-    server.listen(5000, "0.0.0.0", function () {
-        console.log("Servidor funcionando!");
-    });
+
+    server.listen(
+        5000,
+        "0.0.0.0",
+        function () {
+
+            console.log(
+                "Servidor funcionando!"
+            );
+        }
+    );
 }
 
+// EXPORTAÇÃO PARA VERCEL
 module.exports = server;
