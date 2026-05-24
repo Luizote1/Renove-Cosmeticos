@@ -1,30 +1,78 @@
-<title>Renove | Finalizar Compra</title>
-<link rel="icon" href="/img/logo.png">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/themes.css">
+<!DOCTYPE html>
+<html lang="pt-br">
 
-<style>
-  .navbar {
-    position: relative;
-    z-index: 99999 !important;
-  }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  .dropdown-menu {
-    z-index: 100000 !important;
-  }
+  <title>Renove | Finalizar Compra</title>
 
-  .sticky-top {
-    z-index: 1 !important;
-  }
+  <link rel="icon" href="/img/logo.png">
 
-  .card {
-    position: relative;
-    z-index: 1;
-  }
-</style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/themes.css?v=60">
 
-<body>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <style>
+    .navbar {
+      position: relative;
+      z-index: 99999 !important;
+    }
+
+    .dropdown-menu {
+      z-index: 100000 !important;
+    }
+
+    .sticky-top {
+      z-index: 1 !important;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 768px) {
+      .checkout-title {
+        font-size: 1.35rem;
+      }
+
+      .checkout-card-header h4,
+      .checkout-card-header h5 {
+        font-size: 1rem;
+      }
+
+      .container {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .card-body {
+        padding: 1rem;
+      }
+
+      #creditCardFields .row {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      #creditCardFields .row > div {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .sticky-top {
+        position: static !important;
+        margin-top: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body class="theme-light">
 
   <!-- LOADING -->
   <div id="loadingOverlay" class="loading-overlay">
@@ -33,10 +81,9 @@
       <path class="pill-half-outline" d="M50 0 L85 0 A15 15 0 0 1 85 30 L50 30 Z" />
     </svg>
   </div>
-  <!-- LOADING -->
 
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg">
-
     <div class="container-fluid">
 
       <a class="navbar-brand" href="/">
@@ -44,9 +91,7 @@
       </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02">
-
         <span class="navbar-toggler-icon"></span>
-
       </button>
 
       <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
@@ -64,268 +109,309 @@
           <% if(!usuarioLogado){ %>
 
             <li class="nav-item">
-              <a class="nav-link" href="/cadastro">
-                Registrar
-              </a>
+              <a class="nav-link" href="/cadastro">Registrar</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="/login">
-                Login
-              </a>
+              <a class="nav-link" href="/login">Login</a>
             </li>
 
-            <% } else { %>
+          <% } else { %>
 
-              <li class="nav-item dropdown">
+            <li class="nav-item dropdown">
 
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <i class="bi bi-person-circle"></i>
+                Minha Conta
+              </a>
 
-                  <i class="bi bi-person-circle"></i>
-                  Minha Conta
+              <ul class="dropdown-menu dropdown-menu-end">
 
-                </a>
+                <li>
+                  <a class="dropdown-item" href="/perfil">
+                    <i class="bi bi-person"></i>
+                    Meu Perfil
+                  </a>
+                </li>
 
-                <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a class="dropdown-item" href="/pedido/meus-pedidos">
+                    <i class="bi bi-bag-check"></i>
+                    Meus Pedidos
+                  </a>
+                </li>
 
+                <% if(tipoLogado=="usuario"){ %>
                   <li>
-                    <a class="dropdown-item" href="/perfil">
-
-                      <i class="bi bi-person"></i>
-                      Meu Perfil
-
+                    <a class="dropdown-item" href="/usuario">
+                      <i class="bi bi-gear"></i>
+                      Sistema
                     </a>
                   </li>
+                <% } %>
 
-                  <li>
-                    <a class="dropdown-item" href="/pedido/meus-pedidos">
-                      <i class="bi bi-bag-check"></i>
-                      Meus Pedidos
-                    </a>
-                  </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
 
-                  <% if(tipoLogado=="usuario" ){ %>
+                <li>
+                  <button class="dropdown-item text-danger" type="button" onclick="window.location='/login/logout'">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Sair
+                  </button>
+                </li>
 
-                    <li>
-                      <a class="dropdown-item" href="/usuario">
+              </ul>
 
-                        <i class="bi bi-gear"></i>
-                        Sistema
+            </li>
 
-                      </a>
-                    </li>
-
-                    <% } %>
-
-                      <li>
-                        <hr class="dropdown-divider">
-                      </li>
-
-                      <li>
-
-                        <button class="dropdown-item text-danger" type="button"
-                          onclick="window.location='/login/logout'">
-
-                          <i class="bi bi-box-arrow-right"></i>
-                          Sair
-
-                        </button>
-
-                      </li>
-
-                </ul>
-
-              </li>
-
-              <% } %>
+          <% } %>
 
         </ul>
 
         <div class="d-flex align-items-center">
-
           <button class="btn btn-outline-primary me-2" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#cartOffcanvas">
-
             <i class="bi bi-cart3"></i>
-
             <span class="badge bg-danger ms-1" id="cartCount">0</span>
-
           </button>
-
         </div>
 
       </div>
 
     </div>
-
   </nav>
 
-  <div class="container mt-4">
-    <div class="row">
+  <!-- CONTEÚDO CHECKOUT -->
+  <div class="container mt-4 mb-5">
+
+    <div class="row g-4">
+
       <div class="col-lg-8">
-        <!-- Formulário de Checkout -->
+
         <div class="card shadow-sm" style="border-radius: 20px; border: none;">
-          <div class="card-header"
+
+          <div class="card-header checkout-card-header"
             style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 20px 20px 0 0; border: none;">
-            <h4 class="mb-0"><i class="bi bi-credit-card me-2"></i>Informações de Pagamento</h4>
+            <h4 class="mb-0 checkout-title">
+              <i class="bi bi-credit-card me-2"></i>
+              Informações de Pagamento
+            </h4>
           </div>
+
           <div class="card-body">
+
             <form id="checkoutForm">
-              <!-- Informações Pessoais -->
 
-
-              <!-- Endereço de Entrega -->
+              <!-- ENDEREÇO -->
               <div class="row mb-4">
+
                 <div class="col-12">
-                  <h5 class="border-bottom pb-2 mb-3">Endereço de Entrega</h5>
+                  <h5 class="border-bottom pb-2 mb-3">
+                    Endereço de Entrega
+                  </h5>
                 </div>
+
                 <div class="col-md-4 mb-3">
                   <label for="zipCode" class="form-label">CEP *</label>
                   <input type="text" class="form-control" maxlength="9" id="zipCode" required>
                 </div>
+
                 <div class="col-md-4 mb-3">
-                  <label for="city" class="form-label">Cidade *</label>
+                  <label for="cidade" class="form-label">Cidade *</label>
                   <input type="text" class="form-control" id="cidade" required>
                 </div>
+
                 <div class="col-md-4 mb-3">
-                  <label for="city" class="form-label">Estado *</label>
+                  <label for="estado" class="form-label">Estado *</label>
                   <input type="text" class="form-control" id="estado" required>
                 </div>
+
                 <div class="col-12 mb-3">
-                  <label for="address" class="form-label">Rua *</label>
+                  <label for="rua" class="form-label">Rua *</label>
                   <input type="text" class="form-control" id="rua" required>
                 </div>
+
                 <div class="col-12 mb-3">
-                  <label for="address" class="form-label">Bairro *</label>
+                  <label for="bairro" class="form-label">Bairro *</label>
                   <input type="text" class="form-control" id="bairro" required>
                 </div>
+
                 <div class="col-md-4 mb-3">
-                  <label for="address" class="form-label">Número *</label>
+                  <label for="numero" class="form-label">Número *</label>
                   <input type="number" class="form-control" id="numero" required>
                 </div>
-                <div class="col-8 mb-3">
-                  <label for="address" class="form-label">Complemento (opicional)</label>
+
+                <div class="col-md-8 mb-3">
+                  <label for="complemento" class="form-label">Complemento opcional</label>
                   <input type="text" class="form-control" id="complemento">
                 </div>
 
-
               </div>
 
-              <!-- Método de Pagamento -->
+              <!-- PAGAMENTO -->
               <div class="row mb-4">
+
                 <div class="col-12">
-                  <h5 class="border-bottom pb-2 mb-3">Método de Pagamento</h5>
+                  <h5 class="border-bottom pb-2 mb-3">
+                    Método de Pagamento
+                  </h5>
                 </div>
+
                 <div class="col-12 mb-3">
+
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="credit"
                       checked>
                     <label class="form-check-label" for="creditCard">
-                      <i class="bi bi-credit-card me-2"></i>Cartão de Crédito
+                      <i class="bi bi-credit-card me-2"></i>
+                      Cartão de Crédito
                     </label>
                   </div>
+
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="paymentMethod" id="pix" value="pix">
                     <label class="form-check-label" for="pix">
-                      <i class="bi bi-qr-code me-2"></i>PIX
+                      <i class="bi bi-qr-code me-2"></i>
+                      PIX
                     </label>
                   </div>
+
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="paymentMethod" id="boleto" value="boleto">
                     <label class="form-check-label" for="boleto">
-                      <i class="bi bi-upc-scan me-2"></i>Boleto Bancário
+                      <i class="bi bi-upc-scan me-2"></i>
+                      Boleto Bancário
                     </label>
                   </div>
+
                 </div>
 
-                <!-- Campos do Cartão de Crédito -->
+                <!-- CARTÃO -->
                 <div id="creditCardFields">
+
                   <div class="col-12 mb-3">
                     <label for="cardNumber" class="form-label">Número do Cartão *</label>
                     <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456"
                       maxlength="18">
                   </div>
+
                   <div class="row">
+
                     <div class="col-md-6 mb-3">
                       <label for="expiryDate" class="form-label">Data de Validade *</label>
                       <input type="text" class="form-control" maxlength="5" id="expiryDate" placeholder="MM/AA">
                     </div>
+
                     <div class="col-md-6 mb-3">
                       <label for="cvv" class="form-label">CVV *</label>
                       <input type="text" class="form-control" id="cvv" placeholder="123">
                     </div>
+
                   </div>
+
                   <div class="col-12 mb-3">
                     <label for="cardName" class="form-label">Nome no Cartão *</label>
                     <input type="text" class="form-control" id="cardName">
                   </div>
+
                 </div>
+
               </div>
 
-              <!-- Botões -->
+              <!-- BOTÕES -->
               <div class="row">
                 <div class="col-12">
+
                   <button type="submit" class="btn btn-primary btn-lg w-100">
-                    <i class="bi bi-lock me-2"></i>Finalizar Compra
+                    <i class="bi bi-lock me-2"></i>
+                    Finalizar Compra
                   </button>
+
                   <a href="/produtos" class="btn btn-outline-secondary w-100 mt-2">
-                    <i class="bi bi-arrow-left me-2"></i>Voltar aos Produtos
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Voltar aos Produtos
                   </a>
+
                 </div>
               </div>
+
             </form>
+
           </div>
+
         </div>
+
       </div>
 
+      <!-- RESUMO -->
       <div class="col-lg-4">
-        <!-- Resumo do Pedido -->
+
         <div class="card shadow-sm sticky-top" style="top: 2rem; border-radius: 20px; border: none;">
-          <div class="card-header"
+
+          <div class="card-header checkout-card-header"
             style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 20px 20px 0 0; border: none;">
-            <h5 class="mb-0"><i class="bi bi-cart-check me-2"></i>Resumo do Pedido</h5>
+            <h5 class="mb-0">
+              <i class="bi bi-cart-check me-2"></i>
+              Resumo do Pedido
+            </h5>
           </div>
+
           <div class="card-body">
+
             <div id="orderSummary">
               <!-- Resumo será carregado dinamicamente -->
             </div>
 
             <div class="border-top pt-3">
+
               <div class="d-flex justify-content-between mb-2">
                 <span>Subtotal:</span>
                 <span id="subtotal">R$ 0,00</span>
               </div>
+
               <div class="d-flex justify-content-between mb-2">
                 <span>Frete:</span>
                 <span id="shipping">R$ 0,00</span>
               </div>
+
               <div class="d-flex justify-content-between mb-2">
                 <span>Taxas:</span>
                 <span id="taxes">R$ 0,00</span>
               </div>
+
               <div class="border-top pt-2">
                 <div class="d-flex justify-content-between">
                   <strong>Total:</strong>
                   <strong id="total" class="text-primary">R$ 0,00</strong>
                 </div>
               </div>
+
             </div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
   </div>
 
+  <!-- FOOTER -->
   <footer class="footer-techmode">
+
     <div class="footer-container">
 
       <div class="footer-coluna" id="footer-logo-col">
-        <img src="/img/logo.png" alt="Logo Tech Mode" class="footer-logo">
+        <img src="/img/logo.png" alt="Logo Renove" class="footer-logo">
         <p class="footer-slogan">Inovação e tecnologia ao seu alcance.</p>
       </div>
 
       <div class="footer-coluna">
         <h4>Empresa</h4>
+
         <ul>
           <li><a href="#">Sobre Nós</a></li>
           <li><a href="#">Carreiras</a></li>
@@ -336,6 +422,7 @@
 
       <div class="footer-coluna">
         <h4>Suporte</h4>
+
         <ul>
           <li><a href="#">FAQ</a></li>
           <li><a href="#">Central de Ajuda</a></li>
@@ -346,46 +433,57 @@
 
       <div class="footer-coluna">
         <h4>Siga-nos</h4>
+
         <div class="footer-social-links">
-          <a href="#" aria-label="Facebook" title="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="24"
-              height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
-            </svg></a>
-          <a href="#" aria-label="Instagram" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24"
-              height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.644-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.359 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.359-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.359-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z" />
-            </svg></a>
-          <a href="#" aria-label="Twitter" title="Twitter (X)"><svg xmlns="http://www.w3.org/2000/svg" width="24"
-              height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.617l-5.21-6.817-6.044 6.817h-3.308l7.732-8.734-8.232-10.76h6.802l4.555 6.031 5.527-6.031zm-1.4 17.52h2.16l-9.309-12.48h-2.28l9.429 12.48z" />
-            </svg></a>
+
+          <a href="#" aria-label="Facebook" title="Facebook">
+            <i class="bi bi-facebook"></i>
+          </a>
+
+          <a href="#" aria-label="Instagram" title="Instagram">
+            <i class="bi bi-instagram"></i>
+          </a>
+
+          <a href="#" aria-label="Twitter" title="Twitter">
+            <i class="bi bi-twitter-x"></i>
+          </a>
+
         </div>
       </div>
 
     </div>
 
     <div class="footer-bottom-bar">
-      <p>&copy; 2025 Tech Mode. Todos os direitos reservados. Desenvolvido por <a
-          href="https://luizote1.github.io/tech-mode/" target="_blank" rel="noopener noreferrer">Tech Mode</a>.</p>
+      <p>
+        &copy; 2025 Tech Mode. Todos os direitos reservados.
+        Desenvolvido por
+        <a href="https://luizote1.github.io/tech-mode/" target="_blank" rel="noopener noreferrer">
+          Tech Mode
+        </a>.
+      </p>
     </div>
+
   </footer>
+
+  <!-- VLIBRAS -->
   <div vw class="enabled">
     <div vw-access-button class="active"></div>
+
     <div vw-plugin-wrapper>
       <div class="vw-plugin-top-wrapper"></div>
     </div>
   </div>
 
   <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+
   <script>
     new window.VLibras.Widget('https://vlibras.gov.br/app');
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/theme-manager.js"></script>
   <script src="/js/checkout.js"></script>
   <script src="/js/site.js"></script>
+
 </body>
+
+</html>
