@@ -229,6 +229,31 @@ class ClienteModel {
 
         return rows.length > 0;
     }
+
+    async atualizarPerfil() {
+
+        let sql = `
+        update tb_cliente
+        set
+            cli_nome = ?,
+            cli_nascimento = ?,
+            cli_genero = ?,
+            cli_telefone = ?
+        where cli_id = ?
+    `;
+
+        let valores = [
+            this.#cliNome,
+            this.#cliNascimento,
+            this.#cliGenero,
+            this.#cliTelefone,
+            this.#cliId
+        ];
+
+        let banco = new Database();
+
+        return await banco.ExecutaComandoNonQuery(sql, valores);
+    }
 }
 
 module.exports = ClienteModel;
