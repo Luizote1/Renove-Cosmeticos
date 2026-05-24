@@ -1351,3 +1351,200 @@ body.theme-light {
         gap: 8px !important;
     }
 }
+
+/* =========================================================
+   FIX FINAL HOME - SEM ARRASTAR PARA DIREITA/ESQUERDA
+========================================================= */
+
+html,
+body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+
+body {
+    position: relative;
+}
+
+main,
+section,
+.container,
+.container-fluid,
+.row {
+    max-width: 100% !important;
+}
+
+/* HERO HOME */
+.hero {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+}
+
+.hero.container {
+    max-width: calc(100% - 32px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Imagens nunca podem estourar a tela */
+img {
+    max-width: 100%;
+}
+
+/* MOBILE HOME */
+@media (max-width: 768px) {
+
+    html,
+    body {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        touch-action: pan-y;
+    }
+
+    .navbar {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+    }
+
+    .navbar .container-fluid {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+    }
+
+    .hero {
+        width: auto !important;
+        max-width: calc(100% - 24px) !important;
+        margin: 20px auto !important;
+        padding: 42px 18px !important;
+        border-radius: 24px !important;
+        text-align: center !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        overflow: hidden !important;
+    }
+
+    .hero-text {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto 24px auto !important;
+        text-align: center !important;
+    }
+
+    .hero h1 {
+        font-size: 2.65rem !important;
+        line-height: 1.15 !important;
+        max-width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+    }
+
+    .hero p {
+        font-size: 1.15rem !important;
+        line-height: 1.45 !important;
+        max-width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    .hero .btn {
+        max-width: 100% !important;
+        white-space: normal !important;
+    }
+
+    .hero-img {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+    }
+
+    .hero-img img {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+        display: block !important;
+    }
+
+    .footer-techmode,
+    .footer-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .hero {
+        max-width: calc(100% - 20px) !important;
+        padding: 36px 14px !important;
+        margin: 16px auto !important;
+    }
+
+    .hero h1 {
+        font-size: 2.25rem !important;
+    }
+
+    .hero p {
+        font-size: 1rem !important;
+    }
+}
+
+/* ===== HOME HERO TAMANHO ANTIGO ===== */
+
+.hero.container {
+    max-width: 1280px !important;
+    min-height: 420px !important;
+    padding: 8rem 5rem !important;
+    margin: 2rem auto 3rem auto !important;
+}
+
+.hero h1 {
+    font-size: 3.2rem !important;
+}
+
+.hero p {
+    font-size: 1.2rem !important;
+}
+
+.hero-img img {
+    max-height: 360px !important;
+    width: auto !important;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .hero.container {
+        max-width: calc(100% - 24px) !important;
+        min-height: auto !important;
+        padding: 3rem 1.4rem !important;
+        margin: 1.5rem auto 2rem auto !important;
+    }
+
+    .hero h1 {
+        font-size: 2.55rem !important;
+    }
+
+    .hero p {
+        font-size: 1.05rem !important;
+    }
+
+    .hero-img img {
+        max-height: 360px !important;
+        width: 100% !important;
+        object-fit: contain !important;
+    }
+}
