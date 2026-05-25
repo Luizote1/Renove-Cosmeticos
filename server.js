@@ -118,13 +118,7 @@ server.use("/pedido", pedidoRoute);
 global.CAMINHO_IMG = "/img/produtos/";
 
 // CORREÇÃO PARA VERCEL
-global.CAMINHO_IMG_ABS =
-    path.join(
-        __dirname,
-        "public",
-        "img",
-        "produtos"
-    ) + path.sep;
+global.CAMINHO_IMG_ABS = path.join(__dirname,"public","img","produtos") + path.sep;
 
 
 // ==============================
