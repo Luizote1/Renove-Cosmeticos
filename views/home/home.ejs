@@ -182,56 +182,58 @@
               <a class="nav-link" href="/login">Login</a>
             </li>
 
-          <% } else { %>
+            <% } else { %>
 
-            <li class="nav-item dropdown">
+              <li class="nav-item dropdown">
 
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                <i class="bi bi-person-circle"></i>
-                Minha Conta
-              </a>
+                <a class="nav-link dropdown-toggle" href="#" id="menuConta" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="bi bi-person-circle"></i>
+                  Minha Conta
+                </a>
 
-              <ul class="dropdown-menu dropdown-menu-end">
+                <ul class="dropdown-menu dropdown-menu-end">
 
-                <li>
-                  <a class="dropdown-item" href="/perfil">
-                    <i class="bi bi-person"></i>
-                    Meu Perfil
-                  </a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="/pedido/meus-pedidos">
-                    <i class="bi bi-bag-check"></i>
-                    Meus Pedidos
-                  </a>
-                </li>
-
-                <% if(tipoLogado=="usuario"){ %>
                   <li>
-                    <a class="dropdown-item" href="/usuario">
-                      <i class="bi bi-gear"></i>
-                      Sistema
+                    <a class="dropdown-item" href="/perfil">
+                      <i class="bi bi-person"></i>
+                      Meu Perfil
                     </a>
                   </li>
-                <% } %>
 
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
+                  <li>
+                    <a class="dropdown-item" href="/pedido/meus-pedidos">
+                      <i class="bi bi-bag-check"></i>
+                      Meus Pedidos
+                    </a>
+                  </li>
 
-                <li>
-                  <button class="dropdown-item text-danger" type="button" onclick="window.location='/login/logout'">
-                    <i class="bi bi-box-arrow-right"></i>
-                    Sair
-                  </button>
-                </li>
+                  <% if(tipoLogado=="usuario" ){ %>
+                    <li>
+                      <a class="dropdown-item" href="/usuario">
+                        <i class="bi bi-gear"></i>
+                        Sistema
+                      </a>
+                    </li>
+                    <% } %>
 
-              </ul>
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
 
-            </li>
+                      <li>
+                        <button class="dropdown-item text-danger" type="button"
+                          onclick="window.location='/login/logout'">
+                          <i class="bi bi-box-arrow-right"></i>
+                          Sair
+                        </button>
+                      </li>
 
-          <% } %>
+                </ul>
+
+              </li>
+
+              <% } %>
 
         </ul>
 
@@ -270,17 +272,16 @@
 
     <div class="row g-4">
 
-      <% if (produtosDestaque && produtosDestaque.length > 0) { %>
+      <% if (produtosDestaque && produtosDestaque.length> 0) { %>
 
-        <% produtosDestaque.forEach(produto => { %>
+        <% produtosDestaque.forEach(produto=> { %>
 
           <div class="col-md-4">
 
             <div class="card shadow-sm h-100 text-center">
 
               <img src="<%= produto.proImagem ? produto.proImagem : '/img/produtos/produto-sem-imagem.png' %>"
-                class="card-img-top mx-auto"
-                alt="<%= produto.proNome %>">
+                class="card-img-top mx-auto" alt="<%= produto.proNome %>">
 
               <div class="card-body">
 
@@ -293,7 +294,7 @@
                 </p>
 
                 <h5 class="text-primary">
-                  R$ <%= Number(produto.proPreco).toFixed(2).replace(".", ",") %>
+                  R$ <%= Number(produto.proPreco).toFixed(2).replace(".", "," ) %>
                 </h5>
 
                 <a href="/produtos" class="btn btn-outline-primary">
@@ -306,15 +307,15 @@
 
           </div>
 
-        <% }) %>
+          <% }) %>
 
-      <% } else { %>
+            <% } else { %>
 
-        <div class="col-12 text-center">
-          <p class="text-muted">Nenhum produto em destaque disponível.</p>
-        </div>
+              <div class="col-12 text-center">
+                <p class="text-muted">Nenhum produto em destaque disponível.</p>
+              </div>
 
-      <% } %>
+              <% } %>
 
     </div>
 

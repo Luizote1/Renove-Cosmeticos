@@ -36,24 +36,14 @@
       <!-- AÇÕES MOBILE -->
       <div class="navbar-actions-fix d-lg-none">
 
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarTogglerDemo02"
-          aria-controls="navbarTogglerDemo02"
-          aria-expanded="false"
-          aria-label="Abrir menu">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+          aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Abrir menu">
 
           <span class="navbar-toggler-icon"></span>
 
         </button>
 
-        <button
-          class="btn cart-navbar-btn"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#cartOffcanvas"
+        <button class="btn cart-navbar-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"
           aria-label="Abrir carrinho">
 
           <i class="bi bi-cart3"></i>
@@ -97,81 +87,69 @@
               </a>
             </li>
 
-          <% } else { %>
+            <% } else { %>
 
-            <li class="nav-item dropdown">
+              <li class="nav-item dropdown">
 
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="menuConta" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="bi bi-person-circle"></i>
+                  Minha Conta
+                </a>
 
-                <i class="bi bi-person-circle"></i>
-                Minha Conta
-
-              </a>
-
-              <ul class="dropdown-menu dropdown-menu-end">
-
-                <li>
-                  <a class="dropdown-item" href="/perfil">
-                    <i class="bi bi-person"></i>
-                    Meu Perfil
-                  </a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="/pedido/meus-pedidos">
-                    <i class="bi bi-bag-check"></i>
-                    Meus Pedidos
-                  </a>
-                </li>
-
-                <% if(tipoLogado=="usuario"){ %>
+                <ul class="dropdown-menu dropdown-menu-end">
 
                   <li>
-                    <a class="dropdown-item" href="/usuario">
-                      <i class="bi bi-gear"></i>
-                      Sistema
+                    <a class="dropdown-item" href="/perfil">
+                      <i class="bi bi-person"></i>
+                      Meu Perfil
                     </a>
                   </li>
 
-                <% } %>
+                  <li>
+                    <a class="dropdown-item" href="/pedido/meus-pedidos">
+                      <i class="bi bi-bag-check"></i>
+                      Meus Pedidos
+                    </a>
+                  </li>
 
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
+                  <% if(tipoLogado=="usuario" ){ %>
 
-                <li>
-                  <button
-                    class="dropdown-item text-danger"
-                    type="button"
-                    onclick="window.location='/login/logout'">
+                    <li>
+                      <a class="dropdown-item" href="/usuario">
+                        <i class="bi bi-gear"></i>
+                        Sistema
+                      </a>
+                    </li>
 
-                    <i class="bi bi-box-arrow-right"></i>
-                    Sair
+                    <% } %>
 
-                  </button>
-                </li>
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
 
-              </ul>
+                      <li>
+                        <button class="dropdown-item text-danger" type="button"
+                          onclick="window.location='/login/logout'">
 
-            </li>
+                          <i class="bi bi-box-arrow-right"></i>
+                          Sair
 
-          <% } %>
+                        </button>
+                      </li>
+
+                </ul>
+
+              </li>
+
+              <% } %>
 
         </ul>
 
         <!-- CARRINHO DESKTOP -->
         <div class="d-none d-lg-flex ms-3">
 
-          <button
-            class="btn cart-navbar-btn"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#cartOffcanvas"
+          <button class="btn cart-navbar-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"
             aria-label="Abrir carrinho">
 
             <i class="bi bi-cart3"></i>
@@ -195,8 +173,7 @@
     <div class="row mb-5">
       <div class="col-12 text-center">
 
-        <h1 class="display-3 fw-bold mb-3"
-          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        <h1 class="display-3 fw-bold mb-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;">
@@ -240,11 +217,7 @@
             Buscar produtos
           </label>
 
-          <input
-            type="text"
-            class="form-control"
-            id="searchInput"
-            placeholder="Digite o nome do produto...">
+          <input type="text" class="form-control" id="searchInput" placeholder="Digite o nome do produto...">
         </div>
 
         <div class="col-md-3">
@@ -255,25 +228,25 @@
           <select class="form-select" id="categoryFilter">
             <option value="">Todas as categorias</option>
 
-            <% let categoriasUnicas = []; %>
+            <% let categoriasUnicas=[]; %>
 
-            <% for(let i = 0; i < lista.length; i++) { %>
+              <% for(let i=0; i < lista.length; i++) { %>
 
-              <% if(!categoriasUnicas.includes(lista[i].catDescricao)) { %>
+                <% if(!categoriasUnicas.includes(lista[i].catDescricao)) { %>
 
-                <% categoriasUnicas.push(lista[i].catDescricao); %>
+                  <% categoriasUnicas.push(lista[i].catDescricao); %>
 
-              <% } %>
+                    <% } %>
 
-            <% } %>
+                      <% } %>
 
-            <% for(let i = 0; i < categoriasUnicas.length; i++) { %>
+                        <% for(let i=0; i < categoriasUnicas.length; i++) { %>
 
-              <option value="<%= categoriasUnicas[i] %>">
-                <%= categoriasUnicas[i] %>
-              </option>
+                          <option value="<%= categoriasUnicas[i] %>">
+                            <%= categoriasUnicas[i] %>
+                          </option>
 
-            <% } %>
+                          <% } %>
 
           </select>
         </div>
@@ -336,11 +309,7 @@
   </div>
 
   <!-- MODAL PRODUTO -->
-  <div
-    class="modal fade product-modal"
-    id="productModal"
-    tabindex="-1"
-    aria-labelledby="productModalLabel"
+  <div class="modal fade product-modal" id="productModal" tabindex="-1" aria-labelledby="productModalLabel"
     aria-hidden="true">
 
     <div class="modal-dialog modal-lg">
@@ -351,11 +320,7 @@
             Detalhes do Produto
           </h5>
 
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Fechar">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">
           </button>
         </div>
 
@@ -367,11 +332,7 @@
   </div>
 
   <!-- CARRINHO -->
-  <div
-    class="offcanvas offcanvas-end cart-panel"
-    tabindex="-1"
-    id="cartOffcanvas"
-    aria-labelledby="cartOffcanvasLabel">
+  <div class="offcanvas offcanvas-end cart-panel" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
 
     <div class="offcanvas-header border-bottom">
 
@@ -389,11 +350,7 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="offcanvas"
-        aria-label="Fechar">
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar">
       </button>
 
     </div>
@@ -422,9 +379,7 @@
           </strong>
         </div>
 
-        <button
-          class="btn btn-primary w-100 mt-4 py-3"
-          onclick="checkout()">
+        <button class="btn btn-primary w-100 mt-4 py-3" onclick="checkout()">
 
           <i class="bi bi-credit-card me-2"></i>
           Finalizar Compra

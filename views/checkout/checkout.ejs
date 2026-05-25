@@ -179,7 +179,6 @@
       color: #4f7bce;
       font-size: 1rem;
     }
-
   </style>
 </head>
 
@@ -201,7 +200,8 @@
         <img class="images" src="/img/logotipo.png" alt="Renove">
       </a>
 
-      <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02">
+      <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarTogglerDemo02">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -227,56 +227,58 @@
               <a class="nav-link" href="/login">Login</a>
             </li>
 
-          <% } else { %>
+            <% } else { %>
 
-            <li class="nav-item dropdown">
+              <li class="nav-item dropdown">
 
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                <i class="bi bi-person-circle"></i>
-                Minha Conta
-              </a>
+                <a class="nav-link dropdown-toggle" href="#" id="menuConta" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="bi bi-person-circle"></i>
+                  Minha Conta
+                </a>
 
-              <ul class="dropdown-menu dropdown-menu-end">
+                <ul class="dropdown-menu dropdown-menu-end">
 
-                <li>
-                  <a class="dropdown-item" href="/perfil">
-                    <i class="bi bi-person"></i>
-                    Meu Perfil
-                  </a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="/pedido/meus-pedidos">
-                    <i class="bi bi-bag-check"></i>
-                    Meus Pedidos
-                  </a>
-                </li>
-
-                <% if(tipoLogado == "usuario"){ %>
                   <li>
-                    <a class="dropdown-item" href="/usuario">
-                      <i class="bi bi-gear"></i>
-                      Sistema
+                    <a class="dropdown-item" href="/perfil">
+                      <i class="bi bi-person"></i>
+                      Meu Perfil
                     </a>
                   </li>
-                <% } %>
 
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
+                  <li>
+                    <a class="dropdown-item" href="/pedido/meus-pedidos">
+                      <i class="bi bi-bag-check"></i>
+                      Meus Pedidos
+                    </a>
+                  </li>
 
-                <li>
-                  <button class="dropdown-item text-danger" type="button" onclick="window.location='/login/logout'">
-                    <i class="bi bi-box-arrow-right"></i>
-                    Sair
-                  </button>
-                </li>
+                  <% if(tipoLogado=="usuario" ){ %>
+                    <li>
+                      <a class="dropdown-item" href="/usuario">
+                        <i class="bi bi-gear"></i>
+                        Sistema
+                      </a>
+                    </li>
+                    <% } %>
 
-              </ul>
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
 
-            </li>
+                      <li>
+                        <button class="dropdown-item text-danger" type="button"
+                          onclick="window.location='/login/logout'">
+                          <i class="bi bi-box-arrow-right"></i>
+                          Sair
+                        </button>
+                      </li>
 
-          <% } %>
+                </ul>
+
+              </li>
+
+              <% } %>
 
         </ul>
 
@@ -365,7 +367,8 @@
                   <div class="payment-method-toggle">
 
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="credit" checked>
+                      <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="credit"
+                        checked>
                       <label class="form-check-label" for="creditCard">
                         <i class="bi bi-credit-card"></i>
                         Cartão de Crédito
@@ -397,7 +400,8 @@
 
                   <div class="col-12 mb-3">
                     <label for="cardNumber" class="form-label">Número do Cartão *</label>
-                    <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="18">
+                    <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456"
+                      maxlength="18">
                   </div>
 
                   <div class="row">
