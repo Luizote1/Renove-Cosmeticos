@@ -526,35 +526,3 @@ label {
 
 }
 
-/* ===== FIX DROPDOWN MINHA CONTA MOBILE ===== */
-
-.navbar,
-.navbar .container-fluid,
-.navbar-collapse {
-    overflow: visible !important;
-}
-
-.navbar {
-    z-index: 9999 !important;
-}
-
-.dropdown-menu {
-    z-index: 10000 !important;
-}
-
-@media (max-width: 991px) {
-    .navbar .dropdown-menu {
-        position: static !important;
-        display: none;
-        width: 100%;
-        margin-top: 8px;
-        text-align: center;
-        background: #ffffff;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    }
-
-    .navbar .dropdown-menu.show {
-        display: block !important;
-    }
-}
