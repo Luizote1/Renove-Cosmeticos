@@ -526,80 +526,6 @@ body.theme-light {
     transform: translateY(-2px);
 }
 
-/* ===== CHECKOUT AJUSTE FINAL ===== */
-
-.checkout-page {
-    max-width: 1500px;
-    margin: 0 auto;
-}
-
-.checkout-page .row {
-    align-items: flex-start !important;
-}
-
-.checkout-summary-card {
-    margin-top: 0 !important;
-}
-
-.checkout-form input,
-.checkout-form select,
-.checkout-form textarea {
-    height: 52px !important;
-    border: 2px solid #dbe3ef !important;
-    border-radius: 12px !important;
-    background: #ffffff !important;
-    font-size: 16px !important;
-}
-
-@media (max-width: 768px) {
-    .checkout-page {
-        width: 100% !important;
-        padding-left: 14px !important;
-        padding-right: 14px !important;
-        overflow-x: hidden !important;
-    }
-
-    .checkout-page .row {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-    }
-
-    .checkout-page .col-lg-8,
-    .checkout-page .col-lg-4,
-    .checkout-page .col-md-4,
-    .checkout-page .col-md-6,
-    .checkout-page .col-md-8,
-    .checkout-page .col-12 {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-
-    .checkout-page .card-body {
-        padding: 22px !important;
-    }
-
-    .checkout-form input,
-    .checkout-form select,
-    .checkout-form textarea {
-        height: 58px !important;
-        font-size: 17px !important;
-    }
-
-    .checkout-form label {
-        font-size: 1.05rem !important;
-        margin-bottom: 8px;
-    }
-
-    .checkout-page h5 {
-        font-size: 1.35rem !important;
-    }
-
-    .checkout-summary-card {
-        margin-top: 18px !important;
-        position: static !important;
-    }
-}
-
 /* ================= BENEFÍCIOS ================= */
 
 .benefits-bar {
@@ -1428,7 +1354,8 @@ body.theme-light {
 }
 
 /* =========================================================
-   FIX FINAL HOME - SEM ARRASTAR PARA DIREITA/ESQUERDA
+   FIX FINAL NAVBAR MOBILE + MINHA CONTA + HOME
+   Mantém o visual, corrige dropdown e evita o menu por cima do hero
 ========================================================= */
 
 html,
@@ -1450,60 +1377,225 @@ section,
     max-width: 100% !important;
 }
 
-/* HERO HOME */
-.hero {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow: hidden !important;
-}
-
-.hero.container {
-    max-width: calc(100% - 32px) !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-}
-
-/* Imagens nunca podem estourar a tela */
 img {
     max-width: 100%;
 }
 
-/* MOBILE HOME */
-@media (max-width: 768px) {
+/* Desktop mantém o hero antigo */
+.hero.container {
+    max-width: 1280px !important;
+    min-height: 420px !important;
+    padding: 8rem 5rem !important;
+    margin: 2rem auto 3rem auto !important;
+}
+
+.hero h1 {
+    font-size: 3.2rem !important;
+}
+
+.hero p {
+    font-size: 1.2rem !important;
+}
+
+.hero-img img {
+    max-height: 360px !important;
+    width: auto !important;
+}
+
+/* Tablet/celular */
+@media (max-width: 991px) {
 
     html,
     body {
-        width: 100% !important;
-        max-width: 100% !important;
         overflow-x: hidden !important;
         touch-action: pan-y;
     }
 
     .navbar {
+        position: relative !important;
+        z-index: 9999 !important;
         width: 100% !important;
         max-width: 100% !important;
+        overflow: visible !important;
+        padding: 0.65rem 0 !important;
+    }
+
+    .navbar .container-fluid,
+    .navbar-mobile-fix {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+        overflow: visible !important;
+    }
+
+    .navbar-brand,
+    .navbar-logo-fix {
+        order: 1 !important;
+        margin: 0 !important;
+        width: 135px !important;
+        height: 46px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
         overflow: hidden !important;
     }
 
-    .navbar .container-fluid {
+    .navbar-brand img,
+    .navbar-brand .images,
+    .navbar-logo-fix img {
         width: 100% !important;
-        max-width: 100% !important;
-        overflow: hidden !important;
+        height: auto !important;
+        object-fit: contain !important;
     }
 
+    .navbar-actions-fix,
+    .cart-mobile-area,
+    .d-lg-none {
+        order: 2 !important;
+        margin-left: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 10px !important;
+        margin-top: 0 !important;
+    }
+
+    .navbar-toggler {
+        width: 48px !important;
+        height: 44px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 12px !important;
+        background: #ffffff !important;
+    }
+
+    .navbar-collapse {
+        order: 3 !important;
+        width: 100% !important;
+        flex-basis: 100% !important;
+        padding: 12px 0 16px !important;
+        margin-top: 10px !important;
+        background: #ffffff !important;
+        border-radius: 0 0 18px 18px !important;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08) !important;
+        overflow: visible !important;
+        position: static !important;
+        z-index: 9999 !important;
+    }
+
+    .navbar-nav {
+        width: 100% !important;
+        gap: 8px !important;
+        margin-left: 0 !important;
+    }
+
+    .navbar-nav .nav-item {
+        width: 100% !important;
+    }
+
+    .navbar-nav .nav-link {
+        width: 100% !important;
+        text-align: center !important;
+        margin: 0 !important;
+        padding: 12px 16px !important;
+        border-radius: 12px !important;
+    }
+
+    .navbar-nav .nav-link.active {
+        background: linear-gradient(135deg, #70a0f8 0%, #4b58a2 100%) !important;
+        color: #ffffff !important;
+    }
+
+    /* Minha Conta funcionando no mobile */
+    .navbar .dropdown {
+        width: 100% !important;
+        position: relative !important;
+    }
+
+    .navbar .dropdown-toggle {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    .navbar .dropdown-menu {
+        position: static !important;
+        float: none !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        margin: 8px 0 0 0 !important;
+        padding: 10px !important;
+        border: none !important;
+        border-radius: 16px !important;
+        background: #ffffff !important;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12) !important;
+        transform: none !important;
+        z-index: 99999 !important;
+        text-align: center !important;
+    }
+
+    .navbar .dropdown-menu.show {
+        display: block !important;
+    }
+
+    .navbar .dropdown-item {
+        width: 100% !important;
+        text-align: center !important;
+        padding: 12px !important;
+        border-radius: 12px !important;
+    }
+
+    .cart-navbar-btn {
+        width: 58px !important;
+        height: 44px !important;
+        min-width: 58px !important;
+        border: none !important;
+        border-radius: 16px !important;
+        background: #f4f7ff !important;
+        color: #5b6fd6 !important;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.22) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 7px !important;
+        margin: 0 !important;
+    }
+
+    .cart-navbar-count {
+        min-width: 23px !important;
+        height: 23px !important;
+        padding: 0 7px !important;
+        border-radius: 10px !important;
+        background: linear-gradient(135deg, #70a0f8 0%, #4b58a2 100%) !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        font-size: 13px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* Hero não fica por baixo da animação/menu */
     .hero {
+        position: relative !important;
+        z-index: 1 !important;
         width: auto !important;
         max-width: calc(100% - 24px) !important;
         margin: 20px auto !important;
         padding: 42px 18px !important;
         border-radius: 24px !important;
-        text-align: center !important;
-
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-
+        text-align: center !important;
         overflow: hidden !important;
     }
 
@@ -1515,17 +1607,16 @@ img {
     }
 
     .hero h1 {
-        font-size: 2.65rem !important;
+        font-size: 2.55rem !important;
         line-height: 1.15 !important;
         max-width: 100% !important;
         margin-left: auto !important;
         margin-right: auto !important;
-        word-break: normal !important;
         overflow-wrap: break-word !important;
     }
 
     .hero p {
-        font-size: 1.15rem !important;
+        font-size: 1.05rem !important;
         line-height: 1.45 !important;
         max-width: 100% !important;
         margin-left: auto !important;
@@ -1549,6 +1640,7 @@ img {
         width: 100% !important;
         max-width: 100% !important;
         height: auto !important;
+        max-height: 360px !important;
         object-fit: contain !important;
         display: block !important;
     }
@@ -1578,270 +1670,56 @@ img {
     }
 }
 
-/* ===== HOME HERO TAMANHO ANTIGO ===== */
-
-.hero.container {
-    max-width: 1280px !important;
-    min-height: 420px !important;
-    padding: 8rem 5rem !important;
-    margin: 2rem auto 3rem auto !important;
-}
-
-.hero h1 {
-    font-size: 3.2rem !important;
-}
-
-.hero p {
-    font-size: 1.2rem !important;
-}
-
-.hero-img img {
-    max-height: 360px !important;
-    width: auto !important;
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-    .hero.container {
-        max-width: calc(100% - 24px) !important;
-        min-height: auto !important;
-        padding: 3rem 1.4rem !important;
-        margin: 1.5rem auto 2rem auto !important;
-    }
-
-    .hero h1 {
-        font-size: 2.55rem !important;
-    }
-
-    .hero p {
-        font-size: 1.05rem !important;
-    }
-
-    .hero-img img {
-        max-height: 360px !important;
-        width: 100% !important;
-        object-fit: contain !important;
-    }
-}
-
-/* =========================================================
-   CHECKOUT FINAL CORRIGIDO - CENTRALIZADO + RÁDIOS NORMAIS
-========================================================= */
-
-.checkout-wrapper {
-    width: 100% !important;
-    max-width: 1280px !important;
-    margin: 24px auto 48px auto !important;
-    padding-left: 22px !important;
-    padding-right: 22px !important;
-}
-
-.checkout-wrapper>.row {
-    align-items: flex-start !important;
-}
-
-.checkout-card,
-.checkout-summary-card {
-    border-radius: 22px !important;
-    border: none !important;
-    overflow: hidden !important;
-}
-
-.checkout-card-header {
-    min-height: 58px !important;
-    display: flex !important;
-    align-items: center !important;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    color: #ffffff !important;
-}
-
-.checkout-summary-card {
-    top: 24px !important;
-    margin-top: 0 !important;
-}
-
-.checkout-form input:not([type="radio"]),
-.checkout-form select,
-.checkout-form textarea {
-    height: 52px !important;
-    border: 2px solid #dbe3ef !important;
-    border-radius: 12px !important;
-    background: #ffffff !important;
-    color: #2c3e50 !important;
-    font-size: 16px !important;
-    box-shadow: none !important;
-}
-
-.checkout-form input:not([type="radio"]):focus,
-.checkout-form select:focus,
-.checkout-form textarea:focus {
-    border-color: #667eea !important;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.18) !important;
-}
-
-.checkout-form label {
-    font-weight: 600 !important;
-    color: #2c3e50 !important;
-    margin-bottom: 7px !important;
-}
-
-.payment-method-toggle {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 14px !important;
-    margin-top: 10px !important;
-}
-
-.payment-method-toggle .form-check {
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding-left: 0 !important;
-    margin: 0 !important;
-    min-height: auto !important;
-}
-
-.checkout-form .payment-method-toggle .form-check-input,
-.payment-method-toggle .form-check-input {
-    width: 18px !important;
-    height: 18px !important;
-    min-width: 18px !important;
-    max-width: 18px !important;
-    min-height: 18px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 1px solid #b8c7db !important;
-    border-radius: 50% !important;
-    background-color: #ffffff !important;
-    appearance: auto !important;
-    -webkit-appearance: radio !important;
-    box-shadow: none !important;
-    transform: none !important;
-    cursor: pointer !important;
-}
-
-.checkout-form .payment-method-toggle .form-check-input:checked,
-.payment-method-toggle .form-check-input:checked {
-    background-color: #667eea !important;
-    border-color: #667eea !important;
-}
-
-.payment-method-toggle .form-check-label {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    margin: 0 !important;
-    font-size: 1rem !important;
-    color: #2c3e50 !important;
-    cursor: pointer !important;
-}
-
-.payment-method-toggle i {
-    color: #4f7bce !important;
-    font-size: 1rem !important;
-}
+/* ===== FIX MENU MOBILE SEM ANIMAÇÃO BUGADA ===== */
 
 @media (max-width: 991px) {
-    .checkout-wrapper {
-        max-width: 100% !important;
-        margin-top: 20px !important;
-        padding-left: 16px !important;
-        padding-right: 16px !important;
+    .navbar-collapse.collapsing {
+        height: auto !important;
+        overflow: hidden !important;
+        transition: none !important;
+        display: none !important;
     }
 
-    .checkout-summary-card {
-        position: static !important;
-        margin-top: 18px !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .checkout-wrapper {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding-left: 14px !important;
-        padding-right: 14px !important;
-        overflow-x: hidden !important;
+    .navbar-collapse.collapse:not(.show) {
+        display: none !important;
     }
 
-    .checkout-wrapper .row {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-    }
-
-    .checkout-wrapper .col-lg-8,
-    .checkout-wrapper .col-lg-4,
-    .checkout-wrapper .col-md-4,
-    .checkout-wrapper .col-md-6,
-    .checkout-wrapper .col-md-8,
-    .checkout-wrapper .col-12 {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-
-    .checkout-card .card-body,
-    .checkout-summary-card .card-body {
-        padding: 22px !important;
-    }
-
-    .checkout-title {
-        font-size: 1.25rem !important;
-    }
-
-    .checkout-card-header h4,
-    .checkout-card-header h5 {
-        font-size: 1.1rem !important;
-    }
-
-    .checkout-form input:not([type="radio"]),
-    .checkout-form select,
-    .checkout-form textarea {
-        height: 56px !important;
-        font-size: 16px !important;
-    }
-
-    #creditCardFields .row {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-    }
-
-    #creditCardFields .row>div {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-}
-
-/* ===== FIX DROPDOWN MINHA CONTA MOBILE ===== */
-
-.navbar,
-.navbar .container-fluid,
-.navbar-collapse {
-    overflow: visible !important;
-}
-
-.navbar {
-    z-index: 9999 !important;
-}
-
-.dropdown-menu {
-    z-index: 10000 !important;
-}
-
-@media (max-width: 991px) {
-    .navbar .dropdown-menu {
-        position: static !important;
-        display: none;
-        width: 100%;
-        margin-top: 8px;
-        text-align: center;
-        background: #ffffff;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    }
-
-    .navbar .dropdown-menu.show {
+    .navbar-collapse.collapse.show {
         display: block !important;
+    }
+
+    .navbar-nav .dropdown-menu {
+        display: none !important;
+    }
+
+    .navbar-nav .dropdown-menu.show {
+        display: block !important;
+    }
+}
+
+/* ===== CHECKOUT NAVBAR MOBILE CORRETA ===== */
+
+@media (max-width: 991px) {
+    .navbar .container-fluid {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: wrap !important;
+    }
+
+    .navbar-brand {
+        order: 1 !important;
+        margin: 0 !important;
+    }
+
+    .navbar-toggler {
+        order: 2 !important;
+        margin-left: auto !important;
+    }
+
+    .navbar-collapse {
+        order: 3 !important;
+        width: 100% !important;
+        flex-basis: 100% !important;
     }
 }
