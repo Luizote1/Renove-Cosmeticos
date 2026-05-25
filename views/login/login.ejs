@@ -28,13 +28,9 @@
 
         <svg class="pill-loader-svg" viewBox="0 0 100 30">
 
-            <path
-                class="pill-half-filled"
-                d="M50 0 L15 0 A15 15 0 0 0 15 30 L50 30 Z" />
+            <path class="pill-half-filled" d="M50 0 L15 0 A15 15 0 0 0 15 30 L50 30 Z" />
 
-            <path
-                class="pill-half-outline"
-                d="M50 0 L85 0 A15 15 0 0 1 85 30 L50 30 Z" />
+            <path class="pill-half-outline" d="M50 0 L85 0 A15 15 0 0 1 85 30 L50 30 Z" />
 
         </svg>
 
@@ -52,10 +48,7 @@
 
             </a>
 
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarTogglerDemo02">
 
                 <span class="navbar-toggler-icon"></span>
@@ -104,7 +97,7 @@
 
         <section class="login-box">
 
-            <% if (msg && msg !== "") { %>
+            <% if (msg && msg !=="" ) { %>
 
                 <div class="alert alert-danger text-center" style="margin-bottom: 15px;">
 
@@ -112,88 +105,74 @@
 
                 </div>
 
-            <% } %>
+                <% } %>
 
-            <form action="/login" method="POST" id="formLogin">
+                    <form action="/login" method="POST" id="formLogin">
 
-                <div class="form-group">
+                        <div class="form-group">
 
-                    <label for="emailCpf">
-                        E-mail ou CPF
-                    </label>
+                            <label for="emailCpf">
+                                E-mail ou CPF
+                            </label>
 
-                    <input
-                        type="text"
-                        id="emailCpf"
-                        name="emailCpf"
-                        class="input"
-                        placeholder="Digite seu e-mail ou CPF">
+                            <input type="text" id="emailCpf" name="emailCpf" class="input"
+                                placeholder="Digite seu e-mail ou CPF">
 
-                    <div class="helper-error" id="emailCpfError">
-                        Informe um e-mail ou CPF válido.
-                    </div>
+                            <div class="helper-error" id="emailCpfError">
+                                Informe um e-mail ou CPF válido.
+                            </div>
 
-                </div>
+                        </div>
 
-                <div class="form-group">
+                        <div class="form-group">
 
-                    <label for="senha">
-                        Senha
-                    </label>
+                            <label for="senha">
+                                Senha
+                            </label>
 
-                    <div class="password-wrapper">
+                            <div class="password-wrapper">
 
-                        <input
-                            type="password"
-                            id="senha"
-                            name="senha"
-                            class="input"
-                            placeholder="Digite sua senha">
+                                <input type="password" id="senha" name="senha" class="input"
+                                    placeholder="Digite sua senha">
 
-                        <button
-                            type="button"
-                            class="toggle-pass"
-                            id="toggleSenha">
+                                <button type="button" class="toggle-pass" id="toggleSenha">
 
-                            👁
+                                    <i class="bi bi-eye-fill"></i>
+
+                                </button>
+                            </div>
+
+                            <div class="helper-error" id="senhaError">
+                                Digite sua senha.
+                            </div>
+
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+
+                            Entrar
 
                         </button>
 
-                    </div>
+                        <div class="forgot-password">
 
-                    <div class="helper-error" id="senhaError">
-                        Digite sua senha.
-                    </div>
+                            <a href="#">
+                                Esqueci a senha
+                            </a>
 
-                </div>
+                        </div>
 
-                <button
-                    type="submit"
-                    class="btn btn-primary">
+                        <div class="bottom-link">
 
-                    Entrar
+                            Não tem conta?
 
-                </button>
+                            <a href="/cadastro">
+                                Cadastre-se
+                            </a>
 
-                <div class="forgot-password">
+                        </div>
 
-                    <a href="#">
-                        Esqueci a senha
-                    </a>
-
-                </div>
-
-                <div class="bottom-link">
-
-                    Não tem conta?
-
-                    <a href="/cadastro">
-                        Cadastre-se
-                    </a>
-
-                </div>
-
-            </form>
+                    </form>
 
         </section>
 
