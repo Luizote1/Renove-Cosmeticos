@@ -213,15 +213,20 @@ body {
     color: #495057;
 }
 
-.progress {
-    display: flex;
-    gap: 10px;
-    height: auto !important;
-    overflow: visible !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    border: none !important;
+.progress{
+    display:flex;
+    gap:6px;
+
+    width:240px;       /* menorzinha */
+    max-width:100%;
+
+    height:auto !important;
+    overflow:visible !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    border:none !important;
 }
+
 
 .progress span {
     flex: 1;

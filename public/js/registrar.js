@@ -1,114 +1,537 @@
 let currentStep = 1;
+let cpfExiste = false;
+let emailExiste = false;
 
-const steps = document.querySelectorAll('.step');
-const progress = document.querySelectorAll('.progress span');
-const stepLabel = document.getElementById('stepLabel');
+document.addEventListener("DOMContentLoaded", function () {
+    updateProgress(1);
+    configurarEventos();
+});
+
+function configurarEventos() {
+    const cpf = document.getElementById("cpf");
+    const nome = document.getElementById("nome");
+    const nascimento = document.getElementById("nascimento");
+    const genero = document.getElementById("genero");
+    const telefone = document.getElementById("telefone");
+    const email = document.getElementById("email");
+    const termos = document.getElementById("termos");
+    const senha = document.getElementById("senha");
+    const confirmarSenha = document.getElementById("confirmarSenha");
+
+    if (cpf) {
+        cpf.addEventListener("input", function (e) {
+            let v = e.target.value.replace(/\D/g, "").slice(0, 11);
+
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+            e.target.value = v;
+
+            cpfExiste = false;
+            document.getElementById("cpfError").textContent = "Digite um CPF válido.";
+            clearError("cpf", "cpfError");
+        });
+
+        cpf.addEventListener("blur", async function () {
+            await validarCampoCpf();
+        });
+    }
+
+    if (nome) {
+        nome.addEventListener("input", function () {
+            clearError("nome", "nomeError");
+        });
+
+        nome.addEventListener("blur", function () {
+            validarCampoNome();
+        });
+    }
+
+    if (nascimento) {
+        nascimento.addEventListener("input", function () {
+            clearError("nascimento", "nascimentoError");
+        });
+
+        nascimento.addEventListener("blur", function () {
+            validarCampoNascimento();
+        });
+    }
+
+    if (genero) {
+        genero.addEventListener("change", function () {
+            validarCampoGenero();
+        });
+    }
+
+    if (telefone) {
+        telefone.addEventListener("input", function (e) {
+            let v = e.target.value.replace(/\D/g, "").slice(0, 11);
+
+            v = v.replace(/(\d{2})(\d)/, "($1) $2");
+            v = v.replace(/(\d{5})(\d{1,4})$/, "$1-$2");
+
+            e.target.value = v;
+
+            clearError("telefone", "telefoneError");
+        });
+
+        telefone.addEventListener("blur", function () {
+            validarCampoTelefone();
+        });
+    }
+
+    if (email) {
+        email.addEventListener("input", function () {
+            emailExiste = false;
+            document.getElementById("emailError").textContent = "Digite um e-mail válido.";
+            clearError("email", "emailError");
+        });
+
+        email.addEventListener("blur", async function () {
+            await validarCampoEmail();
+        });
+    }
+
+    if (termos) {
+        termos.addEventListener("change", function () {
+            validarCampoTermos();
+        });
+    }
+
+    if (senha) {
+        senha.addEventListener("input", function (e) {
+            atualizarRegrasSenha(e.target.value);
+            clearError("senha", "senhaError");
+        });
+
+        senha.addEventListener("blur", function () {
+            validarCampoSenha(true);
+        });
+    }
+
+    if (confirmarSenha) {
+        confirmarSenha.addEventListener("input", function () {
+            clearError("confirmarSenha", "confirmarSenhaError");
+        });
+
+        confirmarSenha.addEventListener("blur", function () {
+            validarCampoConfirmarSenha();
+        });
+    }
+
+    document.querySelectorAll(".toggle-pass").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            const target = document.getElementById(btn.dataset.target);
+
+            if (!target) return;
+
+            target.type = target.type === "password" ? "text" : "password";
+
+            const icon = btn.querySelector("i");
+
+            if (icon) {
+                icon.className = target.type === "password" ? "bi bi-eye" : "bi bi-eye-slash";
+            }
+        });
+    });
+}
 
 function updateProgress(step) {
+    const stepLabel = document.getElementById("stepLabel");
+    const progress = document.querySelectorAll(".progress span");
 
-    stepLabel.textContent = `Passo ${step} de 2`;
+    if (stepLabel) {
+        stepLabel.textContent = `Passo ${step} de 2`;
+    }
 
-    progress.forEach((bar, index) => {
-        bar.classList.toggle('active', index < step);
+    progress.forEach(function (bar, index) {
+        bar.classList.toggle("active", index < step);
     });
 }
 
 function goToStep(step) {
-
     currentStep = step;
 
-    steps.forEach(s => s.classList.remove('active'));
+    const steps = document.querySelectorAll(".step");
 
-    document
-        .querySelector(`.step[data-step="${step}"]`)
-        .classList.add('active');
+    steps.forEach(function (s) {
+        s.classList.remove("active");
+    });
+
+    const atual = document.querySelector(`.step[data-step="${step}"]`);
+
+    if (atual) {
+        atual.classList.add("active");
+    }
 
     updateProgress(step);
 }
 
 async function nextStep(step) {
-
-    if (step === 1 && !validateStep1()) {
-        return;
-    }
-
     if (step === 1) {
+        const ok = await validateStep1();
+
+        if (!ok) return;
+
         goToStep(2);
         return;
     }
 
-    if (step === 2 && !validateStep2()) {
-        return;
-    }
+    if (step === 2) {
+        if (!validateStep2()) return;
 
-    try {
-
-        const cpf = document.getElementById('cpf').value.trim();
-        const nome = document.getElementById('nome').value.trim();
-        const nascimento = document.getElementById('nascimento').value;
-        const genero = document.getElementById('genero').value.trim();
-        const telefone = document.getElementById('telefone').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const senha = document.getElementById('senha').value;
-
-        const response = await fetch("/cadastro/gravar", {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                cpf,
-                nome,
-                nascimento,
-                genero,
-                telefone,
-                email,
-                senha
-            })
-        });
-
-        const json = await response.json();
-
-        if (!json.ok) {
-
-            alert(json.msg);
-            return;
-        }
-
-        alert(json.msg);
-
-        // AGORA ENTRA DIRETO LOGADO
-        window.location.href = "/";
-
-    } catch (erro) {
-
-        console.log(erro);
-
-        alert("Erro ao realizar cadastro.");
+        await finalizarCadastro();
     }
 }
 
 function prevStep(step) {
-
     if (step > 1) {
         goToStep(step - 1);
     }
 }
 
-function showError(inputId, errorId, show = true) {
+async function finalizarCadastro() {
+    try {
+        const cpf = document.getElementById("cpf").value.trim();
+        const nome = document.getElementById("nome").value.trim();
+        const nascimento = document.getElementById("nascimento").value;
+        const genero = document.getElementById("genero").value.trim();
+        const telefone = document.getElementById("telefone").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const senha = document.getElementById("senha").value;
 
+        const response = await fetch("/cadastro/gravar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                cpf: onlyDigits(cpf),
+                nome: nome,
+                nascimento: nascimento,
+                genero: genero,
+                telefone: telefone,
+                email: email,
+                senha: senha
+            })
+        });
+
+        const json = await response.json();
+
+        alert(json.msg);
+
+        if (json.ok) {
+            window.location.href = "/";
+        }
+
+    } catch (erro) {
+        console.log(erro);
+        alert("Erro ao realizar cadastro.");
+    }
+}
+
+async function verificarCadastroExistente(dados) {
+    try {
+        const response = await fetch("/cadastro/verificar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dados)
+        });
+
+        const json = await response.json();
+
+        if (dados.cpf) {
+            cpfExiste = json.existe;
+
+            if (json.existe) {
+                document.getElementById("cpfError").textContent = "Este CPF já está cadastrado.";
+                showError("cpf", "cpfError");
+            }
+        }
+
+        if (dados.email) {
+            emailExiste = json.existe;
+
+            if (json.existe) {
+                document.getElementById("emailError").textContent = "Este e-mail já está cadastrado.";
+                showError("email", "emailError");
+            }
+        }
+
+    } catch (erro) {
+        console.log("Erro ao verificar cadastro:", erro);
+    }
+}
+
+async function validarCampoCpf() {
+    const cpf = document.getElementById("cpf").value.trim();
+
+    clearError("cpf", "cpfError");
+    document.getElementById("cpfError").textContent = "Digite um CPF válido.";
+
+    if (!isValidCPF(cpf)) {
+        showError("cpf", "cpfError");
+        return false;
+    }
+
+    await verificarCadastroExistente({
+        cpf: onlyDigits(cpf)
+    });
+
+    return !cpfExiste;
+}
+
+function validarCampoNome() {
+    const nome = document.getElementById("nome").value.trim();
+    const partes = nome.split(/\s+/).filter(Boolean);
+
+    clearError("nome", "nomeError");
+
+    if (partes.length < 2 || nome.length < 6) {
+        showError("nome", "nomeError");
+        return false;
+    }
+
+    return true;
+}
+
+function validarCampoNascimento() {
+
+    const nascimentoInput =
+        document.getElementById("nascimento");
+
+    const nascimento =
+        nascimentoInput.value;
+
+    clearError(
+        "nascimento",
+        "nascimentoError"
+    );
+
+    if (!nascimento) {
+
+        document.getElementById(
+            "nascimentoError"
+        ).innerText =
+            "Informe sua data de nascimento.";
+
+        showError(
+            "nascimento",
+            "nascimentoError"
+        );
+
+        return false;
+    }
+
+    const birth =
+        new Date(
+            nascimento + "T00:00:00"
+        );
+
+    const today =
+        new Date();
+
+    if (birth > today) {
+
+        document.getElementById(
+            "nascimentoError"
+        ).innerText =
+            "Data inválida.";
+
+        showError(
+            "nascimento",
+            "nascimentoError"
+        );
+
+        return false;
+    }
+
+    let idade =
+        today.getFullYear() -
+        birth.getFullYear();
+
+    const mes =
+        today.getMonth() -
+        birth.getMonth();
+
+    if (
+        mes < 0 ||
+        (
+            mes === 0 &&
+            today.getDate() <
+            birth.getDate()
+        )
+    ) {
+        idade--;
+    }
+
+    if (idade < 18) {
+
+        document.getElementById(
+            "nascimentoError"
+        ).innerText =
+            "Você deve ter pelo menos 18 anos.";
+
+        showError(
+            "nascimento",
+            "nascimentoError"
+        );
+
+        return false;
+    }
+
+    if (
+        idade > 95 ||
+        birth.getFullYear() < 1930
+    ) {
+
+        document.getElementById(
+            "nascimentoError"
+        ).innerText =
+            "Data de nascimento inválida.";
+
+        showError(
+            "nascimento",
+            "nascimentoError"
+        );
+
+        return false;
+    }
+
+    clearError(
+        "nascimento",
+        "nascimentoError"
+    );
+
+    return true;
+}
+
+function validarCampoGenero() {
+    const genero = document.getElementById("genero").value.trim();
+
+    clearError("genero", "generoError");
+
+    if (!genero) {
+        showError("genero", "generoError");
+        return false;
+    }
+
+    return true;
+}
+
+function validarCampoTelefone() {
+    const telefone = document.getElementById("telefone").value.trim();
+
+    clearError("telefone", "telefoneError");
+
+    if (onlyDigits(telefone).length !== 11) {
+        showError("telefone", "telefoneError");
+        return false;
+    }
+
+    return true;
+}
+
+async function validarCampoEmail() {
+    const email = document.getElementById("email").value.trim();
+
+    clearError("email", "emailError");
+    document.getElementById("emailError").textContent = "Digite um e-mail válido.";
+
+    if (!isValidEmail(email)) {
+        showError("email", "emailError");
+        return false;
+    }
+
+    await verificarCadastroExistente({
+        email: email
+    });
+
+    return !emailExiste;
+}
+
+function validarCampoTermos() {
+    const termos = document.getElementById("termos").checked;
+
+    clearError("termos", "termosError");
+
+    if (!termos) {
+        showError("termos", "termosError");
+        return false;
+    }
+
+    return true;
+}
+
+function validarCampoSenha(mostrarErro) {
+    const senha = document.getElementById("senha").value;
+
+    const strong =
+        senha.length >= 8 &&
+        senha.length <= 25 &&
+        /[0-9]/.test(senha) &&
+        /[A-Z]/.test(senha) &&
+        /[a-z]/.test(senha);
+
+    if (mostrarErro) {
+        clearError("senha", "senhaError");
+
+        if (!strong) {
+            showError("senha", "senhaError");
+        }
+    }
+
+    return strong;
+}
+
+function validarCampoConfirmarSenha() {
+    const senha = document.getElementById("senha").value;
+    const confirmar = document.getElementById("confirmarSenha").value;
+
+    clearError("confirmarSenha", "confirmarSenhaError");
+
+    if (!confirmar || senha !== confirmar) {
+        showError("confirmarSenha", "confirmarSenhaError");
+        return false;
+    }
+
+    return true;
+}
+
+async function validateStep1() {
+    const resultados = await Promise.all([
+        validarCampoCpf(),
+        Promise.resolve(validarCampoNome()),
+        Promise.resolve(validarCampoNascimento()),
+        Promise.resolve(validarCampoGenero()),
+        Promise.resolve(validarCampoTelefone()),
+        validarCampoEmail(),
+        Promise.resolve(validarCampoTermos())
+    ]);
+
+    return resultados.every(Boolean);
+}
+
+function validateStep2() {
+    let okSenha = validarCampoSenha(true);
+    let okConfirmar = validarCampoConfirmarSenha();
+
+    return okSenha && okConfirmar;
+}
+
+function showError(inputId, errorId, show = true) {
     const input = document.getElementById(inputId);
     const error = document.getElementById(errorId);
 
     if (input) {
-        input.classList.toggle('invalid', show);
+        input.classList.toggle("invalid", show);
     }
 
     if (error) {
-        error.classList.toggle('show', show);
+        error.classList.toggle("show", show);
     }
 }
 
@@ -117,7 +540,7 @@ function clearError(inputId, errorId) {
 }
 
 function onlyDigits(value) {
-    return value.replace(/\D/g, '');
+    return String(value || "").replace(/\D/g, "");
 }
 
 function isValidEmail(email) {
@@ -125,7 +548,6 @@ function isValidEmail(email) {
 }
 
 function isValidCPF(cpf) {
-
     cpf = onlyDigits(cpf);
 
     if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
@@ -165,278 +587,69 @@ function isValidCPF(cpf) {
 
 function isValidBirthDate(dateValue) {
 
-    if (!dateValue) {
+    if (!dateValue)
         return false;
-    }
 
-    const birth = new Date(dateValue + 'T00:00:00');
+    const birth =
+        new Date(
+            dateValue + "T00:00:00"
+        );
 
-    const today = new Date();
+    const today =
+        new Date();
 
-    if (birth > today) {
+    if (birth > today)
         return false;
-    }
 
-    let age = today.getFullYear() - birth.getFullYear();
+    let idade =
+        today.getFullYear() -
+        birth.getFullYear();
 
-    const monthDiff = today.getMonth() - birth.getMonth();
+    const mes =
+        today.getMonth() -
+        birth.getMonth();
 
     if (
-        monthDiff < 0 ||
-        (monthDiff === 0 && today.getDate() < birth.getDate())
+        mes < 0 ||
+        (
+            mes === 0 &&
+            today.getDate() <
+            birth.getDate()
+        )
     ) {
-        age--;
+        idade--;
     }
 
-    return age >= 13;
+    if (idade < 18)
+        return false;
+
+    if (idade > 95)
+        return false;
+
+    if (
+        birth.getFullYear() < 1930
+    )
+        return false;
+
+    return true;
 }
 
-function validateStep1() {
-
-    const cpf = document.getElementById('cpf').value.trim();
-    const nome = document.getElementById('nome').value.trim();
-    const nascimento = document.getElementById('nascimento').value;
-    const genero = document.getElementById('genero').value.trim();
-    const telefone = document.getElementById('telefone').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const termos = document.getElementById('termos').checked;
-
-    let ok = true;
-
-    clearError('cpf', 'cpfError');
-    clearError('nome', 'nomeError');
-    clearError('nascimento', 'nascimentoError');
-    clearError('genero', 'generoError');
-    clearError('telefone', 'telefoneError');
-    clearError('email', 'emailError');
-
-    document
-        .getElementById('termosError')
-        .classList.remove('show');
-
-    if (!isValidCPF(cpf)) {
-        showError('cpf', 'cpfError');
-        ok = false;
-    }
-
-    const nomePartes = nome.split(/\s+/).filter(Boolean);
-
-    if (nomePartes.length < 2 || nome.length < 6) {
-        showError('nome', 'nomeError');
-        ok = false;
-    }
-
-    if (!isValidBirthDate(nascimento)) {
-        showError('nascimento', 'nascimentoError');
-        ok = false;
-    }
-
-    if (!genero) {
-        showError('genero', 'generoError');
-        ok = false;
-    }
-
-    if (onlyDigits(telefone).length !== 11) {
-        showError('telefone', 'telefoneError');
-        ok = false;
-    }
-
-    if (!isValidEmail(email)) {
-        showError('email', 'emailError');
-        ok = false;
-    }
-
-    if (!termos) {
-
-        document
-            .getElementById('termosError')
-            .classList.add('show');
-
-        ok = false;
-    }
-
-    return ok;
-}
-
-function validateStep2() {
-
-    const senha = document.getElementById('senha').value;
-
-    const confirmar = document.getElementById('confirmarSenha').value;
-
-    const strong =
-        senha.length >= 8 &&
-        senha.length <= 25 &&
-        /[0-9]/.test(senha) &&
-        /[A-Z]/.test(senha) &&
-        /[a-z]/.test(senha);
-
-    clearError('senha', 'senhaError');
-    clearError('confirmarSenha', 'confirmarSenhaError');
-
-    let ok = true;
-
-    if (!strong) {
-        showError('senha', 'senhaError');
-        ok = false;
-    }
-
-    if (!confirmar || senha !== confirmar) {
-        showError('confirmarSenha', 'confirmarSenhaError');
-        ok = false;
-    }
-
-    return ok;
-}
-
-// CPF
-document.getElementById('cpf').addEventListener('input', async e => {
-
-    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
-
-    v = v.replace(/(\d{3})(\d)/, '$1.$2');
-    v = v.replace(/(\d{3})(\d)/, '$1.$2');
-    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-
-    e.target.value = v;
-
-    clearError('cpf', 'cpfError');
-
-    if (v.length === 14) {
-
-        const response = await fetch('/cadastro/verificar', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                cpf: v.replace(/\D/g, '')
-            })
-        });
-
-        const json = await response.json();
-
-        if (json.existe) {
-
-            document.getElementById('cpfError').textContent =
-                'Este CPF já está cadastrado.';
-
-            showError('cpf', 'cpfError');
-
-        } else {
-
-            document.getElementById('cpfError').textContent =
-                'Digite um CPF válido.';
-        }
-    }
-});
-
-// EMAIL
-document.getElementById('email').addEventListener('blur', async () => {
-
-    const email = document.getElementById('email').value.trim();
-
-    clearError('email', 'emailError');
-
-    if (!isValidEmail(email)) {
-        return;
-    }
-
-    const response = await fetch('/cadastro/verificar', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            email
-        })
-    });
-
-    const json = await response.json();
-
-    if (json.existe) {
-
-        document.getElementById('emailError').textContent =
-            'Este e-mail já está cadastrado.';
-
-        showError('email', 'emailError');
-
-    } else {
-
-        document.getElementById('emailError').textContent =
-            'Digite um e-mail válido.';
-    }
-});
-
-document.getElementById('nome').addEventListener('input', () => {
-    clearError('nome', 'nomeError');
-});
-
-document.getElementById('nascimento').addEventListener('input', () => {
-    clearError('nascimento', 'nascimentoError');
-});
-
-document.getElementById('genero').addEventListener('change', () => {
-    clearError('genero', 'generoError');
-});
-
-document.getElementById('telefone').addEventListener('input', e => {
-
-    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
-
-    v = v.replace(/(\d{2})(\d)/, '($1) $2');
-    v = v.replace(/(\d{5})(\d{1,4})$/, '$1-$2');
-
-    e.target.value = v;
-
-    clearError('telefone', 'telefoneError');
-});
-
-document.getElementById('termos').addEventListener('change', () => {
-
-    document
-        .getElementById('termosError')
-        .classList.remove('show');
-});
-
-document.getElementById('senha').addEventListener('input', e => {
-
-    const value = e.target.value;
-
+function atualizarRegrasSenha(value) {
     const checks = {
-        'rule-length': value.length >= 8 && value.length <= 25,
-        'rule-number': /[0-9]/.test(value),
-        'rule-upper': /[A-Z]/.test(value),
-        'rule-lower': /[a-z]/.test(value)
+        "rule-length": value.length >= 8 && value.length <= 25,
+        "rule-number": /[0-9]/.test(value),
+        "rule-upper": /[A-Z]/.test(value),
+        "rule-lower": /[a-z]/.test(value)
     };
 
-    Object.entries(checks).forEach(([id, valid]) => {
-
+    Object.entries(checks).forEach(function ([id, valid]) {
         const item = document.getElementById(id);
 
-        const texto = item.textContent.replace(/^[✓○]\s/, '');
+        if (!item) return;
 
-        item.classList.toggle('ok', valid);
+        const texto = item.textContent.replace(/^[✓○]\s/, "");
 
-        item.textContent = `${valid ? '✓' : '○'} ${texto}`;
+        item.classList.toggle("ok", valid);
+        item.textContent = `${valid ? "✓" : "○"} ${texto}`;
     });
-
-    clearError('senha', 'senhaError');
-});
-
-document.getElementById('confirmarSenha').addEventListener('input', () => {
-    clearError('confirmarSenha', 'confirmarSenhaError');
-});
-
-document.querySelectorAll('.toggle-pass').forEach(btn => {
-
-    btn.addEventListener('click', () => {
-
-        const target = document.getElementById(btn.dataset.target);
-
-        target.type =
-            target.type === 'password'
-                ? 'text'
-                : 'password';
-    });
-});
+}

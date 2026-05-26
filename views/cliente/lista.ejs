@@ -1,18 +1,17 @@
 <script src="/js/cliente/listar.js"></script>
 
-<div>
-    <h1>Clientes cadastrados</h1>
+<div class="page-card">
 
-    <div>
+    <div class="page-header">
+        <h1>Clientes cadastrados</h1>
+
         <a class="btn btn-primary" href="/cliente/cadastrar">
             <i class="fas fa-plus"></i> Cadastrar Cliente
         </a>
     </div>
 
-    <br>
-
-    <div>
-        <table class="table table-striped">
+    <div class="table-responsive tabela-scroll">
+        <table class="table table-striped table-hover align-middle tabela-sistema">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -33,10 +32,15 @@
                         <td><%= lista[i].cliId %></td>
                         <td><%= lista[i].cliNome %></td>
                         <td><%= lista[i].cliCpf %></td>
-                        <td><%= lista[i].cliNascimento %></td>
+
+                        <td>
+                            <%= lista[i].cliNascimento ? new Date(lista[i].cliNascimento).toLocaleDateString("pt-BR") : "---" %>
+                        </td>
+
                         <td><%= lista[i].cliGenero %></td>
                         <td><%= lista[i].cliTelefone %></td>
                         <td><%= lista[i].cliEmail %></td>
+
                         <td>
                             <% if(lista[i].cliAtivo == "s") { %>
                                 <span class="badge bg-success">Sim</span>
@@ -44,18 +48,22 @@
                                 <span class="badge bg-danger">Não</span>
                             <% } %>
                         </td>
-                        <td>
-                            <a href="/cliente/alterar/<%= lista[i].cliId %>" class="btn btn-primary">
-                                <i class="fas fa-pen"></i>
-                            </a>
 
-                            <button data-id="<%= lista[i].cliId %>" class="btn btn-danger btnExcluir" type="button">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                        <td>
+                            <div class="acoes">
+                                <a href="/cliente/alterar/<%= lista[i].cliId %>" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+
+                                <button data-id="<%= lista[i].cliId %>" class="btn btn-danger btn-sm btnExcluir" type="button">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 <% } %>
             </tbody>
         </table>
     </div>
+
 </div>

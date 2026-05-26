@@ -1,12 +1,17 @@
 <script src="/js/usuario/listar.js"></script>
-<div>
-    <h1>Usuários cadastrados</h1>
-    <div>
-        <a class="btn btn-primary" href="/usuario/cadastrar"><i class="fas fa-plus"></i> Cadastrar Usuário</a>
+
+<div class="page-card">
+
+    <div class="page-header">
+        <h1>Usuários cadastrados</h1>
+
+        <a class="btn btn-primary" href="/usuario/cadastrar">
+            <i class="fas fa-plus"></i> Cadastrar Usuário
+        </a>
     </div>
-    <br>
-    <div>
-        <table class="table table-striped">
+
+    <div class="table-responsive tabela-scroll">
+        <table class="table table-striped table-hover align-middle tabela-sistema">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -17,28 +22,39 @@
                     <th>Ações</th>
                 </tr>
             </thead>
+
             <tbody>
                 <% for(let i = 0; i < lista.length; i++) { %>
                     <tr>
                         <td><%= lista[i].usuId %></td>
                         <td><%= lista[i].usuNome %></td>
                         <td><%= lista[i].usuEmail %></td>
-                        <td><%= lista[i].usuAtivo %></td>
-                        <td><%= lista[i].perfilId %></td>
+
                         <td>
-                            <a href="/usuario/alterar/<%= lista[i].usuId %>" class="btn btn-primary">
-                                <i class="fas fa-pen"></i>
-                            </a>
-                            <button data-id="<%= lista[i].usuId %>" class="btn btn-danger btnExcluir">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <% if(lista[i].usuAtivo == "s") { %>
+                                <span class="badge bg-success">Sim</span>
+                            <% } else { %>
+                                <span class="badge bg-danger">Não</span>
+                            <% } %>
+                        </td>
+
+                        <td><%= lista[i].perfilId %></td>
+
+                        <td>
+                            <div class="acoes">
+                                <a href="/usuario/alterar/<%= lista[i].usuId %>" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+
+                                <button data-id="<%= lista[i].usuId %>" class="btn btn-danger btn-sm btnExcluir">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 <% } %>
-                
             </tbody>
-
-
         </table>
     </div>
+
 </div>
