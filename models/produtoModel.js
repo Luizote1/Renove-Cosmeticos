@@ -17,6 +17,10 @@ class ProdutoModel {
     #catDescricao;
     #tipDescricao;
     #labNome;
+    #promoDesconto;
+    #promoPrecoFinal;
+    #promoInicio;
+    #promoFim;
 
     get proCodigo() { return this.#proCodigo; }
     set proCodigo(value) { this.#proCodigo = value; }
@@ -60,6 +64,18 @@ class ProdutoModel {
     get labNome() { return this.#labNome; }
     set labNome(value) { this.#labNome = value; }
 
+    get promoDesconto() { return this.#promoDesconto; }
+    set promoDesconto(value) { this.#promoDesconto = value; }
+
+    get promoPrecoFinal() { return this.#promoPrecoFinal; }
+    set promoPrecoFinal(value) { this.#promoPrecoFinal = value; }
+
+    get promoInicio() { return this.#promoInicio; }
+    set promoInicio(value) { this.#promoInicio = value; }
+
+    get promoFim() { return this.#promoFim; }
+    set promoFim(value) { this.#promoFim = value; }
+
     constructor(
         proCodigo,
         proNome,
@@ -74,7 +90,11 @@ class ProdutoModel {
         labId,
         catDescricao = "",
         tipDescricao = "",
-        labNome = ""
+        labNome = "",
+        promoDesconto = null,
+        promoPrecoFinal = null,
+        promoInicio = null,
+        promoFim = null
     ) {
         this.#proCodigo = proCodigo;
         this.#proNome = proNome;
@@ -90,6 +110,10 @@ class ProdutoModel {
         this.#catDescricao = catDescricao;
         this.#tipDescricao = tipDescricao;
         this.#labNome = labNome;
+        this.#promoDesconto = promoDesconto;
+        this.#promoPrecoFinal = promoPrecoFinal;
+        this.#promoInicio = promoInicio;
+        this.#promoFim = promoFim;
     }
 
     montarImagem(imagemBanco) {
@@ -107,6 +131,17 @@ class ProdutoModel {
         }
 
         return imagem;
+    }
+
+    calcularPrecoFinal(preco, desconto) {
+        preco = Number(preco);
+        desconto = Number(desconto);
+
+        if (!desconto || desconto <= 0) {
+            return null;
+        }
+
+        return preco - (preco * desconto / 100);
     }
 
     async cadastrar() {
@@ -229,7 +264,7 @@ class ProdutoModel {
 
         let banco = new Database();
 
-        return await banco.ExecutaComandoNonQuery(sql, valores) > 0;
+        return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
     async deletar(codigo) {
@@ -308,18 +343,25 @@ class ProdutoModel {
     async listarAtivos() {
 
         let sql = `
-        select
-            p.*,
-            c.cat_descricao,
-            t.tip_descricao,
-            l.lab_nome
-        from tb_produto p
-        inner join tb_categoria c on p.cat_id = c.cat_id
-        inner join tb_tipo_produto t on p.tip_id = t.tip_id
-        inner join tb_laboratorio l on p.lab_id = l.lab_id
-        where p.pro_ativo = 's'
-        order by p.pro_codigo
-    `;
+            select
+                p.*,
+                c.cat_descricao,
+                t.tip_descricao,
+                l.lab_nome,
+                promo.prom_desconto,
+                promo.prom_data_inicio,
+                promo.prom_data_fim
+            from tb_produto p
+            inner join tb_categoria c on p.cat_id = c.cat_id
+            inner join tb_tipo_produto t on p.tip_id = t.tip_id
+            inner join tb_laboratorio l on p.lab_id = l.lab_id
+            left join tb_promocao promo
+                on promo.pro_codigo = p.pro_codigo
+                and promo.prom_ativo = 's'
+                and curdate() between promo.prom_data_inicio and promo.prom_data_fim
+            where p.pro_ativo = 's'
+            order by p.pro_codigo
+        `;
 
         let banco = new Database();
 
@@ -330,6 +372,9 @@ class ProdutoModel {
         for (let i = 0; i < rows.length; i++) {
 
             let imagem = this.montarImagem(rows[i]["pro_imagem"]);
+
+            let desconto = rows[i]["prom_desconto"];
+            let precoFinal = this.calcularPrecoFinal(rows[i]["pro_preco"], desconto);
 
             lista.push(
                 new ProdutoModel(
@@ -346,7 +391,11 @@ class ProdutoModel {
                     rows[i]["lab_id"],
                     rows[i]["cat_descricao"],
                     rows[i]["tip_descricao"],
-                    rows[i]["lab_nome"]
+                    rows[i]["lab_nome"],
+                    desconto,
+                    precoFinal,
+                    rows[i]["prom_data_inicio"],
+                    rows[i]["prom_data_fim"]
                 )
             );
         }
@@ -366,19 +415,19 @@ class ProdutoModel {
 
         let banco = new Database();
 
-        return await banco.ExecutaComandoNonQuery(sql, valores) > 0;
+        return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
     async listarDestaques() {
 
         let sql = `
-        SELECT *
-        FROM tb_produto
-        WHERE pro_ativo = 's'
-        AND pro_estoque > 0
-        ORDER BY pro_codigo DESC
-        LIMIT 3
-    `;
+            SELECT *
+            FROM tb_produto
+            WHERE pro_ativo = 's'
+            AND pro_estoque > 0
+            ORDER BY pro_codigo DESC
+            LIMIT 3
+        `;
 
         let banco = new Database();
 
@@ -424,7 +473,11 @@ class ProdutoModel {
             proDataValidade: this.#proDataValidade,
             catDescricao: this.#catDescricao,
             tipDescricao: this.#tipDescricao,
-            labNome: this.#labNome
+            labNome: this.#labNome,
+            promoDesconto: this.#promoDesconto,
+            promoPrecoFinal: this.#promoPrecoFinal,
+            promoInicio: this.#promoInicio,
+            promoFim: this.#promoFim
         };
     }
 }
