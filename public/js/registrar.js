@@ -5,6 +5,7 @@ let emailExiste = false;
 document.addEventListener("DOMContentLoaded", function () {
     updateProgress(1);
     configurarEventos();
+    configurarDataNascimento();
 });
 
 function configurarEventos() {
@@ -53,12 +54,20 @@ function configurarEventos() {
             clearError("nascimento", "nascimentoError");
         });
 
+        nascimento.addEventListener("change", function () {
+            validarCampoNascimento();
+        });
+
         nascimento.addEventListener("blur", function () {
             validarCampoNascimento();
         });
     }
 
     if (genero) {
+        genero.addEventListener("change", function () {
+            validarCampoGenero();
+        });
+
         genero.addEventListener("blur", function () {
             validarCampoGenero();
         });
@@ -134,6 +143,39 @@ function configurarEventos() {
                 icon.className = target.type === "password" ? "bi bi-eye" : "bi bi-eye-slash";
             }
         });
+    });
+}
+
+function configurarDataNascimento() {
+    const campo = document.getElementById("nascimento");
+    if (!campo) return;
+
+    campo.setAttribute("min", "1930-01-01");
+
+    const hoje = new Date();
+
+    const dataMaxima = new Date(
+        hoje.getFullYear() - 18,
+        hoje.getMonth(),
+        hoje.getDate()
+    );
+
+    const ano = dataMaxima.getFullYear();
+    const mes = String(dataMaxima.getMonth() + 1).padStart(2, "0");
+    const dia = String(dataMaxima.getDate()).padStart(2, "0");
+
+    campo.setAttribute("max", `${ano}-${mes}-${dia}`);
+
+    campo.addEventListener("focus", function () {
+        if (!campo.value) {
+            campo.value = campo.max;
+        }
+    });
+
+    campo.addEventListener("click", function () {
+        if (!campo.value) {
+            campo.value = campo.max;
+        }
     });
 }
 
@@ -524,55 +566,6 @@ function isValidCPF(cpf) {
     }
 
     return digit2 === Number(cpf[10]);
-}
-
-function isValidBirthDate(dateValue) {
-
-    if (!dateValue)
-        return false;
-
-    const birth =
-        new Date(
-            dateValue + "T00:00:00"
-        );
-
-    const today =
-        new Date();
-
-    if (birth > today)
-        return false;
-
-    let idade =
-        today.getFullYear() -
-        birth.getFullYear();
-
-    const mes =
-        today.getMonth() -
-        birth.getMonth();
-
-    if (
-        mes < 0 ||
-        (
-            mes === 0 &&
-            today.getDate() <
-            birth.getDate()
-        )
-    ) {
-        idade--;
-    }
-
-    if (idade < 18)
-        return false;
-
-    if (idade > 95)
-        return false;
-
-    if (
-        birth.getFullYear() < 1930
-    )
-        return false;
-
-    return true;
 }
 
 function atualizarRegrasSenha(value) {
