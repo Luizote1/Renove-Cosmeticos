@@ -28,32 +28,45 @@
             </thead>
 
             <tbody>
-                <% for(let i = 0; i < lista.length; i++) { %>
+                <% for(let i=0; i < lista.length; i++) { %>
                     <tr>
-                        <td><%= lista[i].proCodigo %></td>
-                        <td><%= lista[i].proNome %></td>
-
                         <td>
-                            R$ <%= Number(lista[i].proPreco).toFixed(2).replace(".", ",") %>
+                            <%= lista[i].proCodigo %>
                         </td>
-
-                        <td><%= lista[i].proEstoque %></td>
-
                         <td>
-                            <%= lista[i].proDataValidade ? new Date(lista[i].proDataValidade).toLocaleDateString("pt-BR") : "---" %>
+                            <%= lista[i].proNome %>
                         </td>
 
                         <td>
-                            <% if(lista[i].proAtivo == "s") { %>
+                            R$ <%= Number(lista[i].proPreco).toFixed(2).replace(".", "," ) %>
+                        </td>
+
+                        <td>
+                            <%= lista[i].proEstoque %>
+                        </td>
+
+                        <td>
+                            <%= lista[i].proDataValidade ? new
+                                Date(lista[i].proDataValidade).toLocaleDateString("pt-BR") : "---" %>
+                        </td>
+
+                        <td>
+                            <% if(lista[i].proAtivo=="s" ) { %>
                                 <span class="badge bg-success">Sim</span>
-                            <% } else { %>
-                                <span class="badge bg-danger">Não</span>
-                            <% } %>
+                                <% } else { %>
+                                    <span class="badge bg-danger">Não</span>
+                                    <% } %>
                         </td>
 
-                        <td><%= lista[i].catDescricao || "---" %></td>
-                        <td><%= lista[i].tipDescricao || "---" %></td>
-                        <td><%= lista[i].labNome || "---" %></td>
+                        <td>
+                            <%= lista[i].catDescricao || "---" %>
+                        </td>
+                        <td>
+                            <%= lista[i].tipDescricao || "---" %>
+                        </td>
+                        <td>
+                            <%= lista[i].labNome || "---" %>
+                        </td>
 
                         <td>
                             <div class="acoes">
@@ -61,13 +74,13 @@
                                     <i class="fas fa-pen"></i>
                                 </a>
 
-                                <button data-id="<%= lista[i].proCodigo %>" class="btn btn-danger btn-sm btnExcluir">
+                                <button data-codigo="<%= lista[i].proCodigo %>" class="btn btn-danger btn-sm btnExcluir" type="button">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
-                <% } %>
+                    <% } %>
             </tbody>
         </table>
     </div>

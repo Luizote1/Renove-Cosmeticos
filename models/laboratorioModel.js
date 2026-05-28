@@ -16,52 +16,29 @@ class LaboratorioModel {
         this.#labAtivo = labAtivo;
     }
 
-    get labId() {
-        return this.#labId;
-    }
+    get labId() { return this.#labId; }
+    set labId(value) { this.#labId = value; }
 
-    set labId(value) {
-        this.#labId = value;
-    }
+    get labNome() { return this.#labNome; }
+    set labNome(value) { this.#labNome = value; }
 
-    get labNome() {
-        return this.#labNome;
-    }
+    get labTelefone() { return this.#labTelefone; }
+    set labTelefone(value) { this.#labTelefone = value; }
 
-    set labNome(value) {
-        this.#labNome = value;
-    }
+    get labEmail() { return this.#labEmail; }
+    set labEmail(value) { this.#labEmail = value; }
 
-    get labTelefone() {
-        return this.#labTelefone;
-    }
-
-    set labTelefone(value) {
-        this.#labTelefone = value;
-    }
-
-    get labEmail() {
-        return this.#labEmail;
-    }
-
-    set labEmail(value) {
-        this.#labEmail = value;
-    }
-
-    get labAtivo() {
-        return this.#labAtivo;
-    }
-
-    set labAtivo(value) {
-        this.#labAtivo = value;
-    }
+    get labAtivo() { return this.#labAtivo; }
+    set labAtivo(value) { this.#labAtivo = value; }
 
     async listar() {
         let sql = "select * from tb_laboratorio order by lab_id";
+
         let banco = new Database();
         let rows = await banco.ExecutaComando(sql);
 
         let lista = [];
+
         for (let i = 0; i < rows.length; i++) {
             lista.push(new LaboratorioModel(
                 rows[i]["lab_id"],
@@ -77,6 +54,7 @@ class LaboratorioModel {
 
     async obter(id) {
         let sql = "select * from tb_laboratorio where lab_id = ?";
+
         let banco = new Database();
         let rows = await banco.ExecutaComando(sql, [id]);
 
@@ -100,15 +78,14 @@ class LaboratorioModel {
             values (?, ?, ?, ?)
         `;
 
-        let valores = [
+        let banco = new Database();
+
+        return await banco.ExecutaComandoNonQuery(sql, [
             this.#labNome,
             this.#labTelefone,
             this.#labEmail,
             this.#labAtivo
-        ];
-
-        let banco = new Database();
-        return await banco.ExecutaComandoNonQuery(sql, valores);
+        ]);
     }
 
     async atualizar() {
@@ -118,21 +95,39 @@ class LaboratorioModel {
             where lab_id = ?
         `;
 
-        let valores = [
+        let banco = new Database();
+
+        return await banco.ExecutaComandoNonQuery(sql, [
             this.#labNome,
             this.#labTelefone,
             this.#labEmail,
             this.#labAtivo,
             this.#labId
-        ];
+        ]);
+    }
+
+    async estaEmUso(id) {
+        let sql = `
+            select count(*) as total
+            from tb_produto
+            where lab_id = ?
+        `;
 
         let banco = new Database();
-        return await banco.ExecutaComandoNonQuery(sql, valores);
+        let rows = await banco.ExecutaComando(sql, [id]);
+
+        return rows[0].total > 0;
     }
 
     async deletar(id) {
+        if (await this.estaEmUso(id)) {
+            return false;
+        }
+
         let sql = "delete from tb_laboratorio where lab_id = ?";
+
         let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, [id]);
     }
 }

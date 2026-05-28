@@ -82,15 +82,17 @@ class AgendamentoModel {
 
     async listar() {
         let sql = `
-            select
+            SELECT
                 a.*,
                 s.ser_descricao,
                 s.ser_cor,
                 p.pro_nome
-            from tb_agendamento a
-            inner join tb_servico s on a.ser_id = s.ser_id
-            inner join tb_profissional p on a.pro_id = p.pro_id
-            order by a.age_data, a.age_hora
+            FROM tb_agendamento a
+            INNER JOIN tb_servico s 
+                ON a.ser_id = s.ser_id
+            INNER JOIN tb_profissional p 
+                ON a.pro_id = p.pro_id
+            ORDER BY a.age_data, a.age_hora
         `;
 
         let banco = new Database();
@@ -119,7 +121,12 @@ class AgendamentoModel {
     }
 
     async obter(id) {
-        let sql = "select * from tb_agendamento where age_id = ?";
+        let sql = `
+            SELECT *
+            FROM tb_agendamento
+            WHERE age_id = ?
+        `;
+
         let banco = new Database();
         let rows = await banco.ExecutaComando(sql, [id]);
 
@@ -142,7 +149,7 @@ class AgendamentoModel {
 
     async cadastrar() {
         let sql = `
-            insert into tb_agendamento
+            INSERT INTO tb_agendamento
             (
                 ser_id,
                 pro_id,
@@ -153,7 +160,7 @@ class AgendamentoModel {
                 age_status,
                 age_observacao
             )
-            values (?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         let valores = [
@@ -168,33 +175,66 @@ class AgendamentoModel {
         ];
 
         let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
     async atualizarStatus(id, status) {
         let sql = `
-            update tb_agendamento
-            set age_status = ?
-            where age_id = ?
+            UPDATE tb_agendamento
+            SET age_status = ?
+            WHERE age_id = ?
         `;
 
         let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, [status, id]);
     }
 
-    async deletar(id) {
-        let sql = "delete from tb_agendamento where age_id = ?";
+    async estaFinalizado(id) {
+        let sql = `
+            SELECT COUNT(*) AS total
+            FROM tb_agendamento
+            WHERE age_id = ?
+              AND age_status = 'Finalizado'
+        `;
+
         let banco = new Database();
+        let rows = await banco.ExecutaComando(sql, [id]);
+
+        return rows[0].total > 0;
+    }
+
+    async deletar(id) {
+        if (await this.estaFinalizado(id)) {
+            return false;
+        }
+
+        let sql = `
+            DELETE FROM tb_agendamento
+            WHERE age_id = ?
+        `;
+
+        let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, [id]);
     }
 
     toCalendarJson() {
+        let dataFormatada = "";
+
+        if (this.#ageData instanceof Date) {
+            dataFormatada = this.#ageData.toISOString().split("T")[0];
+        } else {
+            dataFormatada = String(this.#ageData).split("T")[0];
+        }
+
         return {
             id: this.#ageId,
 
             title: `${this.#serDescricao} - ${this.#ageClienteNome}`,
 
-            start: `${this.#ageData.toISOString().split("T")[0]}T${this.#ageHora}`,
+            start: `${dataFormatada}T${this.#ageHora}`,
 
             color: this.#serCor || "#ff5a00",
 
@@ -209,4 +249,4 @@ class AgendamentoModel {
     }
 }
 
-module.exports = AgendamentoModel;  
+module.exports = AgendamentoModel;

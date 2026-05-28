@@ -1,31 +1,48 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
-    let btns = document.querySelectorAll(".btnExcluir");
+    const btns = document.querySelectorAll(".btnExcluir");
 
-    for (let i = 0; i < btns.length; i++) {
-        btns[i].addEventListener("click", function() {
-            let id = this.dataset.id;
+    btns.forEach(function (btn) {
 
-            if (confirm("Tem certeza que deseja excluir o produto?")) {
-                fetch("/produtos/deletar", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ id: id })
-                })
-                .then(resposta => resposta.json())
-                .then(corpo => {
-                    alert(corpo.msg);
-                    if (corpo.ok) {
-                        window.location.reload();
-                    }
-                })
-                .catch(erro => {
-                    console.error(erro);
-                    alert("Erro ao excluir produto.");
-                });
+        btn.addEventListener("click", function () {
+
+            const codigo = this.dataset.codigo;
+
+            if (!codigo) {
+                alert("Código do produto não encontrado no botão.");
+                return;
             }
+
+            if (!confirm("Tem certeza que deseja excluir este produto?")) {
+                return;
+            }
+
+            fetch("/produtos/deletar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    codigo: codigo
+                })
+            })
+            .then(function (resposta) {
+                return resposta.json();
+            })
+            .then(function (corpo) {
+                alert(corpo.msg);
+
+                if (corpo.ok) {
+                    window.location.reload();
+                }
+            })
+            .catch(function (erro) {
+                console.error("ERRO AO EXCLUIR PRODUTO:", erro);
+                alert("Erro ao excluir produto.");
+            });
+
         });
-    }
+
+    });
+
 });

@@ -117,20 +117,15 @@ class ProdutoModel {
     }
 
     montarImagem(imagemBanco) {
-        let imagem = "";
-
         if (
             imagemBanco != null &&
             imagemBanco != "" &&
             fs.existsSync(global.CAMINHO_IMG_ABS + imagemBanco)
         ) {
-            imagem = global.CAMINHO_IMG + imagemBanco;
-        }
-        else {
-            imagem = global.CAMINHO_IMG + "produto-sem-imagem.png";
+            return global.CAMINHO_IMG + imagemBanco;
         }
 
-        return imagem;
+        return global.CAMINHO_IMG + "produto-sem-imagem.png";
     }
 
     calcularPrecoFinal(preco, desconto) {
@@ -145,7 +140,6 @@ class ProdutoModel {
     }
 
     async cadastrar() {
-
         let sql = `
             insert into tb_produto
             (
@@ -184,7 +178,6 @@ class ProdutoModel {
     }
 
     async obter(codigo) {
-
         let sql = `
             select
                 p.*,
@@ -202,9 +195,7 @@ class ProdutoModel {
         let rows = await banco.ExecutaComando(sql, [codigo]);
 
         if (rows.length > 0) {
-
             let row = rows[0];
-
             let imagem = this.montarImagem(row["pro_imagem"]);
 
             return new ProdutoModel(
@@ -229,7 +220,6 @@ class ProdutoModel {
     }
 
     async atualizar(codigoAntigo) {
-
         let sql = `
             update tb_produto
             set
@@ -267,16 +257,43 @@ class ProdutoModel {
         return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
+    async estaEmUso(codigo) {
+        let sql = `
+            select
+                (select count(*) from tb_pedidoitens where pro_codigo = ?) as pedidos,
+                (select count(*) from tb_recebimento where pro_codigo = ?) as recebimentos,
+                (select count(*) from tb_descarte where pro_codigo = ?) as descartes,
+                (select count(*) from tb_promocao where pro_codigo = ?) as promocoes
+        `;
+
+        let banco = new Database();
+
+        let rows = await banco.ExecutaComando(sql, [
+            codigo,
+            codigo,
+            codigo,
+            codigo
+        ]);
+
+        return (
+            rows[0].pedidos > 0 ||
+            rows[0].recebimentos > 0 ||
+            rows[0].descartes > 0 ||
+            rows[0].promocoes > 0
+        );
+    }
+
     async deletar(codigo) {
+        if (await this.estaEmUso(codigo)) {
+            return false;
+        }
 
         let produto = await this.obter(codigo);
 
         if (produto && produto.proImagem) {
-
             let nomeImg = produto.proImagem.split("/").pop();
 
             if (nomeImg != "produto-sem-imagem.png") {
-
                 let caminho = global.CAMINHO_IMG_ABS + nomeImg;
 
                 if (fs.existsSync(caminho)) {
@@ -293,7 +310,6 @@ class ProdutoModel {
     }
 
     async listar() {
-
         let sql = `
             select
                 p.*,
@@ -308,40 +324,35 @@ class ProdutoModel {
         `;
 
         let banco = new Database();
-
         let rows = await banco.ExecutaComando(sql);
 
         let lista = [];
 
         for (let i = 0; i < rows.length; i++) {
-
             let imagem = this.montarImagem(rows[i]["pro_imagem"]);
 
-            lista.push(
-                new ProdutoModel(
-                    rows[i]["pro_codigo"],
-                    rows[i]["pro_nome"],
-                    rows[i]["pro_descricao"],
-                    rows[i]["pro_preco"],
-                    rows[i]["pro_estoque"],
-                    rows[i]["pro_data_validade"],
-                    rows[i]["pro_ativo"],
-                    imagem,
-                    rows[i]["cat_id"],
-                    rows[i]["tip_id"],
-                    rows[i]["lab_id"],
-                    rows[i]["cat_descricao"],
-                    rows[i]["tip_descricao"],
-                    rows[i]["lab_nome"]
-                )
-            );
+            lista.push(new ProdutoModel(
+                rows[i]["pro_codigo"],
+                rows[i]["pro_nome"],
+                rows[i]["pro_descricao"],
+                rows[i]["pro_preco"],
+                rows[i]["pro_estoque"],
+                rows[i]["pro_data_validade"],
+                rows[i]["pro_ativo"],
+                imagem,
+                rows[i]["cat_id"],
+                rows[i]["tip_id"],
+                rows[i]["lab_id"],
+                rows[i]["cat_descricao"],
+                rows[i]["tip_descricao"],
+                rows[i]["lab_nome"]
+            ));
         }
 
         return lista;
     }
 
     async listarAtivos() {
-
         let sql = `
             select
                 p.*,
@@ -364,99 +375,86 @@ class ProdutoModel {
         `;
 
         let banco = new Database();
-
         let rows = await banco.ExecutaComando(sql);
 
         let lista = [];
 
         for (let i = 0; i < rows.length; i++) {
-
             let imagem = this.montarImagem(rows[i]["pro_imagem"]);
-
             let desconto = rows[i]["prom_desconto"];
             let precoFinal = this.calcularPrecoFinal(rows[i]["pro_preco"], desconto);
 
-            lista.push(
-                new ProdutoModel(
-                    rows[i]["pro_codigo"],
-                    rows[i]["pro_nome"],
-                    rows[i]["pro_descricao"],
-                    rows[i]["pro_preco"],
-                    rows[i]["pro_estoque"],
-                    rows[i]["pro_data_validade"],
-                    rows[i]["pro_ativo"],
-                    imagem,
-                    rows[i]["cat_id"],
-                    rows[i]["tip_id"],
-                    rows[i]["lab_id"],
-                    rows[i]["cat_descricao"],
-                    rows[i]["tip_descricao"],
-                    rows[i]["lab_nome"],
-                    desconto,
-                    precoFinal,
-                    rows[i]["prom_data_inicio"],
-                    rows[i]["prom_data_fim"]
-                )
-            );
+            lista.push(new ProdutoModel(
+                rows[i]["pro_codigo"],
+                rows[i]["pro_nome"],
+                rows[i]["pro_descricao"],
+                rows[i]["pro_preco"],
+                rows[i]["pro_estoque"],
+                rows[i]["pro_data_validade"],
+                rows[i]["pro_ativo"],
+                imagem,
+                rows[i]["cat_id"],
+                rows[i]["tip_id"],
+                rows[i]["lab_id"],
+                rows[i]["cat_descricao"],
+                rows[i]["tip_descricao"],
+                rows[i]["lab_nome"],
+                desconto,
+                precoFinal,
+                rows[i]["prom_data_inicio"],
+                rows[i]["prom_data_fim"]
+            ));
         }
 
         return lista;
     }
 
     async atualizarEstoque(produtoCodigo, novaQuantidade) {
-
         let sql = `
             update tb_produto
             set pro_estoque = ?
             where pro_codigo = ?
         `;
 
-        let valores = [novaQuantidade, produtoCodigo];
-
         let banco = new Database();
 
-        return await banco.ExecutaComandoNonQuery(sql, valores);
+        return await banco.ExecutaComandoNonQuery(sql, [
+            novaQuantidade,
+            produtoCodigo
+        ]);
     }
 
     async listarDestaques() {
-
         let sql = `
-            SELECT *
-            FROM tb_produto
-            WHERE pro_ativo = 's'
-            AND pro_estoque > 0
-            ORDER BY pro_codigo DESC
-            LIMIT 3
+            select *
+            from tb_produto
+            where pro_ativo = 's'
+            and pro_estoque > 0
+            order by pro_codigo desc
+            limit 3
         `;
 
         let banco = new Database();
-
         let rows = await banco.ExecutaComando(sql);
 
         let lista = [];
 
         for (let i = 0; i < rows.length; i++) {
+            let imagem = this.montarImagem(rows[i]["pro_imagem"]);
 
-            let imagem =
-                this.montarImagem(
-                    rows[i]["pro_imagem"]
-                );
-
-            lista.push(
-                new ProdutoModel(
-                    rows[i]["pro_codigo"],
-                    rows[i]["pro_nome"],
-                    rows[i]["pro_descricao"],
-                    rows[i]["pro_preco"],
-                    rows[i]["pro_estoque"],
-                    rows[i]["pro_data_validade"],
-                    rows[i]["pro_ativo"],
-                    imagem,
-                    rows[i]["cat_id"],
-                    rows[i]["tip_id"],
-                    rows[i]["lab_id"]
-                )
-            );
+            lista.push(new ProdutoModel(
+                rows[i]["pro_codigo"],
+                rows[i]["pro_nome"],
+                rows[i]["pro_descricao"],
+                rows[i]["pro_preco"],
+                rows[i]["pro_estoque"],
+                rows[i]["pro_data_validade"],
+                rows[i]["pro_ativo"],
+                imagem,
+                rows[i]["cat_id"],
+                rows[i]["tip_id"],
+                rows[i]["lab_id"]
+            ));
         }
 
         return lista;

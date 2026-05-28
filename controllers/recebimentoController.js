@@ -4,109 +4,162 @@ const ProdutoModel = require("../models/produtoModel");
 class RecebimentoController {
 
     async listar(req, res) {
-        let model = new RecebimentoModel();
-        let lista = await model.listar();
+        try {
+            let model = new RecebimentoModel();
+            let lista = await model.listar();
 
-        res.render("recebimento/lista", {
-            layout: "layout",
-            lista: lista
-        });
+            res.render("recebimento/lista", {
+                layout: "layout",
+                lista: lista
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO LISTAR RECEBIMENTOS:", erro);
+
+            res.render("recebimento/lista", {
+                layout: "layout",
+                lista: []
+            });
+        }
     }
 
     async cadastrarView(req, res) {
-        let produtoModel = new ProdutoModel();
-        let produtos = await produtoModel.listar();
+        try {
+            let produtoModel = new ProdutoModel();
+            let produtos = await produtoModel.listar();
 
-        res.render("recebimento/cadastrar", {
-            layout: "layout",
-            produtos: produtos
-        });
+            res.render("recebimento/cadastrar", {
+                layout: "layout",
+                produtos: produtos
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO ABRIR CADASTRO DE RECEBIMENTO:", erro);
+            res.redirect("/recebimento");
+        }
     }
 
     async cadastrar(req, res) {
-        let ok = false;
-        let msg = "";
+        try {
+            let ok = false;
+            let msg = "";
 
-        if (req.body.produto && req.body.quantidade && req.body.data) {
+            if (
+                req.body.produto &&
+                req.body.quantidade &&
+                req.body.data
+            ) {
+                let model = new RecebimentoModel(
+                    0,
+                    req.body.produto,
+                    req.body.quantidade,
+                    req.body.data,
+                    req.body.lote,
+                    req.body.validade,
+                    req.body.observacao
+                );
 
-            let model = new RecebimentoModel(
-                0,
-                req.body.produto,
-                req.body.quantidade,
-                req.body.data,
-                req.body.lote,
-                req.body.validade,
-                req.body.observacao
-            );
+                let result = await model.cadastrar();
 
-            ok = await model.cadastrar();
+                if (result) {
+                    await model.atualizarEstoque();
 
-            if (ok) {
-                await model.atualizarEstoque();
-                msg = "Recebimento cadastrado e estoque atualizado!";
+                    ok = true;
+                    msg = "Recebimento cadastrado com sucesso! O estoque foi atualizado.";
+                } else {
+                    msg = "Não foi possível cadastrar o recebimento.";
+                }
+
             } else {
-                msg = "Erro ao cadastrar recebimento.";
+                msg = "Preencha todos os campos obrigatórios.";
             }
 
-        } else {
-            msg = "Preencha os campos obrigatórios.";
-        }
+            res.send({ ok, msg });
 
-        res.send({ ok, msg });
+        } catch (erro) {
+            console.log("ERRO AO CADASTRAR RECEBIMENTO:", erro);
+
+            res.send({
+                ok: false,
+                msg: "Erro interno ao cadastrar recebimento."
+            });
+        }
     }
 
     async alterarView(req, res) {
-        let model = new RecebimentoModel();
-        let recebimento = await model.obter(req.params.id);
+        try {
+            let model = new RecebimentoModel();
+            let recebimento = await model.obter(req.params.id);
 
-        let produtoModel = new ProdutoModel();
-        let produtos = await produtoModel.listar();
+            let produtoModel = new ProdutoModel();
+            let produtos = await produtoModel.listar();
 
-        res.render("recebimento/alterar", {
-            layout: "layout",
-            recebimento: recebimento,
-            produtos: produtos
-        });
+            if (!recebimento) {
+                return res.redirect("/recebimento");
+            }
+
+            res.render("recebimento/alterar", {
+                layout: "layout",
+                recebimento: recebimento,
+                produtos: produtos
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO ABRIR ALTERAÇÃO DE RECEBIMENTO:", erro);
+            res.redirect("/recebimento");
+        }
     }
 
     async alterar(req, res) {
-        let ok = false;
-        let msg = "";
+        try {
+            let ok = false;
+            let msg = "";
 
-        if (req.body.id && req.body.produto && req.body.quantidade && req.body.data) {
+            if (
+                req.body.id &&
+                req.body.produto &&
+                req.body.quantidade &&
+                req.body.data
+            ) {
+                let model = new RecebimentoModel(
+                    req.body.id,
+                    req.body.produto,
+                    req.body.quantidade,
+                    req.body.data,
+                    req.body.lote,
+                    req.body.validade,
+                    req.body.observacao
+                );
 
-            let model = new RecebimentoModel(
-                req.body.id,
-                req.body.produto,
-                req.body.quantidade,
-                req.body.data,
-                req.body.lote,
-                req.body.validade,
-                req.body.observacao
-            );
+                let result = await model.atualizar();
 
-            ok = await model.atualizar();
+                if (result) {
+                    ok = true;
+                    msg = "Recebimento alterado com sucesso!";
+                } else {
+                    msg = "Não foi possível alterar o recebimento.";
+                }
 
-            if (ok) {
-                msg = "Recebimento alterado!";
             } else {
-                msg = "Erro ao alterar recebimento.";
+                msg = "Preencha todos os campos obrigatórios.";
             }
 
-        } else {
-            msg = "Preencha os campos obrigatórios.";
-        }
+            res.send({ ok, msg });
 
-        res.send({ ok, msg });
+        } catch (erro) {
+            console.log("ERRO AO ALTERAR RECEBIMENTO:", erro);
+
+            res.send({
+                ok: false,
+                msg: "Erro interno ao alterar recebimento."
+            });
+        }
     }
 
     async deletar(req, res) {
-        let model = new RecebimentoModel();
-        let ok = await model.deletar(req.body.id);
-
-        res.send({
-            ok: ok,
-            msg: ok ? "Recebimento excluído!" : "Erro ao excluir recebimento."
+        return res.send({
+            ok: false,
+            msg: "Não é possível excluir um recebimento, pois ele faz parte do histórico de entrada de estoque."
         });
     }
 }

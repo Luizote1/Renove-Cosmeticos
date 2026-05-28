@@ -106,14 +106,18 @@ class UsuarioModel {
         return result;
     }
 
-    async deletar(id) {
+    async deletar(id, usuarioLogadoId = null) {
+
+        if (usuarioLogadoId && Number(id) === Number(usuarioLogadoId)) {
+            return false;
+        }
+
         let sql = "delete from tb_usuario where usu_id = ?";
         let valores = [id];
+
         let banco = new Database();
 
-        let result = await banco.ExecutaComandoNonQuery(sql, valores);
-
-        return result;
+        return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
     async listar() {

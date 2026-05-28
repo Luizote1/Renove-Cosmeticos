@@ -12,36 +12,23 @@ class TipoProdutoModel {
         this.#tipAtivo = tipAtivo;
     }
 
-    get tipId() {
-        return this.#tipId;
-    }
+    get tipId() { return this.#tipId; }
+    set tipId(value) { this.#tipId = value; }
 
-    set tipId(value) {
-        this.#tipId = value;
-    }
+    get tipDescricao() { return this.#tipDescricao; }
+    set tipDescricao(value) { this.#tipDescricao = value; }
 
-    get tipDescricao() {
-        return this.#tipDescricao;
-    }
-
-    set tipDescricao(value) {
-        this.#tipDescricao = value;
-    }
-
-    get tipAtivo() {
-        return this.#tipAtivo;
-    }
-
-    set tipAtivo(value) {
-        this.#tipAtivo = value;
-    }
+    get tipAtivo() { return this.#tipAtivo; }
+    set tipAtivo(value) { this.#tipAtivo = value; }
 
     async listar() {
         let sql = "select * from tb_tipo_produto order by tip_id";
+
         let banco = new Database();
         let rows = await banco.ExecutaComando(sql);
 
         let lista = [];
+
         for (let i = 0; i < rows.length; i++) {
             lista.push(new TipoProdutoModel(
                 rows[i]["tip_id"],
@@ -55,6 +42,7 @@ class TipoProdutoModel {
 
     async obter(id) {
         let sql = "select * from tb_tipo_produto where tip_id = ?";
+
         let banco = new Database();
         let rows = await banco.ExecutaComando(sql, [id]);
 
@@ -70,24 +58,58 @@ class TipoProdutoModel {
     }
 
     async cadastrar() {
-        let sql = "insert into tb_tipo_produto (tip_descricao, tip_ativo) values (?, ?)";
-        let valores = [this.#tipDescricao, this.#tipAtivo];
+        let sql = `
+            insert into tb_tipo_produto
+            (tip_descricao, tip_ativo)
+            values (?, ?)
+        `;
 
         let banco = new Database();
-        return await banco.ExecutaComandoNonQuery(sql, valores);
+
+        return await banco.ExecutaComandoNonQuery(sql, [
+            this.#tipDescricao,
+            this.#tipAtivo
+        ]);
     }
 
     async atualizar() {
-        let sql = "update tb_tipo_produto set tip_descricao = ?, tip_ativo = ? where tip_id = ?";
-        let valores = [this.#tipDescricao, this.#tipAtivo, this.#tipId];
+        let sql = `
+            update tb_tipo_produto
+            set tip_descricao = ?, tip_ativo = ?
+            where tip_id = ?
+        `;
 
         let banco = new Database();
-        return await banco.ExecutaComandoNonQuery(sql, valores);
+
+        return await banco.ExecutaComandoNonQuery(sql, [
+            this.#tipDescricao,
+            this.#tipAtivo,
+            this.#tipId
+        ]);
+    }
+
+    async estaEmUso(id) {
+        let sql = `
+            select count(*) as total
+            from tb_produto
+            where tip_id = ?
+        `;
+
+        let banco = new Database();
+        let rows = await banco.ExecutaComando(sql, [id]);
+
+        return rows[0].total > 0;
     }
 
     async deletar(id) {
+        if (await this.estaEmUso(id)) {
+            return false;
+        }
+
         let sql = "delete from tb_tipo_produto where tip_id = ?";
+
         let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, [id]);
     }
 }

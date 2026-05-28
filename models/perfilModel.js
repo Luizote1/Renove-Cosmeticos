@@ -58,13 +58,29 @@ class PerfilModel {
         return result;
     }
 
+    async estaEmUso(id) {
+        let sql = `
+        select count(*) as total
+        from tb_usuario
+        where per_id = ?
+    `;
+
+        let banco = new Database();
+        let rows = await banco.ExecutaComando(sql, [id]);
+
+        return rows[0].total > 0;
+    }
+
     async deletar(id) {
+        if (await this.estaEmUso(id)) {
+            return false;
+        }
+
         let sql = "delete from tb_perfil where per_id = ?";
         let valores = [id];
 
         let banco = new Database();
-        let result = await banco.ExecutaComandoNonQuery(sql, valores);
-        return result;
+        return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
     async listar() {

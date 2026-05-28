@@ -4,109 +4,226 @@ const ProdutoModel = require("../models/produtoModel");
 class PromocaoController {
 
     async listar(req, res) {
-        let model = new PromocaoModel();
+        try {
+            let model = new PromocaoModel();
 
-        let lista = await model.listar();
-        let proximosVencimento = await model.listarProdutosProximosVencimento();
+            let lista = await model.listar();
+            let proximosVencimento = await model.listarProdutosProximosVencimento();
 
-        res.render("promocao/lista", {
-            layout: "layout",
-            lista: lista,
-            proximosVencimento: proximosVencimento
-        });
+            res.render("promocao/lista", {
+                layout: "layout",
+                lista: lista,
+                proximosVencimento: proximosVencimento
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO LISTAR PROMOÇÕES:", erro);
+
+            res.render("promocao/lista", {
+                layout: "layout",
+                lista: [],
+                proximosVencimento: []
+            });
+        }
     }
 
     async cadastrarView(req, res) {
-        let produtoModel = new ProdutoModel();
-        let produtos = await produtoModel.listar();
+        try {
+            let produtoModel = new ProdutoModel();
+            let produtos = await produtoModel.listar();
 
-        res.render("promocao/cadastrar", {
-            layout: "layout",
-            produtos: produtos
-        });
+            res.render("promocao/cadastrar", {
+                layout: "layout",
+                produtos: produtos
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO ABRIR CADASTRO DE PROMOÇÃO:", erro);
+            res.redirect("/promocao");
+        }
     }
 
     async cadastrar(req, res) {
-        let ok = false;
-        let msg = "";
+        try {
+            let ok = false;
+            let msg = "";
 
-        if (
-            req.body.produto &&
-            req.body.desconto &&
-            req.body.dataInicio &&
-            req.body.dataFim
-        ) {
-            let model = new PromocaoModel(
-                0,
-                req.body.produto,
-                req.body.desconto,
-                req.body.dataInicio,
-                req.body.dataFim,
-                req.body.ativo == "s" ? "s" : "n"
-            );
+            if (
+                req.body.produto &&
+                req.body.desconto &&
+                req.body.dataInicio &&
+                req.body.dataFim
+            ) {
+                let dataInicio = new Date(req.body.dataInicio);
+                let dataFim = new Date(req.body.dataFim);
 
-            ok = await model.cadastrar();
+                if (Number(req.body.desconto) <= 0 || Number(req.body.desconto) > 100) {
+                    return res.send({
+                        ok: false,
+                        msg: "O desconto deve ser maior que 0 e menor ou igual a 100%."
+                    });
+                }
 
-            msg = ok ? "Promoção cadastrada!" : "Erro ao cadastrar promoção.";
-        } else {
-            msg = "Preencha os campos obrigatórios.";
+                if (dataFim < dataInicio) {
+                    return res.send({
+                        ok: false,
+                        msg: "A data final da promoção não pode ser menor que a data inicial."
+                    });
+                }
+
+                let model = new PromocaoModel(
+                    0,
+                    req.body.produto,
+                    req.body.desconto,
+                    req.body.dataInicio,
+                    req.body.dataFim,
+                    req.body.ativo == "s" ? "s" : "n"
+                );
+
+                let result = await model.cadastrar();
+
+                if (result) {
+                    ok = true;
+                    msg = "Promoção cadastrada com sucesso!";
+                } else {
+                    msg = "Não foi possível cadastrar a promoção.";
+                }
+
+            } else {
+                msg = "Preencha todos os campos obrigatórios.";
+            }
+
+            res.send({ ok, msg });
+
+        } catch (erro) {
+            console.log("ERRO AO CADASTRAR PROMOÇÃO:", erro);
+
+            res.send({
+                ok: false,
+                msg: "Erro interno ao cadastrar promoção."
+            });
         }
-
-        res.send({ ok, msg });
     }
 
     async alterarView(req, res) {
-        let model = new PromocaoModel();
-        let promocao = await model.obter(req.params.id);
+        try {
+            let model = new PromocaoModel();
+            let promocao = await model.obter(req.params.id);
 
-        let produtoModel = new ProdutoModel();
-        let produtos = await produtoModel.listar();
+            let produtoModel = new ProdutoModel();
+            let produtos = await produtoModel.listar();
 
-        res.render("promocao/alterar", {
-            layout: "layout",
-            promocao: promocao,
-            produtos: produtos
-        });
+            if (!promocao) {
+                return res.redirect("/promocao");
+            }
+
+            res.render("promocao/alterar", {
+                layout: "layout",
+                promocao: promocao,
+                produtos: produtos
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO ABRIR ALTERAÇÃO DE PROMOÇÃO:", erro);
+            res.redirect("/promocao");
+        }
     }
 
     async alterar(req, res) {
-        let ok = false;
-        let msg = "";
+        try {
+            let ok = false;
+            let msg = "";
 
-        if (
-            req.body.id &&
-            req.body.produto &&
-            req.body.desconto &&
-            req.body.dataInicio &&
-            req.body.dataFim
-        ) {
-            let model = new PromocaoModel(
-                req.body.id,
-                req.body.produto,
-                req.body.desconto,
-                req.body.dataInicio,
-                req.body.dataFim,
-                req.body.ativo == "s" ? "s" : "n"
-            );
+            if (
+                req.body.id &&
+                req.body.produto &&
+                req.body.desconto &&
+                req.body.dataInicio &&
+                req.body.dataFim
+            ) {
+                let dataInicio = new Date(req.body.dataInicio);
+                let dataFim = new Date(req.body.dataFim);
 
-            ok = await model.atualizar();
+                if (Number(req.body.desconto) <= 0 || Number(req.body.desconto) > 100) {
+                    return res.send({
+                        ok: false,
+                        msg: "O desconto deve ser maior que 0 e menor ou igual a 100%."
+                    });
+                }
 
-            msg = ok ? "Promoção alterada!" : "Erro ao alterar promoção.";
-        } else {
-            msg = "Preencha os campos obrigatórios.";
+                if (dataFim < dataInicio) {
+                    return res.send({
+                        ok: false,
+                        msg: "A data final da promoção não pode ser menor que a data inicial."
+                    });
+                }
+
+                let model = new PromocaoModel(
+                    req.body.id,
+                    req.body.produto,
+                    req.body.desconto,
+                    req.body.dataInicio,
+                    req.body.dataFim,
+                    req.body.ativo == "s" ? "s" : "n"
+                );
+
+                let result = await model.atualizar();
+
+                if (result) {
+                    ok = true;
+                    msg = "Promoção alterada com sucesso!";
+                } else {
+                    msg = "Não foi possível alterar a promoção.";
+                }
+
+            } else {
+                msg = "Preencha todos os campos obrigatórios.";
+            }
+
+            res.send({ ok, msg });
+
+        } catch (erro) {
+            console.log("ERRO AO ALTERAR PROMOÇÃO:", erro);
+
+            res.send({
+                ok: false,
+                msg: "Erro interno ao alterar promoção."
+            });
         }
-
-        res.send({ ok, msg });
     }
 
     async deletar(req, res) {
-        let model = new PromocaoModel();
-        let ok = await model.deletar(req.body.id);
+        try {
+            if (!req.body.id) {
+                return res.send({
+                    ok: false,
+                    msg: "ID da promoção não informado."
+                });
+            }
 
-        res.send({
-            ok: ok,
-            msg: ok ? "Promoção excluída!" : "Erro ao excluir promoção."
-        });
+            let model = new PromocaoModel();
+            let result = await model.deletar(req.body.id);
+
+            if (result) {
+                return res.send({
+                    ok: true,
+                    msg: "Promoção excluída com sucesso!"
+                });
+            }
+
+            return res.send({
+                ok: false,
+                msg: "Não é possível excluir esta promoção enquanto ela estiver ativa."
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO EXCLUIR PROMOÇÃO:", erro);
+
+            return res.send({
+                ok: false,
+                msg: "Erro interno ao excluir promoção."
+            });
+        }
     }
 }
 

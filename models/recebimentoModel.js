@@ -43,19 +43,28 @@ class RecebimentoModel {
 
     async listar() {
         let sql = `
-            SELECT r.*, p.pro_nome
+            SELECT 
+                r.*,
+                p.pro_nome
             FROM tb_recebimento r
             INNER JOIN tb_produto p ON r.pro_codigo = p.pro_codigo
             ORDER BY r.rec_data DESC
         `;
 
         let banco = new Database();
+
         return await banco.ExecutaComando(sql);
     }
 
     async obter(id) {
-        let sql = "SELECT * FROM tb_recebimento WHERE rec_id = ?";
+        let sql = `
+            SELECT *
+            FROM tb_recebimento
+            WHERE rec_id = ?
+        `;
+
         let banco = new Database();
+
         let rows = await banco.ExecutaComando(sql, [id]);
 
         if (rows.length > 0) {
@@ -68,7 +77,14 @@ class RecebimentoModel {
     async cadastrar() {
         let sql = `
             INSERT INTO tb_recebimento
-            (pro_codigo, rec_quantidade, rec_data, rec_lote, rec_validade, rec_observacao)
+            (
+                pro_codigo,
+                rec_quantidade,
+                rec_data,
+                rec_lote,
+                rec_validade,
+                rec_observacao
+            )
             VALUES (?, ?, ?, ?, ?, ?)
         `;
 
@@ -82,13 +98,15 @@ class RecebimentoModel {
         ];
 
         let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
     async atualizar() {
         let sql = `
             UPDATE tb_recebimento
-            SET pro_codigo = ?,
+            SET
+                pro_codigo = ?,
                 rec_quantidade = ?,
                 rec_data = ?,
                 rec_lote = ?,
@@ -108,6 +126,7 @@ class RecebimentoModel {
         ];
 
         let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
@@ -118,18 +137,32 @@ class RecebimentoModel {
             WHERE pro_codigo = ?
         `;
 
-        let banco = new Database();
-
-        return await banco.ExecutaComandoNonQuery(sql, [
+        let valores = [
             this.#recQuantidade,
             this.#proCodigo
-        ]);
+        ];
+
+        let banco = new Database();
+
+        return await banco.ExecutaComandoNonQuery(sql, valores);
+    }
+
+    async estaEmUso(id) {
+        let sql = `
+            SELECT COUNT(*) AS total
+            FROM tb_recebimento
+            WHERE rec_id = ?
+        `;
+
+        let banco = new Database();
+
+        let rows = await banco.ExecutaComando(sql, [id]);
+
+        return rows[0].total > 0;
     }
 
     async deletar(id) {
-        let sql = "DELETE FROM tb_recebimento WHERE rec_id = ?";
-        let banco = new Database();
-        return await banco.ExecutaComandoNonQuery(sql, [id]);
+        return false;
     }
 }
 

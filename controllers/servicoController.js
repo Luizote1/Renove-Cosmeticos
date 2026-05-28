@@ -5,29 +5,41 @@ const AgendamentoModel = require("../models/agendamentoModel");
 class ServicoController {
 
     async listar(req, res) {
-        let servicoModel = new ServicoModel();
-        let profissionalModel = new ProfissionalModel();
-        let agendamentoModel = new AgendamentoModel();
+        try {
+            let servicoModel = new ServicoModel();
+            let profissionalModel = new ProfissionalModel();
+            let agendamentoModel = new AgendamentoModel();
 
-        let lista = await servicoModel.listar();
-        let profissionais = await profissionalModel.listarAtivos();
-        let servicosAtivos = await servicoModel.listarAtivos();
+            let lista = await servicoModel.listar();
+            let profissionais = await profissionalModel.listarAtivos();
+            let servicosAtivos = await servicoModel.listarAtivos();
+            let agendamentos = await agendamentoModel.listar();
 
-        let agendamentos = await agendamentoModel.listar();
+            let eventos = [];
 
-        let eventos = [];
+            for (let i = 0; i < agendamentos.length; i++) {
+                eventos.push(agendamentos[i].toCalendarJson());
+            }
 
-        for (let i = 0; i < agendamentos.length; i++) {
-            eventos.push(agendamentos[i].toCalendarJson());
+            res.render("servico/lista", {
+                layout: "layout",
+                lista: lista,
+                profissionais: profissionais,
+                servicosAtivos: servicosAtivos,
+                eventosJson: JSON.stringify(eventos || [])
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO LISTAR SERVIÇOS:", erro);
+
+            res.render("servico/lista", {
+                layout: "layout",
+                lista: [],
+                profissionais: [],
+                servicosAtivos: [],
+                eventosJson: "[]"
+            });
         }
-
-        res.render("servico/lista", {
-            layout: "layout",
-            lista: lista,
-            profissionais: profissionais,
-            servicosAtivos: servicosAtivos,
-            eventosJson: JSON.stringify(eventos || [])
-        });
     }
 
     cadastrarView(req, res) {
@@ -37,151 +49,234 @@ class ServicoController {
     }
 
     async cadastrar(req, res) {
-        let ok = false;
-        let msg = "";
+        try {
+            let ok = false;
+            let msg = "";
 
-        if (
-            req.body.descricao &&
-            req.body.valor &&
-            req.body.duracao
-        ) {
-            let model = new ServicoModel(
-                0,
-                req.body.descricao,
-                req.body.detalhes,
-                req.body.valor,
-                req.body.duracao,
-                req.body.cor || "#ff5a00",
-                req.body.ativo == "s" ? "s" : "n"
-            );
+            if (
+                req.body.descricao &&
+                req.body.descricao.trim() !== "" &&
+                req.body.valor &&
+                req.body.duracao
+            ) {
+                let model = new ServicoModel(
+                    0,
+                    req.body.descricao.trim(),
+                    req.body.detalhes || "",
+                    req.body.valor,
+                    req.body.duracao,
+                    req.body.cor || "#ff5a00",
+                    req.body.ativo == "s" ? "s" : "n"
+                );
 
-            ok = await model.cadastrar();
+                let result = await model.cadastrar();
 
-            if (ok) {
-                msg = "Serviço cadastrado!";
+                if (result) {
+                    ok = true;
+                    msg = "Serviço cadastrado com sucesso!";
+                } else {
+                    msg = "Não foi possível cadastrar o serviço.";
+                }
+
             } else {
-                msg = "Erro ao cadastrar serviço.";
+                msg = "Preencha todos os campos obrigatórios do serviço.";
             }
 
-        } else {
-            msg = "Preencha todos os campos obrigatórios.";
-        }
+            res.send({ ok, msg });
 
-        res.send({
-            ok: ok,
-            msg: msg
-        });
+        } catch (erro) {
+            console.log("ERRO AO CADASTRAR SERVIÇO:", erro);
+
+            res.send({
+                ok: false,
+                msg: "Erro interno ao cadastrar serviço."
+            });
+        }
     }
 
     async alterarView(req, res) {
-        let model = new ServicoModel();
-        let servico = await model.obter(req.params.id);
+        try {
+            let model = new ServicoModel();
+            let servico = await model.obter(req.params.id);
 
-        res.render("servico/alterar", {
-            layout: "layout",
-            servico: servico
-        });
+            if (!servico) {
+                return res.redirect("/servico");
+            }
+
+            res.render("servico/alterar", {
+                layout: "layout",
+                servico: servico
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO ABRIR ALTERAÇÃO DE SERVIÇO:", erro);
+            res.redirect("/servico");
+        }
     }
 
     async alterar(req, res) {
-        let ok = false;
-        let msg = "";
+        try {
+            let ok = false;
+            let msg = "";
 
-        if (
-            req.body.id &&
-            req.body.descricao &&
-            req.body.valor &&
-            req.body.duracao
-        ) {
-            let model = new ServicoModel(
-                req.body.id,
-                req.body.descricao,
-                req.body.detalhes,
-                req.body.valor,
-                req.body.duracao,
-                req.body.cor || "#ff5a00",
-                req.body.ativo == "s" ? "s" : "n"
-            );
+            if (
+                req.body.id &&
+                req.body.descricao &&
+                req.body.descricao.trim() !== "" &&
+                req.body.valor &&
+                req.body.duracao
+            ) {
+                let model = new ServicoModel(
+                    req.body.id,
+                    req.body.descricao.trim(),
+                    req.body.detalhes || "",
+                    req.body.valor,
+                    req.body.duracao,
+                    req.body.cor || "#ff5a00",
+                    req.body.ativo == "s" ? "s" : "n"
+                );
 
-            ok = await model.atualizar();
+                let result = await model.atualizar();
 
-            if (ok) {
-                msg = "Serviço atualizado!";
+                if (result) {
+                    ok = true;
+                    msg = "Serviço alterado com sucesso!";
+                } else {
+                    msg = "Não foi possível alterar o serviço.";
+                }
+
             } else {
-                msg = "Erro ao atualizar serviço.";
+                msg = "Preencha corretamente todos os campos obrigatórios.";
             }
 
-        } else {
-            msg = "Preencha todos os campos obrigatórios.";
-        }
+            res.send({ ok, msg });
 
-        res.send({
-            ok: ok,
-            msg: msg
-        });
+        } catch (erro) {
+            console.log("ERRO AO ALTERAR SERVIÇO:", erro);
+
+            res.send({
+                ok: false,
+                msg: "Erro interno ao alterar serviço."
+            });
+        }
     }
 
     async excluir(req, res) {
-        let model = new ServicoModel();
+        try {
+            if (!req.body.id) {
+                return res.send({
+                    ok: false,
+                    msg: "ID do serviço não informado."
+                });
+            }
 
-        let ok = await model.deletar(req.body.id);
+            let model = new ServicoModel();
+            let result = await model.deletar(req.body.id);
 
-        res.send({
-            ok: ok,
-            msg: ok ? "Serviço excluído!" : "Erro ao excluir serviço."
-        });
+            if (result) {
+                return res.send({
+                    ok: true,
+                    msg: "Serviço excluído com sucesso!"
+                });
+            }
+
+            return res.send({
+                ok: false,
+                msg: "Não é possível excluir este serviço, pois existem agendamentos vinculados a ele."
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO EXCLUIR SERVIÇO:", erro);
+
+            return res.send({
+                ok: false,
+                msg: "Erro interno ao excluir serviço."
+            });
+        }
     }
 
     async agendar(req, res) {
-        let ok = false;
-        let msg = "";
+        try {
+            let ok = false;
+            let msg = "";
 
-        if (
-            req.body.servico &&
-            req.body.profissional &&
-            req.body.cliente &&
-            req.body.data &&
-            req.body.hora
-        ) {
-            let agendamento = new AgendamentoModel(
-                0,
-                req.body.servico,
-                req.body.profissional,
-                req.body.cliente,
-                req.body.telefone,
-                req.body.data,
-                req.body.hora,
-                "Agendado",
-                req.body.observacao
-            );
+            if (
+                req.body.servico &&
+                req.body.profissional &&
+                req.body.cliente &&
+                req.body.cliente.trim() !== "" &&
+                req.body.data &&
+                req.body.hora
+            ) {
+                let agendamento = new AgendamentoModel(
+                    0,
+                    req.body.servico,
+                    req.body.profissional,
+                    req.body.cliente.trim(),
+                    req.body.telefone || "",
+                    req.body.data,
+                    req.body.hora,
+                    "Agendado",
+                    req.body.observacao || ""
+                );
 
-            ok = await agendamento.cadastrar();
+                let result = await agendamento.cadastrar();
 
-            if (ok) {
-                msg = "Agendamento realizado!";
+                if (result) {
+                    ok = true;
+                    msg = "Agendamento realizado com sucesso!";
+                } else {
+                    msg = "Não foi possível realizar o agendamento.";
+                }
+
             } else {
-                msg = "Erro ao realizar agendamento.";
+                msg = "Preencha todos os campos obrigatórios do agendamento.";
             }
 
-        } else {
-            msg = "Preencha todos os campos obrigatórios.";
-        }
+            res.send({ ok, msg });
 
-        res.send({
-            ok: ok,
-            msg: msg
-        });
+        } catch (erro) {
+            console.log("ERRO AO REALIZAR AGENDAMENTO:", erro);
+
+            res.send({
+                ok: false,
+                msg: "Erro interno ao realizar agendamento."
+            });
+        }
     }
 
     async excluirAgendamento(req, res) {
-        let model = new AgendamentoModel();
+        try {
+            if (!req.body.id) {
+                return res.send({
+                    ok: false,
+                    msg: "ID do agendamento não informado."
+                });
+            }
 
-        let ok = await model.deletar(req.body.id);
+            let model = new AgendamentoModel();
+            let result = await model.deletar(req.body.id);
 
-        res.send({
-            ok: ok,
-            msg: ok ? "Agendamento removido!" : "Erro ao remover agendamento."
-        });
+            if (result) {
+                return res.send({
+                    ok: true,
+                    msg: "Agendamento removido com sucesso!"
+                });
+            }
+
+            return res.send({
+                ok: false,
+                msg: "Não é possível remover um agendamento finalizado."
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO REMOVER AGENDAMENTO:", erro);
+
+            return res.send({
+                ok: false,
+                msg: "Erro interno ao remover agendamento."
+            });
+        }
     }
 }
 

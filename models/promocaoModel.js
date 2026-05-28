@@ -107,9 +107,29 @@ class PromocaoModel {
         return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
+    async estaAtiva(id) {
+        let sql = `
+        select count(*) as total
+        from tb_promocao
+        where prom_id = ?
+          and prom_ativo = 's'
+          and curdate() between prom_data_inicio and prom_data_fim
+    `;
+
+        let banco = new Database();
+        let rows = await banco.ExecutaComando(sql, [id]);
+
+        return rows[0].total > 0;
+    }
+
     async deletar(id) {
+        if (await this.estaAtiva(id)) {
+            return false;
+        }
+
         let sql = "DELETE FROM tb_promocao WHERE prom_id = ?";
         let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, [id]);
     }
 

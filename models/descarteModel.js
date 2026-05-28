@@ -38,19 +38,29 @@ class DescarteModel {
 
     async listar() {
         let sql = `
-            SELECT d.*, p.pro_nome
+            SELECT 
+                d.*,
+                p.pro_nome
             FROM tb_descarte d
-            INNER JOIN tb_produto p ON d.pro_codigo = p.pro_codigo
+            INNER JOIN tb_produto p 
+                ON d.pro_codigo = p.pro_codigo
             ORDER BY d.des_data DESC
         `;
 
         let banco = new Database();
+
         return await banco.ExecutaComando(sql);
     }
 
     async obter(id) {
-        let sql = "SELECT * FROM tb_descarte WHERE des_id = ?";
+        let sql = `
+            SELECT *
+            FROM tb_descarte
+            WHERE des_id = ?
+        `;
+
         let banco = new Database();
+
         let rows = await banco.ExecutaComando(sql, [id]);
 
         if (rows.length > 0) {
@@ -63,7 +73,13 @@ class DescarteModel {
     async cadastrar() {
         let sql = `
             INSERT INTO tb_descarte
-            (pro_codigo, des_quantidade, des_data, des_motivo, des_observacao)
+            (
+                pro_codigo,
+                des_quantidade,
+                des_data,
+                des_motivo,
+                des_observacao
+            )
             VALUES (?, ?, ?, ?, ?)
         `;
 
@@ -76,13 +92,15 @@ class DescarteModel {
         ];
 
         let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
     async atualizar() {
         let sql = `
             UPDATE tb_descarte
-            SET pro_codigo = ?,
+            SET
+                pro_codigo = ?,
                 des_quantidade = ?,
                 des_data = ?,
                 des_motivo = ?,
@@ -100,6 +118,7 @@ class DescarteModel {
         ];
 
         let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
@@ -111,13 +130,15 @@ class DescarteModel {
               AND pro_estoque >= ?
         `;
 
-        let banco = new Database();
-
-        return await banco.ExecutaComandoNonQuery(sql, [
+        let valores = [
             this.#desQuantidade,
             this.#proCodigo,
             this.#desQuantidade
-        ]);
+        ];
+
+        let banco = new Database();
+
+        return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
     async devolverEstoque(qtd, codigoProduto) {
@@ -127,18 +148,18 @@ class DescarteModel {
             WHERE pro_codigo = ?
         `;
 
-        let banco = new Database();
-
-        return await banco.ExecutaComandoNonQuery(sql, [
+        let valores = [
             qtd,
             codigoProduto
-        ]);
+        ];
+
+        let banco = new Database();
+
+        return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
     async deletar(id) {
-        let sql = "DELETE FROM tb_descarte WHERE des_id = ?";
-        let banco = new Database();
-        return await banco.ExecutaComandoNonQuery(sql, [id]);
+        return false;
     }
 }
 
