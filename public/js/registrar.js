@@ -72,11 +72,19 @@ function configurarEventos() {
 
     if (btnCalendario && nascimentoCalendario && nascimento) {
         btnCalendario.addEventListener("click", function () {
-            if (typeof nascimentoCalendario.showPicker === "function") {
-                nascimentoCalendario.showPicker();
-            } else {
-                nascimentoCalendario.click();
+
+            // Chrome / Android
+            if (nascimentoCalendario.showPicker) {
+                try {
+                    nascimentoCalendario.showPicker();
+                    return;
+                } catch (e) { }
             }
+
+            // iPhone / Safari
+            nascimentoCalendario.focus();
+            nascimentoCalendario.click();
+
         });
 
         nascimentoCalendario.addEventListener("change", function () {
