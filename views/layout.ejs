@@ -16,12 +16,14 @@
       box-sizing: border-box;
     }
 
+    html,
     body {
       margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
       font-family: 'Poppins', sans-serif;
       background: #f4f7fb;
       color: #07172f;
-      overflow-x: hidden;
     }
 
     .app-sidebar {
@@ -29,20 +31,15 @@
       top: 0;
       left: 0;
       width: 280px;
-
       height: 100vh;
       height: 100dvh;
-
       background: linear-gradient(180deg, #07172f 0%, #0b2346 100%);
-      z-index: 1050;
-
+      z-index: 1060;
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-
-      padding-bottom: 35px;
-
-      transition: width .25s ease, left .25s ease;
+      padding-bottom: 120px;
+      transition: width .25s ease, left .28s ease;
     }
 
     .sidebar-collapsed .app-sidebar {
@@ -54,21 +51,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      border-bottom: 1px solid rgba(255,255,255,.08);
       text-decoration: none;
     }
 
     .logo-aberta {
       width: 155px;
-      max-width: 155px;
-      height: auto;
       display: block;
     }
 
     .logo-fechada {
       width: 46px;
-      max-width: 46px;
-      height: auto;
       display: none;
     }
 
@@ -81,7 +74,7 @@
     }
 
     .user-panel-custom {
-      background: rgba(255, 255, 255, .07);
+      background: rgba(255,255,255,.07);
       margin: 18px;
       padding: 16px;
       border-radius: 18px;
@@ -100,22 +93,18 @@
       flex: 0 0 auto;
     }
 
-    .user-panel-custom strong,
-    .user-panel-custom small {
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
     .user-panel-custom strong {
       color: #fff;
       font-size: 15px;
+      display: block;
+      white-space: nowrap;
     }
 
     .user-panel-custom small {
       color: #9fb3d1;
       font-size: 12px;
+      display: block;
+      white-space: nowrap;
     }
 
     .sidebar-collapsed .user-panel-custom {
@@ -162,7 +151,7 @@
     }
 
     .menu-link:hover {
-      background: rgba(255, 255, 255, .12);
+      background: rgba(255,255,255,.12);
       color: #fff;
       text-decoration: none;
     }
@@ -200,7 +189,6 @@
 
     .sidebar-collapsed .menu-link i {
       width: auto;
-      margin: 0;
     }
 
     .app-main {
@@ -217,7 +205,7 @@
     .app-header {
       height: 70px;
       background: #fff;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, .06);
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -273,7 +261,7 @@
       background: #fff;
       border-radius: 24px;
       padding: 32px;
-      box-shadow: 0 10px 35px rgba(0, 0, 0, .07);
+      box-shadow: 0 10px 35px rgba(0,0,0,.07);
       min-height: calc(100vh - 120px);
       overflow-x: hidden;
     }
@@ -287,12 +275,13 @@
     .card {
       border: none;
       border-radius: 22px;
-      box-shadow: 0 8px 28px rgba(0, 0, 0, .07);
+      box-shadow: 0 8px 28px rgba(0,0,0,.07);
       overflow: hidden;
     }
 
     .card-body {
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .table {
@@ -341,7 +330,6 @@
     select.form-select {
       appearance: auto !important;
       padding-right: 45px !important;
-      line-height: normal !important;
     }
 
     .btn {
@@ -355,42 +343,39 @@
       border-color: #0d6efd !important;
     }
 
-    .form-check-input {
-      width: 18px;
-      height: 18px;
-      margin-top: 4px;
-    }
-
-    .form-check-label {
-      font-size: 17px;
-      font-weight: 700;
-    }
-
     .mobile-overlay {
       display: none;
     }
 
     @media(max-width: 768px) {
       .app-sidebar {
+        left: -280px;
+        width: 280px;
         height: 100vh;
         height: 100dvh;
         max-height: 100dvh;
         overflow-y: auto !important;
+        overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
-        padding-bottom: 90px;
+        padding-bottom: 150px;
+        z-index: 1060;
       }
 
       body.mobile-sidebar-open .app-sidebar {
         left: 0;
       }
 
+      body.mobile-sidebar-open {
+        overflow: hidden;
+      }
+
       .sidebar-collapsed .app-sidebar {
-        width: 260px;
+        width: 280px;
       }
 
       .sidebar-collapsed .logo-aberta {
         display: block;
-        width: 140px;
+        width: 145px;
       }
 
       .sidebar-collapsed .logo-fechada {
@@ -433,7 +418,23 @@
 
       .app-main,
       .sidebar-collapsed .app-main {
-        margin-left: 0;
+        margin-left: 0 !important;
+      }
+
+      .mobile-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        background: rgba(0,0,0,.55);
+        backdrop-filter: blur(4px);
+        z-index: 1055;
+      }
+
+      body.mobile-sidebar-open .mobile-overlay {
+        display: block;
       }
 
       .app-header {
@@ -461,6 +462,7 @@
         padding: 20px;
         border-radius: 18px;
         min-height: calc(100vh - 90px);
+        overflow-x: hidden;
       }
 
       h1 {
@@ -481,18 +483,6 @@
 
       .table {
         min-width: 760px;
-      }
-
-      .mobile-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, .45);
-        z-index: 1040;
-      }
-
-      body.mobile-sidebar-open .mobile-overlay {
-        display: block;
       }
     }
   </style>
@@ -660,13 +650,23 @@
       btnMenu.addEventListener("click", function () {
         if (isMobile()) {
           body.classList.toggle("mobile-sidebar-open");
+          body.classList.remove("sidebar-collapsed");
         } else {
           body.classList.toggle("sidebar-collapsed");
+          body.classList.remove("mobile-sidebar-open");
         }
       });
 
       overlay.addEventListener("click", function () {
         body.classList.remove("mobile-sidebar-open");
+      });
+
+      document.querySelectorAll(".menu-link").forEach(function (link) {
+        link.addEventListener("click", function () {
+          if (isMobile()) {
+            body.classList.remove("mobile-sidebar-open");
+          }
+        });
       });
 
       window.addEventListener("resize", function () {
