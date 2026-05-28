@@ -306,33 +306,50 @@ label {
     right: 8px;
     top: 50%;
     transform: translateY(-50%);
+
     width: 42px;
     height: 42px;
+
     border: none;
     border-radius: 12px;
-    background: transparent;
+    background: #f3f6ff;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     color: #1f2f46;
     font-size: 20px;
-    cursor: pointer;
-    z-index: 2;
-}
 
-.date-button:hover {
-    background: #f1f5ff;
+    pointer-events: none;
+    z-index: 2;
 }
 
 #nascimentoCalendario {
     position: absolute;
     right: 8px;
     top: 50%;
+
     width: 42px;
     height: 42px;
+
     transform: translateY(-50%);
     opacity: 0;
-    pointer-events: none;
+
+    z-index: 10;
+    cursor: pointer;
+
+    border: none;
+    background: transparent;
+
+    appearance: auto;
+    -webkit-appearance: auto;
+}
+
+#nascimento {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* ================= ERROS ================= */
@@ -612,6 +629,19 @@ label {
         padding-right: 56px !important;
     }
 
+    .date-button {
+        width: 42px;
+        height: 42px;
+        right: 8px;
+    }
+
+    #nascimentoCalendario {
+        width: 42px;
+        height: 42px;
+        right: 8px;
+        z-index: 10;
+    }
+
     .btn {
         height: 54px;
         font-size: 1rem;
@@ -660,15 +690,31 @@ label {
         width: 210px;
     }
 
+    .date-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .date-wrapper .input {
+        width: 100%;
+        min-width: 0;
+        padding-left: 14px !important;
+        padding-right: 54px !important;
+        font-size: 16px !important;
+    }
+
     .date-button {
         right: 6px;
         width: 40px;
         height: 40px;
+        font-size: 18px;
     }
 
     #nascimentoCalendario {
         right: 6px;
         width: 40px;
         height: 40px;
+        z-index: 10;
     }
 }

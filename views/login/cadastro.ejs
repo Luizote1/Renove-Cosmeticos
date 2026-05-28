@@ -9,52 +9,8 @@
     <link rel="icon" href="/img/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/cadastro.css?v=63">
+    <link rel="stylesheet" href="/css/cadastro.css?v=65">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-    <style>
-        .date-wrapper {
-            position: relative;
-            width: 100%;
-        }
-
-        .date-wrapper .input {
-            width: 100%;
-            padding-right: 58px !important;
-        }
-
-        .date-button {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 42px;
-            height: 42px;
-            border: none;
-            border-radius: 12px;
-            background: transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #1f2f46;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .date-button:hover {
-            background: #f1f5ff;
-        }
-
-        #nascimentoCalendario {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            width: 42px;
-            height: 42px;
-            opacity: 0;
-            pointer-events: none;
-        }
-    </style>
 </head>
 
 <body class="theme-light">
@@ -179,8 +135,12 @@
                                         maxlength="10"
                                         autocomplete="bday">
 
-                                    <button type="button" class="date-button" id="btnCalendario" aria-label="Abrir calendário">
-                                        <i class="bi bi-calendar"></i>
+                                    <button
+                                        type="button"
+                                        id="btnCalendario"
+                                        class="date-button"
+                                        aria-label="Abrir calendário">
+                                        <i class="bi bi-calendar3"></i>
                                     </button>
 
                                     <input
@@ -356,7 +316,7 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/registrar.js?v=63"></script>
+    <script src="/js/registrar.js?v=65"></script>
     <script src="/js/site.js"></script>
 
 </body>
