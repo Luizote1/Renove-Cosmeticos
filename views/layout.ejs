@@ -29,11 +29,19 @@
       top: 0;
       left: 0;
       width: 280px;
+
       height: 100vh;
+      height: 100dvh;
+
       background: linear-gradient(180deg, #07172f 0%, #0b2346 100%);
       z-index: 1050;
+
       overflow-y: auto;
       overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+
+      padding-bottom: 35px;
+
       transition: width .25s ease, left .25s ease;
     }
 
@@ -364,8 +372,12 @@
 
     @media(max-width: 768px) {
       .app-sidebar {
-        left: -280px;
-        width: 260px;
+        height: 100vh;
+        height: 100dvh;
+        max-height: 100dvh;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 90px;
       }
 
       body.mobile-sidebar-open .app-sidebar {

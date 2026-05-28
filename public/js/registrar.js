@@ -59,7 +59,7 @@ function configurarEventos() {
     }
 
     if (genero) {
-        genero.addEventListener("change", function () {
+        genero.addEventListener("blur", function () {
             validarCampoGenero();
         });
     }
@@ -299,113 +299,54 @@ function validarCampoNome() {
 }
 
 function validarCampoNascimento() {
+    const nascimentoInput = document.getElementById("nascimento");
+    const nascimento = nascimentoInput.value;
 
-    const nascimentoInput =
-        document.getElementById("nascimento");
-
-    const nascimento =
-        nascimentoInput.value;
-
-    clearError(
-        "nascimento",
-        "nascimentoError"
-    );
+    clearError("nascimento", "nascimentoError");
 
     if (!nascimento) {
-
-        document.getElementById(
-            "nascimentoError"
-        ).innerText =
+        document.getElementById("nascimentoError").innerText =
             "Informe sua data de nascimento.";
 
-        showError(
-            "nascimento",
-            "nascimentoError"
-        );
-
+        showError("nascimento", "nascimentoError");
         return false;
     }
 
-    const birth =
-        new Date(
-            nascimento + "T00:00:00"
-        );
-
-    const today =
-        new Date();
+    const birth = new Date(nascimento + "T00:00:00");
+    const today = new Date();
 
     if (birth > today) {
-
-        document.getElementById(
-            "nascimentoError"
-        ).innerText =
+        document.getElementById("nascimentoError").innerText =
             "Data inválida.";
 
-        showError(
-            "nascimento",
-            "nascimentoError"
-        );
-
+        showError("nascimento", "nascimentoError");
         return false;
     }
 
-    let idade =
-        today.getFullYear() -
-        birth.getFullYear();
+    let idade = today.getFullYear() - birth.getFullYear();
+    const mes = today.getMonth() - birth.getMonth();
 
-    const mes =
-        today.getMonth() -
-        birth.getMonth();
-
-    if (
-        mes < 0 ||
-        (
-            mes === 0 &&
-            today.getDate() <
-            birth.getDate()
-        )
-    ) {
+    if (mes < 0 || (mes === 0 && today.getDate() < birth.getDate())) {
         idade--;
     }
 
     if (idade < 18) {
-
-        document.getElementById(
-            "nascimentoError"
-        ).innerText =
+        document.getElementById("nascimentoError").innerText =
             "Você deve ter pelo menos 18 anos.";
 
-        showError(
-            "nascimento",
-            "nascimentoError"
-        );
-
+        showError("nascimento", "nascimentoError");
         return false;
     }
 
-    if (
-        idade > 95 ||
-        birth.getFullYear() < 1930
-    ) {
-
-        document.getElementById(
-            "nascimentoError"
-        ).innerText =
+    if (idade > 95 || birth.getFullYear() < 1930) {
+        document.getElementById("nascimentoError").innerText =
             "Data de nascimento inválida.";
 
-        showError(
-            "nascimento",
-            "nascimentoError"
-        );
-
+        showError("nascimento", "nascimentoError");
         return false;
     }
 
-    clearError(
-        "nascimento",
-        "nascimentoError"
-    );
-
+    clearError("nascimento", "nascimentoError");
     return true;
 }
 
