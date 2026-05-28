@@ -18,6 +18,8 @@ function configurarEventos() {
     const termos = document.getElementById("termos");
     const senha = document.getElementById("senha");
     const confirmarSenha = document.getElementById("confirmarSenha");
+    const btnCalendario = document.getElementById("btnCalendario");
+    const nascimentoCalendario = document.getElementById("nascimentoCalendario");
 
     if (cpf) {
         cpf.addEventListener("input", function (e) {
@@ -50,15 +52,39 @@ function configurarEventos() {
     }
 
     if (nascimento) {
-        nascimento.addEventListener("input", function () {
+        nascimento.addEventListener("input", function (e) {
+            let v = e.target.value.replace(/\D/g, "").slice(0, 8);
+
+            if (v.length > 4) {
+                v = v.replace(/(\d{2})(\d{2})(\d+)/, "$1/$2/$3");
+            } else if (v.length > 2) {
+                v = v.replace(/(\d{2})(\d+)/, "$1/$2");
+            }
+
+            e.target.value = v;
             clearError("nascimento", "nascimentoError");
         });
 
-        nascimento.addEventListener("change", function () {
+        nascimento.addEventListener("blur", function () {
             validarCampoNascimento();
         });
+    }
 
-        nascimento.addEventListener("blur", function () {
+    if (btnCalendario && nascimentoCalendario && nascimento) {
+        btnCalendario.addEventListener("click", function () {
+            if (typeof nascimentoCalendario.showPicker === "function") {
+                nascimentoCalendario.showPicker();
+            } else {
+                nascimentoCalendario.click();
+            }
+        });
+
+        nascimentoCalendario.addEventListener("change", function () {
+            if (!this.value) return;
+
+            const partes = this.value.split("-");
+            nascimento.value = `${partes[2]}/${partes[1]}/${partes[0]}`;
+
             validarCampoNascimento();
         });
     }
@@ -147,10 +173,9 @@ function configurarEventos() {
 }
 
 function configurarDataNascimento() {
-    const campo = document.getElementById("nascimento");
-    if (!campo) return;
+    const nascimentoCalendario = document.getElementById("nascimentoCalendario");
 
-    campo.setAttribute("min", "1930-01-01");
+    if (!nascimentoCalendario) return;
 
     const hoje = new Date();
 
@@ -164,19 +189,8 @@ function configurarDataNascimento() {
     const mes = String(dataMaxima.getMonth() + 1).padStart(2, "0");
     const dia = String(dataMaxima.getDate()).padStart(2, "0");
 
-    campo.setAttribute("max", `${ano}-${mes}-${dia}`);
-
-    campo.addEventListener("focus", function () {
-        if (!campo.value) {
-            campo.value = campo.max;
-        }
-    });
-
-    campo.addEventListener("click", function () {
-        if (!campo.value) {
-            campo.value = campo.max;
-        }
-    });
+    nascimentoCalendario.min = "1930-01-01";
+    nascimentoCalendario.max = `${ano}-${mes}-${dia}`;
 }
 
 function updateProgress(step) {
@@ -237,7 +251,7 @@ async function finalizarCadastro() {
     try {
         const cpf = document.getElementById("cpf").value.trim();
         const nome = document.getElementById("nome").value.trim();
-        const nascimento = document.getElementById("nascimento").value;
+        const nascimento = document.getElementById("nascimento").value.trim();
         const genero = document.getElementById("genero").value.trim();
         const telefone = document.getElementById("telefone").value.trim();
         const email = document.getElementById("email").value.trim();
@@ -251,7 +265,7 @@ async function finalizarCadastro() {
             body: JSON.stringify({
                 cpf: onlyDigits(cpf),
                 nome: nome,
-                nascimento: nascimento,
+                nascimento: converterDataParaMysql(nascimento),
                 genero: genero,
                 telefone: telefone,
                 email: email,
@@ -342,11 +356,11 @@ function validarCampoNome() {
 
 function validarCampoNascimento() {
     const nascimentoInput = document.getElementById("nascimento");
-    const nascimento = nascimentoInput.value;
+    const valor = nascimentoInput.value.trim();
 
     clearError("nascimento", "nascimentoError");
 
-    if (!nascimento) {
+    if (!valor) {
         document.getElementById("nascimentoError").innerText =
             "Informe sua data de nascimento.";
 
@@ -354,10 +368,27 @@ function validarCampoNascimento() {
         return false;
     }
 
-    const birth = new Date(nascimento + "T00:00:00");
-    const today = new Date();
+    const partes = valor.split("/");
 
-    if (birth > today) {
+    if (partes.length !== 3) {
+        document.getElementById("nascimentoError").innerText =
+            "Use o formato dd/mm/aaaa.";
+
+        showError("nascimento", "nascimentoError");
+        return false;
+    }
+
+    const dia = Number(partes[0]);
+    const mes = Number(partes[1]);
+    const ano = Number(partes[2]);
+
+    const birth = new Date(ano, mes - 1, dia);
+
+    if (
+        birth.getDate() !== dia ||
+        birth.getMonth() !== mes - 1 ||
+        birth.getFullYear() !== ano
+    ) {
         document.getElementById("nascimentoError").innerText =
             "Data inválida.";
 
@@ -365,10 +396,18 @@ function validarCampoNascimento() {
         return false;
     }
 
-    let idade = today.getFullYear() - birth.getFullYear();
-    const mes = today.getMonth() - birth.getMonth();
+    const today = new Date();
 
-    if (mes < 0 || (mes === 0 && today.getDate() < birth.getDate())) {
+    let idade = today.getFullYear() - birth.getFullYear();
+
+    const ajuste =
+        today.getMonth() < birth.getMonth() ||
+        (
+            today.getMonth() === birth.getMonth() &&
+            today.getDate() < birth.getDate()
+        );
+
+    if (ajuste) {
         idade--;
     }
 
@@ -380,7 +419,7 @@ function validarCampoNascimento() {
         return false;
     }
 
-    if (idade > 95 || birth.getFullYear() < 1930) {
+    if (idade > 95 || ano < 1930) {
         document.getElementById("nascimentoError").innerText =
             "Data de nascimento inválida.";
 
@@ -566,6 +605,16 @@ function isValidCPF(cpf) {
     }
 
     return digit2 === Number(cpf[10]);
+}
+
+function converterDataParaMysql(dataBr) {
+    const partes = dataBr.split("/");
+
+    if (partes.length !== 3) {
+        return "";
+    }
+
+    return `${partes[2]}-${partes[1]}-${partes[0]}`;
 }
 
 function atualizarRegrasSenha(value) {

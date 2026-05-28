@@ -1,9 +1,6 @@
 /* =========================================================
    RENOVE - CADASTRO.CSS
-   Navbar copiada do themes.css + formulário de cadastro
 ========================================================= */
-
-/* ================= RESET ================= */
 
 * {
     margin: 0;
@@ -25,6 +22,7 @@ body {
 body {
     background: #ffffff;
     color: #2c3e50;
+    font-family: Arial, sans-serif;
 }
 
 /* ================= LOADING ================= */
@@ -40,9 +38,9 @@ body {
     z-index: 99999;
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
+    background-color: #6f6f6f3d;
     opacity: 1;
     visibility: visible;
-    background-color: #6f6f6f3d;
     transition: opacity 0.5s ease-in-out, visibility 0s linear 0s;
 }
 
@@ -79,112 +77,92 @@ body {
     }
 }
 
-/* ================= NAVBAR DO THEMES.CSS ================= */
+/* ================= NAVBAR ================= */
 
 .navbar {
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px) !important;
     background: rgba(255, 255, 255, 0.95) !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    padding: 0.85rem 0;
-    z-index: 1050;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+    padding: 0.85rem 0 !important;
+    z-index: 1050 !important;
 }
 
 .navbar .container-fluid {
-    width: 100%;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    width: 100% !important;
+    max-width: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
 }
 
 .navbar-brand {
-    height: 52px;
-    width: 190px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin: 0;
+    width: 160px !important;
+    height: 48px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-shrink: 0 !important;
+    overflow: hidden !important;
 }
 
 .navbar-brand img,
 .navbar-brand .images,
 .images {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
 }
 
+.navbar-collapse {
+    flex-grow: 0 !important;
+    justify-content: flex-end !important;
+}
+
+.navbar-nav {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;
+}
+
 .navbar-nav .nav-link {
-    position: relative;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border-radius: 10px;
-    margin: 0 0.25rem;
-    padding: 0.55rem 1rem;
     color: #2c3e50 !important;
+    font-weight: 600 !important;
+    padding: 0.6rem 1rem !important;
+    border-radius: 12px !important;
+    margin: 0 !important;
+    transition: 0.25s ease !important;
 }
 
 .navbar-nav .nav-link:hover {
-    background: rgba(102, 126, 234, 0.1);
+    background: rgba(102, 126, 234, 0.10) !important;
     color: #667eea !important;
-    transform: translateY(-2px);
+    transform: translateY(-2px) !important;
 }
 
 .navbar-nav .nav-link.active {
-    background: linear-gradient(135deg, #70a0f8 0%, #4b58a2 100%);
+    background: linear-gradient(135deg, #70a0f8 0%, #4b58a2 100%) !important;
     color: #ffffff !important;
-    font-weight: 700;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.30) !important;
 }
 
 .navbar-toggler {
-    border-color: rgba(44, 62, 80, 0.25);
-    border-radius: 10px;
-    padding: 0.35rem 0.55rem;
+    border-color: rgba(44, 62, 80, 0.25) !important;
+    border-radius: 10px !important;
+    padding: 0.35rem 0.55rem !important;
 }
 
 .navbar-toggler:focus {
-    box-shadow: 0 0 0 0.15rem rgba(102, 126, 234, 0.25);
-}
-
-.navbar-toggler-icon {
-    width: 1.35em;
-    height: 1.35em;
-}
-
-.navbar .dropdown {
-    position: relative;
-}
-
-.dropdown-menu,
-.navbar .dropdown-menu {
-    border: none;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.96);
-    padding: 0.5rem;
-    z-index: 99999 !important;
-    position: absolute !important;
-}
-
-.dropdown-item {
-    border-radius: 12px;
-    margin: 0.25rem 0;
-    transition: all 0.3s ease;
-    color: #2c3e50 !important;
-}
-
-.dropdown-item:hover {
-    background: rgba(102, 126, 234, 0.1);
-    transform: translateX(4px);
-}
-
-.dropdown-item.active {
-    background: linear-gradient(135deg, #70a0f8 0%, #4b58a2 100%);
-    color: white !important;
+    box-shadow: 0 0 0 0.15rem rgba(102, 126, 234, 0.25) !important;
 }
 
 /* ================= PÁGINA ================= */
@@ -213,24 +191,21 @@ body {
     color: #495057;
 }
 
-.progress{
-    display:flex;
-    gap:6px;
-
-    width:240px;       /* menorzinha */
-    max-width:100%;
-
-    height:auto !important;
-    overflow:visible !important;
-    background:transparent !important;
-    box-shadow:none !important;
-    border:none !important;
+.progress {
+    display: flex;
+    gap: 6px;
+    width: 240px;
+    max-width: 100%;
+    height: auto !important;
+    overflow: visible !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
 }
-
 
 .progress span {
     flex: 1;
-    height: 6px;
+    height: 5px;
     border-radius: 999px;
     background: #d9d9d9;
 }
@@ -269,7 +244,7 @@ h1 {
 }
 
 .form-group {
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 
 .form-row {
@@ -281,7 +256,7 @@ h1 {
 label {
     display: block;
     font-size: 0.96rem;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 8px;
     color: #2c3e50;
 }
@@ -289,15 +264,17 @@ label {
 .input,
 .select {
     width: 100%;
-    height: 50px;
-    border-radius: 12px;
+    max-width: 100%;
+    height: 52px;
+    border-radius: 14px;
     padding: 0 16px;
-    font-size: 0.95rem;
+    font-size: 16px;
     outline: none;
     border: 1px solid #d9d9d9;
     background: #ffffff;
     color: #1f2937;
     transition: all 0.2s ease;
+    display: block;
 }
 
 .input:focus,
@@ -309,6 +286,53 @@ label {
 .input.invalid,
 .select.invalid {
     border-color: #e35d6a;
+}
+
+/* ================= DATA NASCIMENTO ================= */
+
+.date-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+}
+
+.date-wrapper .input {
+    width: 100%;
+    padding-right: 58px !important;
+}
+
+.date-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1f2f46;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.date-button:hover {
+    background: #f1f5ff;
+}
+
+#nascimentoCalendario {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    width: 42px;
+    height: 42px;
+    transform: translateY(-50%);
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* ================= ERROS ================= */
@@ -341,6 +365,7 @@ label {
     height: 20px;
     margin-top: 2px;
     accent-color: #667eea;
+    flex: 0 0 auto;
 }
 
 .checkbox-group a,
@@ -398,6 +423,11 @@ label {
 
 .password-wrapper {
     position: relative;
+    width: 100%;
+}
+
+.password-wrapper .input {
+    padding-right: 58px !important;
 }
 
 .toggle-pass {
@@ -416,283 +446,25 @@ label {
     margin: 10px 0 6px;
 }
 
-.password-rules p,
-.password-rules li {
-    color: #6c757d;
-}
-
 .password-rules ul {
     list-style: none;
     display: grid;
     gap: 8px;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.password-rules li {
+    color: #6c757d;
 }
 
 .password-rules li.ok {
     color: #198754;
 }
 
-/* =========================================================
-   RESPONSIVIDADE NAVBAR TABLET
-========================================================= */
+/* ================= TABLET ================= */
 
 @media (max-width: 992px) {
-
-    .navbar .container-fluid {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-
-    .navbar-collapse {
-        padding-top: 1rem;
-    }
-
-    .navbar-nav .nav-link {
-        margin: 0.25rem 0;
-        text-align: center;
-    }
-
-    .dropdown-menu {
-        position: static !important;
-        box-shadow: none;
-        background: rgba(245, 247, 255, 0.95);
-        margin-top: 0.5rem;
-        text-align: center;
-    }
-}
-
-/* =========================================================
-   RESPONSIVIDADE CADASTRO MOBILE
-========================================================= */
-
-@media (max-width: 768px) {
-
-    body {
-        overflow-x: hidden;
-    }
-
-    .navbar {
-        padding: 0.65rem 0 !important;
-    }
-
-    .navbar .container-fluid {
-        max-width: 100% !important;
-        padding-left: 14px !important;
-        padding-right: 14px !important;
-    }
-
-    .navbar-brand {
-        width: 135px !important;
-        height: 42px !important;
-        margin: 0 !important;
-    }
-
-    .navbar-brand img,
-    .navbar-brand .images,
-    .images {
-        width: 100% !important;
-        height: auto !important;
-    }
-
-    .navbar-toggler {
-        margin-left: auto;
-    }
-
-    .navbar-nav .nav-link {
-        width: 100%;
-        text-align: center;
-        padding: 7px 10px !important;
-        font-size: 0.9rem;
-        border-radius: 8px;
-        margin: 0.25rem 0 !important;
-    }
-
-    .page {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 18px 14px 30px !important;
-        width: 100%;
-        min-height: auto;
-    }
-
-    .wizard {
-        width: 100%;
-        max-width: 560px;
-        margin: 0 auto;
-        padding: 0;
-    }
-
-    .step-header {
-        margin-bottom: 18px;
-    }
-
-    .step-text {
-        font-size: 0.92rem;
-    }
-
-    .progress span {
-        height: 6px;
-    }
-
-    h1 {
-        font-size: 2rem !important;
-        margin-bottom: 8px;
-    }
-
-    .subtitle {
-        font-size: 0.95rem;
-        margin-bottom: 24px;
-    }
-
-    .form-row {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-
-    .form-group {
-        margin-bottom: 18px;
-    }
-
-    label {
-        font-size: 0.94rem;
-    }
-
-    .input,
-    .select {
-        height: 52px;
-        font-size: 16px;
-        border-radius: 12px;
-    }
-
-    .btn {
-        height: 54px;
-        font-size: 1rem;
-    }
-
-    .checkbox-group {
-        font-size: 0.92rem;
-        line-height: 1.5;
-    }
-
-    .bottom-link {
-        font-size: 0.92rem;
-        margin-top: 18px;
-    }
-}
-
-/* =========================================================
-   CELULAR PEQUENO
-========================================================= */
-
-@media (max-width: 480px) {
-
-    .page {
-        padding: 16px 14px 28px !important;
-    }
-
-    .wizard {
-        max-width: 100%;
-    }
-
-    .navbar-brand {
-        width: 105px !important;
-    }
-
-    h1 {
-        font-size: 1.85rem !important;
-    }
-
-    .subtitle {
-        font-size: 0.92rem;
-    }
-
-    .input,
-    .select {
-        height: 50px;
-    }
-}
-/* =========================================================
-   FIX FINAL NAVBAR CADASTRO
-   Igual Produtos/Home: logo totalmente esquerda e links direita
-========================================================= */
-
-.navbar {
-    backdrop-filter: blur(20px) !important;
-    background: rgba(255, 255, 255, 0.95) !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
-    padding: 0.85rem 0 !important;
-    z-index: 1050 !important;
-}
-
-.navbar .container-fluid {
-    width: 100% !important;
-    max-width: none !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding-left: 28px !important;
-    padding-right: 28px !important;
-}
-
-.navbar-brand {
-    width: 160px !important;
-    height: 48px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    flex-shrink: 0 !important;
-    overflow: hidden !important;
-}
-
-.navbar-brand img,
-.navbar-brand .images,
-.images {
-    width: 100% !important;
-    height: auto !important;
-    object-fit: contain !important;
-    display: block !important;
-}
-
-.navbar-collapse {
-    flex-grow: 0 !important;
-    justify-content: flex-end !important;
-}
-
-.navbar-nav {
-    margin-left: auto !important;
-    margin-right: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 6px !important;
-}
-
-.navbar-nav .nav-link {
-    color: #2c3e50 !important;
-    font-weight: 600 !important;
-    padding: 0.6rem 1rem !important;
-    border-radius: 12px !important;
-    margin: 0 !important;
-    transition: 0.25s ease !important;
-}
-
-.navbar-nav .nav-link:hover {
-    background: rgba(102, 126, 234, 0.10) !important;
-    color: #667eea !important;
-    transform: translateY(-2px) !important;
-}
-
-.navbar-nav .nav-link.active {
-    background: linear-gradient(135deg, #70a0f8 0%, #4b58a2 100%) !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.30) !important;
-}
-
-@media (max-width: 992px) {
-
     .navbar .container-fluid {
         padding-left: 14px !important;
         padding-right: 14px !important;
@@ -727,10 +499,176 @@ label {
         margin: 0.25rem 0 !important;
         padding: 0.65rem 1rem !important;
     }
+
+    .dropdown-menu {
+        position: static !important;
+        box-shadow: none !important;
+        background: rgba(245, 247, 255, 0.95) !important;
+        margin-top: 0.5rem !important;
+        text-align: center !important;
+    }
 }
 
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .navbar {
+        padding: 0.65rem 0 !important;
+    }
+
+    .navbar .container-fluid {
+        max-width: 100% !important;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    .navbar-brand {
+        width: 135px !important;
+        height: 42px !important;
+        margin: 0 !important;
+    }
+
+    .navbar-brand img,
+    .navbar-brand .images,
+    .images {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .page {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 18px 14px 30px !important;
+        width: 100%;
+        min-height: auto;
+    }
+
+    .wizard {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .step-header {
+        margin-bottom: 18px;
+    }
+
+    .step-text {
+        font-size: 0.92rem;
+    }
+
+    .progress {
+        width: 220px;
+    }
+
+    .progress span {
+        height: 4px;
+    }
+
+    h1 {
+        font-size: 2rem !important;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 24px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    label {
+        font-size: 0.94rem;
+    }
+
+    .input,
+    .select {
+        height: 52px;
+        font-size: 16px !important;
+        border-radius: 14px;
+    }
+
+    .date-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        border-radius: 14px;
+    }
+
+    .date-wrapper .input {
+        padding-right: 56px !important;
+    }
+
+    .btn {
+        height: 54px;
+        font-size: 1rem;
+    }
+
+    .checkbox-group {
+        font-size: 0.92rem;
+        line-height: 1.5;
+    }
+
+    .bottom-link {
+        font-size: 0.92rem;
+        margin-top: 18px;
+    }
+}
+
+/* ================= CELULAR PEQUENO ================= */
+
 @media (max-width: 480px) {
+    .page {
+        padding: 16px 14px 28px !important;
+    }
+
+    .wizard {
+        max-width: 100%;
+    }
+
     .navbar-brand {
         width: 115px !important;
+    }
+
+    h1 {
+        font-size: 1.85rem !important;
+    }
+
+    .subtitle {
+        font-size: 0.92rem;
+    }
+
+    .input,
+    .select {
+        height: 50px;
+    }
+
+    .progress {
+        width: 210px;
+    }
+
+    .date-button {
+        right: 6px;
+        width: 40px;
+        height: 40px;
+    }
+
+    #nascimentoCalendario {
+        right: 6px;
+        width: 40px;
+        height: 40px;
     }
 }

@@ -9,53 +9,110 @@
     <link rel="icon" href="/img/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/cadastro.css?v=60">
+    <link rel="stylesheet" href="/css/cadastro.css?v=63">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <style>
+        .date-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .date-wrapper .input {
+            width: 100%;
+            padding-right: 58px !important;
+        }
+
+        .date-button {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 12px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f2f46;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .date-button:hover {
+            background: #f1f5ff;
+        }
+
+        #nascimentoCalendario {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            width: 42px;
+            height: 42px;
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body class="theme-light">
 
-    <!-- LOADING -->
-
     <div id="loadingOverlay" class="loading-overlay">
-
         <svg class="pill-loader-svg" viewBox="0 0 100 30">
-
             <path class="pill-half-filled" d="M50 0 L15 0 A15 15 0 0 0 15 30 L50 30 Z" />
-
             <path class="pill-half-outline" d="M50 0 L85 0 A15 15 0 0 1 85 30 L50 30 Z" />
-
         </svg>
-
     </div>
 
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
+
             <a class="navbar-brand" href="/">
                 <img class="images" src="/img/logotipo.png" alt="Renove">
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarTogglerDemo02">
+                data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02"
+                aria-expanded="false" aria-label="Abrir menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/produtos">Produtos</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/cadastro">Registrar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Início</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/produtos">Produtos</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/cadastro">Registrar</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+
                 </ul>
             </div>
+
         </div>
     </nav>
 
     <main class="page">
+
         <section class="wizard">
 
             <div class="step-header">
-                <div class="step-text" id="stepLabel">Passo 1 de 2</div>
+                <div class="step-text" id="stepLabel">
+                    Passo 1 de 2
+                </div>
+
                 <div class="progress" id="progressBar">
                     <span class="active"></span>
                     <span></span>
@@ -63,9 +120,11 @@
             </div>
 
             <div class="panel">
+
                 <form id="cadastroForm">
 
                     <div class="step active" data-step="1">
+
                         <h1>Vamos começar?</h1>
 
                         <p class="subtitle">
@@ -74,26 +133,72 @@
 
                         <div class="form-group">
                             <label for="cpf">CPF</label>
-                            <input class="input" id="cpf" type="text" maxlength="14" placeholder="000.000.000-00">
-                            <div class="helper-error" id="cpfError">Digite um CPF válido.</div>
+
+                            <input
+                                class="input"
+                                id="cpf"
+                                type="text"
+                                maxlength="14"
+                                placeholder="000.000.000-00"
+                                inputmode="numeric"
+                                autocomplete="off">
+
+                            <div class="helper-error" id="cpfError">
+                                Digite um CPF válido.
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label for="nome">Nome completo</label>
-                            <input class="input" id="nome" type="text" placeholder="Seu nome completo">
-                            <div class="helper-error" id="nomeError">Digite seu nome completo.</div>
+
+                            <input
+                                class="input"
+                                id="nome"
+                                type="text"
+                                placeholder="Seu nome completo"
+                                autocomplete="name">
+
+                            <div class="helper-error" id="nomeError">
+                                Digite seu nome completo.
+                            </div>
                         </div>
 
                         <div class="form-row">
 
                             <div class="form-group">
                                 <label for="nascimento">Data de nascimento</label>
-                                <input class="input" id="nascimento" type="date" lang="pt-BR" autocomplete="bday" min="1930-01-01">
-                                <div class="helper-error" id="nascimentoError">Data de nascimento inválida.</div>
+
+                                <div class="date-wrapper">
+
+                                    <input
+                                        class="input"
+                                        id="nascimento"
+                                        type="text"
+                                        placeholder="dd/mm/aaaa"
+                                        inputmode="numeric"
+                                        maxlength="10"
+                                        autocomplete="bday">
+
+                                    <button type="button" class="date-button" id="btnCalendario" aria-label="Abrir calendário">
+                                        <i class="bi bi-calendar"></i>
+                                    </button>
+
+                                    <input
+                                        id="nascimentoCalendario"
+                                        type="date"
+                                        min="1930-01-01"
+                                        autocomplete="bday">
+
+                                </div>
+
+                                <div class="helper-error" id="nascimentoError">
+                                    Data de nascimento inválida.
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="genero">Gênero</label>
+
                                 <select class="select" id="genero">
                                     <option value="">Selecione</option>
                                     <option value="Masculino">Masculino</option>
@@ -101,25 +206,49 @@
                                     <option value="Não informar">Não informar</option>
                                     <option value="Outro">Outro</option>
                                 </select>
-                                <div class="helper-error" id="generoError">Selecione um gênero.</div>
+
+                                <div class="helper-error" id="generoError">
+                                    Selecione um gênero.
+                                </div>
                             </div>
 
                         </div>
 
                         <div class="form-group">
                             <label for="telefone">Telefone celular</label>
-                            <input class="input" id="telefone" type="text" maxlength="15" placeholder="(00) 00000-0000">
-                            <div class="helper-error" id="telefoneError">Digite um telefone válido.</div>
+
+                            <input
+                                class="input"
+                                id="telefone"
+                                type="text"
+                                maxlength="15"
+                                placeholder="(00) 00000-0000"
+                                inputmode="numeric"
+                                autocomplete="tel">
+
+                            <div class="helper-error" id="telefoneError">
+                                Digite um telefone válido.
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label for="email">Seu e-mail</label>
-                            <input class="input" id="email" type="email" placeholder="seuemail@exemplo.com">
-                            <div class="helper-error" id="emailError">Digite um e-mail válido.</div>
+
+                            <input
+                                class="input"
+                                id="email"
+                                type="email"
+                                placeholder="seuemail@exemplo.com"
+                                autocomplete="email">
+
+                            <div class="helper-error" id="emailError">
+                                Digite um e-mail válido.
+                            </div>
                         </div>
 
                         <label class="checkbox-group">
                             <input type="checkbox" id="termos">
+
                             <span>
                                 Li e aceito os
                                 <a href="#">Termos de uso</a>
@@ -128,7 +257,9 @@
                             </span>
                         </label>
 
-                        <div class="helper-error" id="termosError">Você precisa aceitar os termos.</div>
+                        <div class="helper-error" id="termosError">
+                            Você precisa aceitar os termos.
+                        </div>
 
                         <button class="btn btn-primary" type="button" onclick="nextStep(1)">
                             Continuar
@@ -138,9 +269,11 @@
                             Já tem conta?
                             <a href="/login">Entrar</a>
                         </div>
+
                     </div>
 
                     <div class="step" data-step="2">
+
                         <h1>Crie sua senha</h1>
 
                         <p class="subtitle">
@@ -151,11 +284,19 @@
                             <label for="senha">Senha</label>
 
                             <div class="password-wrapper">
-                                <input class="input" id="senha" type="password" maxlength="25"
-                                    placeholder="Digite sua senha">
+
+                                <input
+                                    class="input"
+                                    id="senha"
+                                    type="password"
+                                    maxlength="25"
+                                    placeholder="Digite sua senha"
+                                    autocomplete="new-password">
+
                                 <button type="button" class="toggle-pass" data-target="senha">
                                     <i class="bi bi-eye"></i>
                                 </button>
+
                             </div>
 
                             <div class="password-rules">
@@ -167,21 +308,33 @@
                                 </ul>
                             </div>
 
-                            <div class="helper-error" id="senhaError">A senha não atende aos requisitos.</div>
+                            <div class="helper-error" id="senhaError">
+                                A senha não atende aos requisitos.
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label for="confirmarSenha">Confirmar senha</label>
 
                             <div class="password-wrapper">
-                                <input class="input" id="confirmarSenha" type="password" maxlength="25"
-                                    placeholder="Confirme sua senha">
+
+                                <input
+                                    class="input"
+                                    id="confirmarSenha"
+                                    type="password"
+                                    maxlength="25"
+                                    placeholder="Confirme sua senha"
+                                    autocomplete="new-password">
+
                                 <button type="button" class="toggle-pass" data-target="confirmarSenha">
                                     <i class="bi bi-eye"></i>
                                 </button>
+
                             </div>
 
-                            <div class="helper-error" id="confirmarSenhaError">As senhas não conferem.</div>
+                            <div class="helper-error" id="confirmarSenhaError">
+                                As senhas não conferem.
+                            </div>
                         </div>
 
                         <button class="btn btn-primary" type="button" onclick="nextStep(2)">
@@ -191,16 +344,19 @@
                         <button class="btn btn-outline" type="button" onclick="prevStep(2)">
                             Voltar
                         </button>
+
                     </div>
 
                 </form>
+
             </div>
 
         </section>
+
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/registrar.js?v=60"></script>
+    <script src="/js/registrar.js?v=63"></script>
     <script src="/js/site.js"></script>
 
 </body>
