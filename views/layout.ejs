@@ -484,6 +484,44 @@
       .table {
         min-width: 760px;
       }
+
+      @media(max-width:768px) {
+
+        .tabela-scroll {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .tabela-sistema {
+          min-width: 720px;
+        }
+
+        .tabela-sistema .acoes {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          justify-content: flex-start;
+          flex-wrap: nowrap;
+        }
+
+        .tabela-sistema .acoes .btn {
+          width: 42px !important;
+          min-width: 42px !important;
+          height: 42px !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          border-radius: 12px !important;
+
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .page-header .btn {
+          width: auto !important;
+          min-width: 220px;
+        }
+      }
     }
   </style>
 </head>
