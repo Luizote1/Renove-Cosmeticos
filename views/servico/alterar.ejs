@@ -1,48 +1,141 @@
 <script src="/js/servico/alterar.js"></script>
 
-<div>
-    <h1>Alterar Serviço</h1>
+<div class="page-card">
 
-    <input type="hidden" id="id" value="<%= servico.serId %>">
+    <div class="page-header">
+
+        <h1>Alterar Serviço</h1>
+
+        <a href="/servico" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Voltar
+        </a>
+
+    </div>
+
+    <input
+        type="hidden"
+        id="id"
+        value="<%= servico.serId %>">
 
     <div class="card">
+
         <div class="card-body">
 
-            <div class="form-group">
-                <label>Descrição</label>
-                <input id="descricao" class="form-control" value="<%= servico.serDescricao %>">
+            <div class="form-group mb-3">
+
+                <label for="descricao">
+                    Descrição
+                </label>
+
+                <input
+                    id="descricao"
+                    class="form-control"
+                    type="text"
+                    value="<%= servico.serDescricao %>">
+
             </div>
 
-            <div class="form-group">
-                <label>Detalhes</label>
-                <textarea id="detalhes" class="form-control"><%= servico.serDetalhes || "" %></textarea>
+            <div class="form-group mb-3">
+
+                <label for="detalhes">
+                    Detalhes
+                </label>
+
+                <textarea
+                    id="detalhes"
+                    class="form-control"
+                    rows="4"><%= servico.serDetalhes || "" %></textarea>
+
             </div>
 
-            <div class="form-group">
-                <label>Valor</label>
-                <input id="valor" type="number" step="0.01" class="form-control" value="<%= servico.serValor %>">
+            <div class="form-group mb-3">
+
+                <label for="valor">
+                    Valor
+                </label>
+
+                <input
+                    id="valor"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    class="form-control"
+                    value="<%= servico.serValor %>">
+
             </div>
 
-            <div class="form-group">
-                <label>Duração em minutos</label>
-                <input id="duracao" type="number" class="form-control" value="<%= servico.serDuracaoMinutos %>">
+            <div class="form-group mb-3">
+
+                <label for="duracao">
+                    Duração em minutos
+                </label>
+
+                <input
+                    id="duracao"
+                    type="number"
+                    min="1"
+                    class="form-control"
+                    value="<%= servico.serDuracaoMinutos %>">
+
             </div>
 
-            <div class="form-group">
-                <label>Cor no calendário</label>
-                <input id="cor" type="color" class="form-control" value="<%= servico.serCor || '#ff5a00' %>">
+            <div class="form-group mb-3">
+
+                <label for="cor">
+                    Cor no calendário
+                </label>
+
+                <input
+                    id="cor"
+                    type="color"
+                    class="form-control form-control-color"
+                    value="<%= servico.serCor || '#ff5a00' %>">
+
             </div>
 
-            <div class="form-check">
-                <input id="ativo" type="checkbox" <%= servico.serAtivo == "s" ? "checked" : "" %>>
-                <label for="ativo">Ativo</label>
+            <div class="form-check mb-4">
+
+                <input
+                    id="ativo"
+                    type="checkbox"
+                    class="form-check-input"
+                    <%= servico.serAtivo == "s" ? "checked" : "" %>>
+
+                <label
+                    for="ativo"
+                    class="form-check-label">
+
+                    Ativo
+
+                </label>
+
             </div>
 
-            <br>
+            <div class="d-flex gap-2">
 
-            <button id="btnAlterar" class="btn btn-primary">Salvar</button>
-            <a href="/servico" class="btn btn-secondary">Voltar</a>
+                <button
+                    id="btnAlterar"
+                    type="button"
+                    class="btn btn-primary">
+
+                    <i class="fas fa-save"></i>
+                    Salvar Alterações
+
+                </button>
+
+                <a
+                    href="/servico"
+                    class="btn btn-secondary">
+
+                    Cancelar
+
+                </a>
+
+            </div>
 
         </div>
+
     </div>
+
 </div>

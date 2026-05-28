@@ -1,63 +1,129 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
-    let btn = document.getElementById("btnAlterar");
+    const btnAlterar =
+        document.getElementById("btnAlterar");
 
-    btn.addEventListener("click", function() {
+    btnAlterar.addEventListener("click", function () {
 
-        let id = document.getElementById("id");
-        let descricao = document.getElementById("descricao");
-        let detalhes = document.getElementById("detalhes");
-        let valor = document.getElementById("valor");
-        let duracao = document.getElementById("duracao");
-        let cor = document.getElementById("cor");
-        let ativo = document.getElementById("ativo");
+        const id =
+            document.getElementById("id");
 
-        descricao.style.borderColor = "#ced4da";
-        valor.style.borderColor = "#ced4da";
-        duracao.style.borderColor = "#ced4da";
-        cor.style.borderColor = "#ced4da";
+        const descricao =
+            document.getElementById("descricao");
 
-        let listaValidacao = [];
+        const detalhes =
+            document.getElementById("detalhes");
 
-        if (id.value == "") listaValidacao.push("id");
-        if (descricao.value == "") listaValidacao.push("descricao");
-        if (valor.value == "") listaValidacao.push("valor");
-        if (duracao.value == "") listaValidacao.push("duracao");
-        if (cor.value == "") listaValidacao.push("cor");
+        const valor =
+            document.getElementById("valor");
 
-        if (listaValidacao.length == 0) {
+        const duracao =
+            document.getElementById("duracao");
 
-            fetch("/servico/alterar", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    id: id.value,
-                    descricao: descricao.value,
-                    detalhes: detalhes.value,
-                    valor: valor.value,
-                    duracao: duracao.value,
-                    cor: cor.value,
-                    ativo: ativo.checked ? "s" : "n"
-                })
-            })
-            .then(r => r.json())
-            .then(c => {
-                alert(c.msg);
+        const cor =
+            document.getElementById("cor");
 
-                if (c.ok) {
-                    window.location.href = "/servico";
-                }
+        const ativo =
+            document.getElementById("ativo");
+
+
+        id.style.borderColor = "";
+        descricao.style.borderColor = "";
+        valor.style.borderColor = "";
+        duracao.style.borderColor = "";
+        cor.style.borderColor = "";
+
+
+        let erros = [];
+
+        if (id.value.trim() == "") {
+            erros.push(id);
+        }
+
+        if (descricao.value.trim() == "") {
+            erros.push(descricao);
+        }
+
+        if (
+            valor.value == "" ||
+            Number(valor.value) < 0
+        ) {
+            erros.push(valor);
+        }
+
+        if (
+            duracao.value == "" ||
+            Number(duracao.value) <= 0
+        ) {
+            erros.push(duracao);
+        }
+
+        if (cor.value == "") {
+            erros.push(cor);
+        }
+
+
+        if (erros.length > 0) {
+
+            erros.forEach(function (campo) {
+                campo.style.borderColor = "red";
             });
 
-        } else {
+            alert("Preencha corretamente os campos obrigatórios.");
+            return;
+        }
 
-            for (let i = 0; i < listaValidacao.length; i++) {
-                document.getElementById(listaValidacao[i]).style.borderColor = "red";
+
+        fetch("/servico/alterar", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                id: id.value,
+
+                descricao: descricao.value.trim(),
+
+                detalhes: detalhes.value.trim(),
+
+                valor: valor.value,
+
+                duracao: duracao.value,
+
+                cor: cor.value,
+
+                ativo: ativo.checked ? "s" : "n"
+
+            })
+
+        })
+        .then(function (resposta) {
+            return resposta.json();
+        })
+        .then(function (corpo) {
+
+            alert(corpo.msg);
+
+            if (corpo.ok) {
+                window.location.href = "/servico";
             }
 
-            alert("Alguns campos não foram preenchidos corretamente, confira!");
-        }
+        })
+        .catch(function (erro) {
+
+            console.error(
+                "ERRO AO ALTERAR SERVIÇO:",
+                erro
+            );
+
+            alert("Erro interno ao alterar serviço.");
+
+        });
+
     });
+
 });

@@ -50,8 +50,9 @@ class UsuarioModel {
     }
 
     async cadastrar() {
+
         let sql = `
-            insert into tb_usuario
+            INSERT INTO tb_usuario
             (
                 usu_nome,
                 usu_email,
@@ -59,31 +60,30 @@ class UsuarioModel {
                 usu_ativo,
                 per_id
             )
-            values (?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?)
         `;
 
-        let valores = [
+        let banco = new Database();
+
+        return await banco.ExecutaComandoNonQuery(sql, [
             this.#usuNome,
             this.#usuEmail,
             this.#usuSenha,
             this.#usuAtivo,
             this.#perfilId
-        ];
-
-        let banco = new Database();
-
-        return await banco.ExecutaComandoNonQuery(sql, valores);
+        ]);
     }
 
     async obter(id) {
+
         let sql = `
-            select
+            SELECT
                 u.*,
                 p.per_descricao
-            from tb_usuario u
-            inner join tb_perfil p
-                on u.per_id = p.per_id
-            where u.usu_id = ?
+            FROM tb_usuario u
+            INNER JOIN tb_perfil p
+                ON u.per_id = p.per_id
+            WHERE u.usu_id = ?
         `;
 
         let banco = new Database();
@@ -91,6 +91,7 @@ class UsuarioModel {
         let rows = await banco.ExecutaComando(sql, [id]);
 
         if (rows.length > 0) {
+
             return new UsuarioModel(
                 rows[0]["usu_id"],
                 rows[0]["usu_nome"],
@@ -106,39 +107,42 @@ class UsuarioModel {
     }
 
     async atualizar() {
+
         let sql = `
-            update tb_usuario
-            set
+            UPDATE tb_usuario
+            SET
                 usu_nome = ?,
                 usu_email = ?,
                 usu_senha = ?,
                 usu_ativo = ?,
                 per_id = ?
-            where usu_id = ?
+            WHERE usu_id = ?
         `;
 
-        let valores = [
+        let banco = new Database();
+
+        return await banco.ExecutaComandoNonQuery(sql, [
             this.#usuNome,
             this.#usuEmail,
             this.#usuSenha,
             this.#usuAtivo,
             this.#perfilId,
             this.#usuId
-        ];
-
-        let banco = new Database();
-
-        return await banco.ExecutaComandoNonQuery(sql, valores);
+        ]);
     }
 
     async deletar(id, usuarioLogadoId = null) {
-        if (usuarioLogadoId && Number(id) === Number(usuarioLogadoId)) {
+
+        if (
+            usuarioLogadoId &&
+            Number(id) === Number(usuarioLogadoId)
+        ) {
             return false;
         }
 
         let sql = `
-            delete from tb_usuario
-            where usu_id = ?
+            DELETE FROM tb_usuario
+            WHERE usu_id = ?
         `;
 
         let banco = new Database();
@@ -147,14 +151,15 @@ class UsuarioModel {
     }
 
     async listar() {
+
         let sql = `
-            select
+            SELECT
                 u.*,
                 p.per_descricao
-            from tb_usuario u
-            inner join tb_perfil p
-                on u.per_id = p.per_id
-            order by u.usu_id
+            FROM tb_usuario u
+            INNER JOIN tb_perfil p
+                ON u.per_id = p.per_id
+            ORDER BY u.usu_id
         `;
 
         let banco = new Database();
@@ -163,33 +168,38 @@ class UsuarioModel {
 
         let lista = [];
 
-        for (let i = 0; i < rows.length; i++) {
-            lista.push(new UsuarioModel(
-                rows[i]["usu_id"],
-                rows[i]["usu_nome"],
-                rows[i]["usu_email"],
-                rows[i]["usu_senha"],
-                rows[i]["usu_ativo"],
-                rows[i]["per_id"],
-                rows[i]["per_descricao"]
-            ));
+        for(let i = 0; i < rows.length; i++) {
+
+            lista.push(
+                new UsuarioModel(
+                    rows[i]["usu_id"],
+                    rows[i]["usu_nome"],
+                    rows[i]["usu_email"],
+                    rows[i]["usu_senha"],
+                    rows[i]["usu_ativo"],
+                    rows[i]["per_id"],
+                    rows[i]["per_descricao"]
+                )
+            );
         }
 
         return lista;
     }
 
     async autenticar(email, senha) {
+
         let sql = `
-            select
+            SELECT
                 u.*,
                 p.per_descricao
-            from tb_usuario u
-            inner join tb_perfil p
-                on u.per_id = p.per_id
-            where u.usu_email = ?
-              and u.usu_senha = ?
-              and u.usu_ativo = 's'
-            limit 1
+            FROM tb_usuario u
+            INNER JOIN tb_perfil p
+                ON u.per_id = p.per_id
+            WHERE
+                u.usu_email = ?
+                AND u.usu_senha = ?
+                AND u.usu_ativo = 's'
+            LIMIT 1
         `;
 
         let banco = new Database();
@@ -200,6 +210,7 @@ class UsuarioModel {
         ]);
 
         if (rows.length > 0) {
+
             return new UsuarioModel(
                 rows[0]["usu_id"],
                 rows[0]["usu_nome"],
@@ -214,10 +225,50 @@ class UsuarioModel {
         return null;
     }
 
+    async listarFuncionarios() {
+
+        let sql = `
+            SELECT
+                u.*,
+                p.per_descricao
+            FROM tb_usuario u
+            INNER JOIN tb_perfil p
+                ON u.per_id = p.per_id
+            WHERE
+                u.per_id = 2
+                AND u.usu_ativo = 's'
+            ORDER BY u.usu_nome
+        `;
+
+        let banco = new Database();
+
+        let rows = await banco.ExecutaComando(sql);
+
+        let lista = [];
+
+        for(let i = 0; i < rows.length; i++) {
+
+            lista.push(
+                new UsuarioModel(
+                    rows[i]["usu_id"],
+                    rows[i]["usu_nome"],
+                    rows[i]["usu_email"],
+                    rows[i]["usu_senha"],
+                    rows[i]["usu_ativo"],
+                    rows[i]["per_id"],
+                    rows[i]["per_descricao"]
+                )
+            );
+        }
+
+        return lista;
+    }
+
     async isAdministrador(id) {
+
         let usuario = await this.obter(id);
 
-        if (!usuario) {
+        if(!usuario){
             return false;
         }
 
@@ -225,9 +276,10 @@ class UsuarioModel {
     }
 
     async isFuncionario(id) {
+
         let usuario = await this.obter(id);
 
-        if (!usuario) {
+        if(!usuario){
             return false;
         }
 

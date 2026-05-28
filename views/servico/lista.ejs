@@ -12,9 +12,7 @@
 
                     <h5>Serviços</h5>
 
-                    <h2>
-                        <%= lista.length %>
-                    </h2>
+                    <h2><%= lista.length %></h2>
 
                 </div>
 
@@ -28,11 +26,9 @@
 
                 <div class="card-body">
 
-                    <h5>Profissionais</h5>
+                    <h5>Funcionários</h5>
 
-                    <h2>
-                        <%= profissionais.length %>
-                    </h2>
+                    <h2><%= profissionais.length %></h2>
 
                 </div>
 
@@ -58,27 +54,38 @@
 
     </div>
 
+
     <div class="mb-3">
 
-        <a href="/servico/cadastrar" class="btn btn-primary">
+        <a
+            href="/servico/cadastrar"
+            class="btn btn-primary">
 
             <i class="fas fa-plus"></i>
             Novo Serviço
 
         </a>
 
-        <button id="btnAbrirAgendamento" class="btn btn-success" type="button">
+        <button
+            id="btnAbrirAgendamento"
+            class="btn btn-success"
+            type="button">
+
             <i class="fas fa-calendar-plus"></i>
             Novo Agendamento
+
         </button>
 
     </div>
+
 
     <div class="card mb-4">
 
         <div class="card-header">
 
-            <strong>Calendário de Agendamentos</strong>
+            <strong>
+                Calendário de Agendamentos
+            </strong>
 
         </div>
 
@@ -90,17 +97,20 @@
 
     </div>
 
+
     <div class="card">
 
         <div class="card-header">
 
-            <strong>Serviços cadastrados</strong>
+            <strong>
+                Serviços cadastrados
+            </strong>
 
         </div>
 
         <div class="card-body">
 
-            <table class="table table-striped">
+            <table class="table table-striped table-hover">
 
                 <thead>
 
@@ -119,30 +129,24 @@
 
                 <tbody>
 
-                    <% for(let i=0; i < lista.length; i++) { %>
+                    <% for(let i = 0; i < lista.length; i++) { %>
 
                         <tr>
 
                             <td>
-
                                 <%= lista[i].serId %>
-
                             </td>
 
                             <td>
 
                                 <strong>
-
                                     <%= lista[i].serDescricao %>
-
                                 </strong>
 
                                 <br>
 
                                 <small>
-
                                     <%= lista[i].serDetalhes || "" %>
-
                                 </small>
 
                             </td>
@@ -150,8 +154,9 @@
                             <td>
 
                                 R$
-
-                                <%= Number(lista[i].serValor) .toFixed(2) .replace(".", "," ) %>
+                                <%= Number(lista[i].serValor)
+                                .toFixed(2)
+                                .replace(".", ",") %>
 
                             </td>
 
@@ -163,35 +168,35 @@
 
                             <td>
 
-                                <% if(lista[i].serAtivo=="s" ) { %>
+                                <% if(lista[i].serAtivo == "s") { %>
 
                                     <span class="badge bg-success">
-
                                         Ativo
-
                                     </span>
 
-                                    <% } else { %>
+                                <% } else { %>
 
-                                        <span class="badge bg-secondary">
+                                    <span class="badge bg-secondary">
+                                        Inativo
+                                    </span>
 
-                                            Inativo
-
-                                        </span>
-
-                                        <% } %>
+                                <% } %>
 
                             </td>
 
                             <td>
 
-                                <a href="/servico/alterar/<%= lista[i].serId %>" class="btn btn-primary btn-sm">
+                                <a
+                                    href="/servico/alterar/<%= lista[i].serId %>"
+                                    class="btn btn-primary btn-sm">
 
                                     <i class="fas fa-pen"></i>
 
                                 </a>
 
-                                <button data-id="<%= lista[i].serId %>" class="btn btn-danger btn-sm btnExcluir">
+                                <button
+                                    data-id="<%= lista[i].serId %>"
+                                    class="btn btn-danger btn-sm btnExcluir">
 
                                     <i class="fas fa-trash"></i>
 
@@ -201,7 +206,7 @@
 
                         </tr>
 
-                        <% } %>
+                    <% } %>
 
                 </tbody>
 
@@ -216,8 +221,11 @@
 
 <!-- MODAL AGENDAMENTO -->
 
-
-<div class="modal fade" id="modalAgendamento" tabindex="-1">
+<div
+    class="modal fade"
+    id="modalAgendamento"
+    tabindex="-1"
+    aria-hidden="true">
 
     <div class="modal-dialog modal-lg">
 
@@ -226,9 +234,7 @@
             <div class="modal-header">
 
                 <h5 class="modal-title">
-
                     Novo Agendamento
-
                 </h5>
 
             </div>
@@ -241,28 +247,34 @@
 
                         <label>Cliente</label>
 
-                        <input id="cliente" class="form-control">
+                        <input
+                            id="cliente"
+                            class="form-control">
 
                     </div>
+
 
                     <div class="col-md-6 mb-3">
 
                         <label>Telefone</label>
 
-                        <input id="telefone" class="form-control">
+                        <input
+                            id="telefone"
+                            class="form-control">
 
                     </div>
+
 
                     <div class="col-md-6 mb-3">
 
                         <label>Serviço</label>
 
-                        <select id="servico" class="form-control">
+                        <select
+                            id="servico"
+                            class="form-control">
 
                             <option value="">
-
                                 Selecione
-
                             </option>
 
                             <% for(let i=0; i < servicosAtivos.length; i++) { %>
@@ -273,64 +285,71 @@
 
                                 </option>
 
-                                <% } %>
+                            <% } %>
 
                         </select>
 
                     </div>
 
+
                     <div class="col-md-6 mb-3">
 
-                        <label>Profissional</label>
+                        <label>Funcionário</label>
 
-                        <select id="profissional" class="form-control">
+                        <select
+                            id="profissional"
+                            class="form-control">
 
                             <option value="">
-
                                 Selecione
-
                             </option>
 
                             <% for(let i=0; i < profissionais.length; i++) { %>
 
-                                <option value="<%= profissionais[i].proId %>">
+                                <option value="<%= profissionais[i].usuId %>">
 
-                                    <%= profissionais[i].proNome %>
-
-                                        -
-
-                                        <%= profissionais[i].proEspecialidade %>
+                                    <%= profissionais[i].usuNome %>
 
                                 </option>
 
-                                <% } %>
+                            <% } %>
 
                         </select>
 
                     </div>
+
 
                     <div class="col-md-6 mb-3">
 
                         <label>Data</label>
 
-                        <input id="data" type="date" class="form-control">
+                        <input
+                            id="data"
+                            type="date"
+                            class="form-control">
 
                     </div>
+
 
                     <div class="col-md-6 mb-3">
 
                         <label>Hora</label>
 
-                        <input id="hora" type="time" class="form-control">
+                        <input
+                            id="hora"
+                            type="time"
+                            class="form-control">
 
                     </div>
+
 
                     <div class="col-md-12 mb-3">
 
                         <label>Observação</label>
 
-                        <textarea id="observacao" class="form-control">
-                        </textarea>
+                        <textarea
+                            id="observacao"
+                            class="form-control"></textarea>
 
                     </div>
 
@@ -338,15 +357,21 @@
 
             </div>
 
+
             <div class="modal-footer">
 
-                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
 
                     Fechar
 
                 </button>
 
-                <button id="btnAgendar" class="btn btn-success">
+                <button
+                    id="btnAgendar"
+                    class="btn btn-success">
 
                     Agendar
 
@@ -360,8 +385,20 @@
 
 </div>
 
-<input type="hidden" id="eventosJson" value='<%= eventosJson %>'>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<input
+    type="hidden"
+    id="eventosJson"
+    value='<%- eventosJson %>'>
+
+
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css">
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+
 <script src="/js/servico/lista.js"></script>

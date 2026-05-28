@@ -4,7 +4,7 @@ class AgendamentoModel {
 
     #ageId;
     #serId;
-    #proId;
+    #usuId;
     #ageClienteNome;
     #ageClienteTelefone;
     #ageData;
@@ -14,7 +14,7 @@ class AgendamentoModel {
 
     #serDescricao;
     #serCor;
-    #proNome;
+    #usuNome;
 
     get ageId() { return this.#ageId; }
     set ageId(value) { this.#ageId = value; }
@@ -22,8 +22,8 @@ class AgendamentoModel {
     get serId() { return this.#serId; }
     set serId(value) { this.#serId = value; }
 
-    get proId() { return this.#proId; }
-    set proId(value) { this.#proId = value; }
+    get usuId() { return this.#usuId; }
+    set usuId(value) { this.#usuId = value; }
 
     get ageClienteNome() { return this.#ageClienteNome; }
     set ageClienteNome(value) { this.#ageClienteNome = value; }
@@ -49,13 +49,13 @@ class AgendamentoModel {
     get serCor() { return this.#serCor; }
     set serCor(value) { this.#serCor = value; }
 
-    get proNome() { return this.#proNome; }
-    set proNome(value) { this.#proNome = value; }
+    get usuNome() { return this.#usuNome; }
+    set usuNome(value) { this.#usuNome = value; }
 
     constructor(
         ageId,
         serId,
-        proId,
+        usuId,
         ageClienteNome,
         ageClienteTelefone,
         ageData,
@@ -64,11 +64,11 @@ class AgendamentoModel {
         ageObservacao,
         serDescricao = "",
         serCor = "",
-        proNome = ""
+        usuNome = ""
     ) {
         this.#ageId = ageId;
         this.#serId = serId;
-        this.#proId = proId;
+        this.#usuId = usuId;
         this.#ageClienteNome = ageClienteNome;
         this.#ageClienteTelefone = ageClienteTelefone;
         this.#ageData = ageData;
@@ -77,7 +77,7 @@ class AgendamentoModel {
         this.#ageObservacao = ageObservacao;
         this.#serDescricao = serDescricao;
         this.#serCor = serCor;
-        this.#proNome = proNome;
+        this.#usuNome = usuNome;
     }
 
     async listar() {
@@ -86,12 +86,12 @@ class AgendamentoModel {
                 a.*,
                 s.ser_descricao,
                 s.ser_cor,
-                p.pro_nome
+                u.usu_nome
             FROM tb_agendamento a
-            INNER JOIN tb_servico s 
+            INNER JOIN tb_servico s
                 ON a.ser_id = s.ser_id
-            INNER JOIN tb_profissional p 
-                ON a.pro_id = p.pro_id
+            INNER JOIN tb_usuario u
+                ON a.usu_id = u.usu_id
             ORDER BY a.age_data, a.age_hora
         `;
 
@@ -104,7 +104,7 @@ class AgendamentoModel {
             lista.push(new AgendamentoModel(
                 rows[i]["age_id"],
                 rows[i]["ser_id"],
-                rows[i]["pro_id"],
+                rows[i]["usu_id"],
                 rows[i]["age_cliente_nome"],
                 rows[i]["age_cliente_telefone"],
                 rows[i]["age_data"],
@@ -113,7 +113,7 @@ class AgendamentoModel {
                 rows[i]["age_observacao"],
                 rows[i]["ser_descricao"],
                 rows[i]["ser_cor"],
-                rows[i]["pro_nome"]
+                rows[i]["usu_nome"]
             ));
         }
 
@@ -134,7 +134,7 @@ class AgendamentoModel {
             return new AgendamentoModel(
                 rows[0]["age_id"],
                 rows[0]["ser_id"],
-                rows[0]["pro_id"],
+                rows[0]["usu_id"],
                 rows[0]["age_cliente_nome"],
                 rows[0]["age_cliente_telefone"],
                 rows[0]["age_data"],
@@ -152,7 +152,7 @@ class AgendamentoModel {
             INSERT INTO tb_agendamento
             (
                 ser_id,
-                pro_id,
+                usu_id,
                 age_cliente_nome,
                 age_cliente_telefone,
                 age_data,
@@ -163,20 +163,18 @@ class AgendamentoModel {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-        let valores = [
+        let banco = new Database();
+
+        return await banco.ExecutaComandoNonQuery(sql, [
             this.#serId,
-            this.#proId,
+            this.#usuId,
             this.#ageClienteNome,
             this.#ageClienteTelefone,
             this.#ageData,
             this.#ageHora,
             this.#ageStatus,
             this.#ageObservacao
-        ];
-
-        let banco = new Database();
-
-        return await banco.ExecutaComandoNonQuery(sql, valores);
+        ]);
     }
 
     async atualizarStatus(id, status) {
@@ -188,7 +186,10 @@ class AgendamentoModel {
 
         let banco = new Database();
 
-        return await banco.ExecutaComandoNonQuery(sql, [status, id]);
+        return await banco.ExecutaComandoNonQuery(sql, [
+            status,
+            id
+        ]);
     }
 
     async estaFinalizado(id) {
@@ -241,7 +242,8 @@ class AgendamentoModel {
             extendedProps: {
                 cliente: this.#ageClienteNome,
                 telefone: this.#ageClienteTelefone,
-                profissional: this.#proNome,
+                funcionario: this.#usuNome,
+                profissional: this.#usuNome,
                 status: this.#ageStatus,
                 observacao: this.#ageObservacao
             }

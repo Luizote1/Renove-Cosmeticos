@@ -1,60 +1,151 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
-    let btn = document.getElementById("btnGravar");
+    const btnGravar =
+        document.getElementById("btnGravar");
 
-    btn.addEventListener("click", function() {
+    btnGravar.addEventListener("click", function () {
 
-        let descricao = document.getElementById("descricao");
-        let detalhes = document.getElementById("detalhes");
-        let valor = document.getElementById("valor");
-        let duracao = document.getElementById("duracao");
-        let cor = document.getElementById("cor");
-        let ativo = document.getElementById("ativo");
+        const descricao =
+            document.getElementById("descricao");
 
-        descricao.style.borderColor = "#ced4da";
-        valor.style.borderColor = "#ced4da";
-        duracao.style.borderColor = "#ced4da";
-        cor.style.borderColor = "#ced4da";
+        const detalhes =
+            document.getElementById("detalhes");
 
-        let listaValidacao = [];
+        const valor =
+            document.getElementById("valor");
 
-        if (descricao.value == "") listaValidacao.push("descricao");
-        if (valor.value == "") listaValidacao.push("valor");
-        if (duracao.value == "") listaValidacao.push("duracao");
-        if (cor.value == "") listaValidacao.push("cor");
+        const duracao =
+            document.getElementById("duracao");
 
-        if (listaValidacao.length == 0) {
+        const cor =
+            document.getElementById("cor");
 
-            fetch("/servico/cadastrar", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    descricao: descricao.value,
-                    detalhes: detalhes.value,
-                    valor: valor.value,
-                    duracao: duracao.value,
-                    cor: cor.value,
-                    ativo: ativo.checked ? "s" : "n"
-                })
-            })
-            .then(r => r.json())
-            .then(c => {
-                alert(c.msg);
+        const ativo =
+            document.getElementById("ativo");
 
-                if (c.ok) {
-                    window.location.href = "/servico";
-                }
+
+        //-------------------------
+        // RESETAR BORDAS
+        //-------------------------
+
+        descricao.style.borderColor = "";
+        valor.style.borderColor = "";
+        duracao.style.borderColor = "";
+        cor.style.borderColor = "";
+
+
+        //-------------------------
+        // VALIDAÇÃO
+        //-------------------------
+
+        let erros = [];
+
+        if (descricao.value.trim() == "") {
+            erros.push(descricao);
+        }
+
+        if (
+            valor.value == "" ||
+            Number(valor.value) < 0
+        ) {
+            erros.push(valor);
+        }
+
+        if (
+            duracao.value == "" ||
+            Number(duracao.value) <= 0
+        ) {
+            erros.push(duracao);
+        }
+
+        if (cor.value == "") {
+            erros.push(cor);
+        }
+
+
+        //-------------------------
+        // CAMPOS INVÁLIDOS
+        //-------------------------
+
+        if (erros.length > 0) {
+
+            erros.forEach(function (campo) {
+                campo.style.borderColor = "red";
             });
 
-        } else {
+            alert(
+                "Preencha corretamente os campos obrigatórios."
+            );
 
-            for (let i = 0; i < listaValidacao.length; i++) {
-                document.getElementById(listaValidacao[i]).style.borderColor = "red";
+            return;
+        }
+
+
+        //-------------------------
+        // ENVIAR
+        //-------------------------
+
+        fetch("/servico/cadastrar", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                descricao:
+                    descricao.value.trim(),
+
+                detalhes:
+                    detalhes.value.trim(),
+
+                valor:
+                    valor.value,
+
+                duracao:
+                    duracao.value,
+
+                cor:
+                    cor.value,
+
+                ativo:
+                    ativo.checked ? "s" : "n"
+
+            })
+
+        })
+        .then(function (resposta) {
+
+            return resposta.json();
+
+        })
+        .then(function (corpo) {
+
+            alert(corpo.msg);
+
+            if (corpo.ok) {
+
+                window.location.href =
+                    "/servico";
+
             }
 
-            alert("Alguns campos não foram preenchidos corretamente, confira!");
-        }
+        })
+        .catch(function (erro) {
+
+            console.error(
+                "ERRO AO CADASTRAR SERVIÇO:",
+                erro
+            );
+
+            alert(
+                "Erro interno ao cadastrar serviço."
+            );
+
+        });
+
     });
+
 });

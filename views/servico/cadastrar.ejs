@@ -1,46 +1,98 @@
 <script src="/js/servico/cadastrar.js"></script>
 
-<div>
-    <h1>Cadastrar Serviço</h1>
+<div class="page-card">
+
+    <div class="page-header">
+        <h1>Cadastrar Serviço</h1>
+
+        <a href="/servico" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Voltar
+        </a>
+    </div>
 
     <div class="card">
         <div class="card-body">
 
-            <div class="form-group">
-                <label>Descrição</label>
-                <input id="descricao" class="form-control">
+            <div class="form-group mb-3">
+                <label for="descricao">Descrição</label>
+                <input
+                    id="descricao"
+                    class="form-control"
+                    type="text"
+                    placeholder="Ex: Limpeza de pele">
             </div>
 
-            <div class="form-group">
-                <label>Detalhes</label>
-                <textarea id="detalhes" class="form-control"></textarea>
+            <div class="form-group mb-3">
+                <label for="detalhes">Detalhes</label>
+                <textarea
+                    id="detalhes"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Descreva os detalhes do serviço"></textarea>
             </div>
 
-            <div class="form-group">
-                <label>Valor</label>
-                <input id="valor" type="number" step="0.01" class="form-control">
+            <div class="form-group mb-3">
+                <label for="valor">Valor</label>
+                <input
+                    id="valor"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    class="form-control"
+                    placeholder="0,00">
             </div>
 
-            <div class="form-group">
-                <label>Duração em minutos</label>
-                <input id="duracao" type="number" class="form-control">
+            <div class="form-group mb-3">
+                <label for="duracao">Duração em minutos</label>
+                <input
+                    id="duracao"
+                    type="number"
+                    min="1"
+                    class="form-control"
+                    placeholder="Ex: 60">
             </div>
 
-            <div class="form-group">
-                <label>Cor no calendário</label>
-                <input id="cor" type="color" class="form-control" value="#ff5a00">
+            <div class="form-group mb-3">
+                <label for="cor">Cor no calendário</label>
+                <input
+                    id="cor"
+                    type="color"
+                    class="form-control form-control-color"
+                    value="#ff5a00">
             </div>
 
-            <div class="form-check">
-                <input id="ativo" type="checkbox" checked>
-                <label for="ativo">Ativo</label>
+            <div class="form-check mb-3">
+                <input
+                    id="ativo"
+                    type="checkbox"
+                    class="form-check-input"
+                    checked>
+
+                <label
+                    for="ativo"
+                    class="form-check-label">
+                    Ativo
+                </label>
             </div>
 
-            <br>
+            <div class="d-flex gap-2">
+                <button
+                    id="btnGravar"
+                    type="button"
+                    class="btn btn-primary">
+                    <i class="fas fa-save"></i>
+                    Gravar
+                </button>
 
-            <button id="btnGravar" class="btn btn-primary">Gravar</button>
-            <a href="/servico" class="btn btn-secondary">Voltar</a>
+                <a
+                    href="/servico"
+                    class="btn btn-secondary">
+                    Cancelar
+                </a>
+            </div>
 
         </div>
     </div>
+
 </div>

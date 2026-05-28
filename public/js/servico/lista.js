@@ -1,77 +1,114 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    let btnAbrirAgendamento = document.getElementById("btnAbrirAgendamento");
+    //-------------------------
+    // ABRIR MODAL AGENDAMENTO
+    //-------------------------
 
-    if (btnAbrirAgendamento) {
+    const btnAbrirAgendamento =
+        document.getElementById("btnAbrirAgendamento");
+
+    const modalEl =
+        document.getElementById("modalAgendamento");
+
+    let modalAgendamento = null;
+
+    if (modalEl) {
+        modalAgendamento =
+            new bootstrap.Modal(modalEl);
+    }
+
+    if (btnAbrirAgendamento && modalAgendamento) {
         btnAbrirAgendamento.addEventListener("click", function () {
-            let modalEl = document.getElementById("modalAgendamento");
-            let modal = new bootstrap.Modal(modalEl);
-            modal.show();
+            modalAgendamento.show();
         });
     }
 
+
     //-------------------------
-    // EXCLUIR
+    // FECHAR MODAL
     //-------------------------
 
-    let btns = document.querySelectorAll(".btnExcluir");
+    const botoesFechar =
+        document.querySelectorAll("[data-bs-dismiss='modal']");
 
-    for (let i = 0; i < btns.length; i++) {
+    botoesFechar.forEach(function (botao) {
+        botao.addEventListener("click", function () {
+            if (modalAgendamento) {
+                modalAgendamento.hide();
+            }
+        });
+    });
 
-        btns[i].addEventListener("click", function () {
 
-            let id = this.dataset.id;
+    //-------------------------
+    // EXCLUIR SERVIÇO
+    //-------------------------
 
-            if (confirm("Deseja excluir este serviço?")) {
+    const btnsExcluir =
+        document.querySelectorAll(".btnExcluir");
 
-                fetch("/servico/deletar", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        id: id
-                    })
-                })
-                    .then(r => r.json())
-                    .then(c => {
+    btnsExcluir.forEach(function (btn) {
 
-                        alert(c.msg);
+        btn.addEventListener("click", function () {
 
-                        if (c.ok) {
-                            window.location.reload();
-                        }
+            const id = this.dataset.id;
 
-                    });
-
+            if (!id) {
+                alert("ID do serviço não encontrado.");
+                return;
             }
 
+            if (!confirm("Deseja excluir este serviço?")) {
+                return;
+            }
+
+            fetch("/servico/deletar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: id
+                })
+            })
+            .then(function (resposta) {
+                return resposta.json();
+            })
+            .then(function (corpo) {
+
+                alert(corpo.msg);
+
+                if (corpo.ok) {
+                    window.location.reload();
+                }
+
+            })
+            .catch(function (erro) {
+                console.error("ERRO AO EXCLUIR SERVIÇO:", erro);
+                alert("Erro ao excluir serviço.");
+            });
+
         });
 
-    }
+    });
 
 
     //-------------------------
-    // EVENTOS CALENDÁRIO
+    // EVENTOS DO CALENDÁRIO
     //-------------------------
 
     let eventos = [];
 
-    let eventosInput = document.getElementById("eventosJson");
+    const eventosInput =
+        document.getElementById("eventosJson");
 
     if (eventosInput) {
-
         try {
-
             eventos = JSON.parse(eventosInput.value);
-
+        } catch (erro) {
+            console.error("Erro ao carregar eventos:", erro);
+            eventos = [];
         }
-        catch (e) {
-
-            console.log("Erro JSON:", e);
-
-        }
-
     }
 
 
@@ -79,37 +116,55 @@ document.addEventListener("DOMContentLoaded", function () {
     // CALENDÁRIO
     //-------------------------
 
-    let calendarioEl = document.getElementById("calendario");
+    const calendarioEl =
+        document.getElementById("calendario");
 
     if (calendarioEl) {
 
-        let calendario = new FullCalendar.Calendar(calendarioEl, {
+        const calendario =
+            new FullCalendar.Calendar(calendarioEl, {
 
-            locale: "pt-br",
+                locale: "pt-br",
 
-            initialView: "dayGridMonth",
+                initialView: "dayGridMonth",
 
-            height: 650,
+                height: 650,
 
-            headerToolbar: {
-                left: "prev,next today",
-                center: "title",
-                right: "dayGridMonth,timeGridWeek,timeGridDay"
-            },
+                headerToolbar: {
+                    left: "prev,next today",
+                    center: "title",
+                    right: "dayGridMonth,timeGridWeek,timeGridDay"
+                },
 
-            buttonText: {
-                today: "Hoje",
-                month: "Mês",
-                week: "Semana",
-                day: "Dia"
-            },
+                buttonText: {
+                    today: "Hoje",
+                    month: "Mês",
+                    week: "Semana",
+                    day: "Dia"
+                },
 
-            events: eventos
+                events: eventos,
 
-        });
+                eventClick: function (info) {
+
+                    const props =
+                        info.event.extendedProps;
+
+                    let mensagem =
+                        "Agendamento\n\n" +
+                        "Serviço: " + info.event.title + "\n" +
+                        "Cliente: " + (props.cliente || "---") + "\n" +
+                        "Telefone: " + (props.telefone || "---") + "\n" +
+                        "Funcionário: " + (props.funcionario || props.profissional || "---") + "\n" +
+                        "Status: " + (props.status || "---") + "\n" +
+                        "Observação: " + (props.observacao || "---");
+
+                    alert(mensagem);
+                }
+
+            });
 
         calendario.render();
-
     }
 
 
@@ -117,80 +172,76 @@ document.addEventListener("DOMContentLoaded", function () {
     // AGENDAR
     //-------------------------
 
-    let btnAgendar = document.getElementById("btnAgendar");
+    const btnAgendar =
+        document.getElementById("btnAgendar");
 
     if (btnAgendar) {
 
         btnAgendar.addEventListener("click", function () {
 
-            let cliente = document.getElementById("cliente");
-            let telefone = document.getElementById("telefone");
-            let servico = document.getElementById("servico");
-            let profissional = document.getElementById("profissional");
-            let data = document.getElementById("data");
-            let hora = document.getElementById("hora");
-            let observacao = document.getElementById("observacao");
+            const cliente =
+                document.getElementById("cliente");
 
-            let validacao = [];
+            const telefone =
+                document.getElementById("telefone");
 
-            if (cliente.value == "")
-                validacao.push("cliente");
+            const servico =
+                document.getElementById("servico");
 
-            if (servico.value == "")
-                validacao.push("servico");
+            const profissional =
+                document.getElementById("profissional");
 
-            if (profissional.value == "")
-                validacao.push("profissional");
+            const data =
+                document.getElementById("data");
 
-            if (data.value == "")
-                validacao.push("data");
+            const hora =
+                document.getElementById("hora");
 
-            if (hora.value == "")
-                validacao.push("hora");
+            const observacao =
+                document.getElementById("observacao");
 
-
-            if (validacao.length == 0) {
-
-                fetch("/servico/agendar", {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        cliente: cliente.value,
-                        telefone: telefone.value,
-                        servico: servico.value,
-                        profissional: profissional.value,
-                        data: data.value,
-                        hora: hora.value,
-                        observacao: observacao.value
-
-                    })
-
-                })
-                    .then(r => r.json())
-                    .then(c => {
-
-                        alert(c.msg);
-
-                        if (c.ok) {
-
-                            window.location.reload();
-
-                        }
-
-                    });
-
-            }
-            else {
-
+            if (
+                !cliente.value.trim() ||
+                !servico.value ||
+                !profissional.value ||
+                !data.value ||
+                !hora.value
+            ) {
                 alert("Preencha os campos obrigatórios.");
-
+                return;
             }
+
+            fetch("/servico/agendar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    cliente: cliente.value.trim(),
+                    telefone: telefone.value.trim(),
+                    servico: servico.value,
+                    profissional: profissional.value,
+                    data: data.value,
+                    hora: hora.value,
+                    observacao: observacao.value.trim()
+                })
+            })
+            .then(function (resposta) {
+                return resposta.json();
+            })
+            .then(function (corpo) {
+
+                alert(corpo.msg);
+
+                if (corpo.ok) {
+                    window.location.reload();
+                }
+
+            })
+            .catch(function (erro) {
+                console.error("ERRO AO AGENDAR:", erro);
+                alert("Erro ao realizar agendamento.");
+            });
 
         });
 
