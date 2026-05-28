@@ -3,10 +3,23 @@ const UsuarioModel = require("../models/usuarioModel");
 
 class UsuarioController {
 
+    async usuarioLogado(req) {
+        let usuarioModel = new UsuarioModel();
+        return await usuarioModel.obter(req.cookies.usuarioLogado);
+    }
+
+    isAdministrador(usuario) {
+        return usuario && Number(usuario.perfilId) === 1;
+    }
+
+    isFuncionario(usuario) {
+        return usuario && Number(usuario.perfilId) === 2;
+    }
+
     async listarView(req, res) {
         try {
-            let usuario = new UsuarioModel();
-            let lista = await usuario.listar();
+            let usuarioModel = new UsuarioModel();
+            let lista = await usuarioModel.listar();
 
             res.render("usuario/listar", {
                 lista: lista,
@@ -25,6 +38,12 @@ class UsuarioController {
 
     async cadastrarView(req, res) {
         try {
+            let logado = await this.usuarioLogado(req);
+
+            if (!this.isAdministrador(logado)) {
+                return res.redirect("/usuario");
+            }
+
             let perfil = new PerfilModel();
             let listaPerfil = await perfil.listar();
 
@@ -41,6 +60,8 @@ class UsuarioController {
 
     async alterarView(req, res) {
         try {
+            let logado = await this.usuarioLogado(req);
+
             let perfil = new PerfilModel();
             let listaPerfil = await perfil.listar();
 
@@ -48,6 +69,10 @@ class UsuarioController {
             let usuario = await usuarioModel.obter(req.params.idAlteracao);
 
             if (!usuario) {
+                return res.redirect("/usuario");
+            }
+
+            if (!this.isAdministrador(logado) && Number(usuario.perfilId) === 1) {
                 return res.redirect("/usuario");
             }
 
@@ -65,6 +90,15 @@ class UsuarioController {
 
     async cadastrar(req, res) {
         try {
+            let logado = await this.usuarioLogado(req);
+
+            if (!this.isAdministrador(logado)) {
+                return res.send({
+                    ok: false,
+                    msg: "Apenas administradores podem cadastrar usuários."
+                });
+            }
+
             let ok = false;
             let msg = "";
 
@@ -114,6 +148,32 @@ class UsuarioController {
 
     async alterar(req, res) {
         try {
+            let logado = await this.usuarioLogado(req);
+
+            let usuarioModel = new UsuarioModel();
+            let usuarioAlvo = await usuarioModel.obter(req.body.id);
+
+            if (!usuarioAlvo) {
+                return res.send({
+                    ok: false,
+                    msg: "Usuário não encontrado."
+                });
+            }
+
+            if (!this.isAdministrador(logado) && Number(usuarioAlvo.perfilId) === 1) {
+                return res.send({
+                    ok: false,
+                    msg: "Funcionários não podem alterar administradores."
+                });
+            }
+
+            if (!this.isAdministrador(logado) && Number(req.body.perfil) === 1) {
+                return res.send({
+                    ok: false,
+                    msg: "Funcionários não podem transformar usuários em administradores."
+                });
+            }
+
             let ok = false;
             let msg = "";
 
@@ -164,35 +224,64 @@ class UsuarioController {
     }
 
     async deletar(req, res) {
+
         try {
-            if (!req.body.id || req.body.id == "0") {
+
+            let idExcluir = req.body.id;
+            let usuarioLogado = req.usuarioLogado;
+
+            if (!idExcluir) {
                 return res.send({
                     ok: false,
                     msg: "ID do usuário não informado."
                 });
             }
 
-            let usuario = new UsuarioModel();
+            let usuarioModel = new UsuarioModel();
 
-            let result = await usuario.deletar(
-                req.body.id,
-                req.cookies.usuarioLogado
-            );
+            let usuarioExcluir = await usuarioModel.obter(idExcluir);
 
-            if (result) {
+            if (!usuarioExcluir) {
                 return res.send({
-                    ok: true,
-                    msg: "Usuário excluído com sucesso!"
+                    ok: false,
+                    msg: "Usuário não encontrado."
                 });
             }
 
+            // não pode excluir si mesmo
+            if (
+                Number(usuarioLogado.usuId) === Number(idExcluir)
+            ) {
+                return res.send({
+                    ok: false,
+                    msg: "Você não pode excluir o usuário logado."
+                });
+            }
+
+            // funcionário tentando excluir admin
+            if (
+                Number(usuarioLogado.perfilId) === 2 &&
+                Number(usuarioExcluir.perfilId) === 1
+            ) {
+                return res.send({
+                    ok: false,
+                    msg: "Funcionário não pode excluir administrador."
+                });
+            }
+
+            let ok = await usuarioModel.deletar(idExcluir);
+
             return res.send({
-                ok: false,
-                msg: "Não é possível excluir este usuário. Verifique se ele está logado ou vinculado ao sistema."
+                ok: ok,
+                msg: ok
+                    ? "Usuário excluído com sucesso!"
+                    : "Erro ao excluir usuário."
             });
 
-        } catch (erro) {
-            console.log("ERRO AO EXCLUIR USUÁRIO:", erro);
+        }
+        catch (erro) {
+
+            console.log(erro);
 
             return res.send({
                 ok: false,

@@ -157,10 +157,25 @@ class RecebimentoController {
     }
 
     async deletar(req, res) {
-        return res.send({
-            ok: false,
-            msg: "Não é possível excluir um recebimento, pois ele faz parte do histórico de entrada de estoque."
-        });
+        try {
+            let model = new RecebimentoModel();
+            let ok = await model.deletar(req.body.id);
+
+            return res.send({
+                ok: !!ok,
+                msg: ok
+                    ? "Recebimento excluído e estoque corrigido com sucesso!"
+                    : "Não foi possível excluir o recebimento."
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO EXCLUIR RECEBIMENTO:", erro);
+
+            return res.send({
+                ok: false,
+                msg: "Erro interno ao excluir recebimento."
+            });
+        }
     }
 }
 

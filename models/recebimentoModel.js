@@ -132,19 +132,20 @@ class RecebimentoModel {
 
     async atualizarEstoque() {
         let sql = `
-            UPDATE tb_produto
-            SET pro_estoque = pro_estoque + ?
-            WHERE pro_codigo = ?
-        `;
-
-        let valores = [
-            this.#recQuantidade,
-            this.#proCodigo
-        ];
+        UPDATE tb_produto
+        SET 
+            pro_estoque = pro_estoque + ?,
+            pro_data_validade = ?
+        WHERE pro_codigo = ?
+    `;
 
         let banco = new Database();
 
-        return await banco.ExecutaComandoNonQuery(sql, valores);
+        return await banco.ExecutaComandoNonQuery(sql, [
+            this.#recQuantidade,
+            this.#recValidade,
+            this.#proCodigo
+        ]);
     }
 
     async estaEmUso(id) {
@@ -162,7 +163,33 @@ class RecebimentoModel {
     }
 
     async deletar(id) {
-        return false;
+        let recebimento = await this.obter(id);
+
+        if (!recebimento) {
+            return false;
+        }
+
+        let sqlEstoque = `
+        UPDATE tb_produto
+        SET pro_estoque = pro_estoque - ?
+        WHERE pro_codigo = ?
+          AND pro_estoque >= ?
+    `;
+
+        let banco = new Database();
+
+        await banco.ExecutaComandoNonQuery(sqlEstoque, [
+            recebimento.rec_quantidade,
+            recebimento.pro_codigo,
+            recebimento.rec_quantidade
+        ]);
+
+        let sql = `
+        DELETE FROM tb_recebimento
+        WHERE rec_id = ?
+    `;
+
+        return await banco.ExecutaComandoNonQuery(sql, [id]);
     }
 }
 

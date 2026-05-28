@@ -34,6 +34,67 @@ class AuthMiddleware {
 
         return res.redirect("/login");
     }
+
+    async verificarAdministrador(req, res, next) {
+
+        if (!req.cookies.usuarioLogado) {
+            return res.redirect("/login");
+        }
+
+        let usuarioModel = new UsuarioModel();
+
+        let usuario = await usuarioModel.obter(
+            req.cookies.usuarioLogado
+        );
+
+        if (!usuario) {
+            return res.redirect("/login");
+        }
+
+        if (Number(usuario.perfilId) !== 1) {
+
+            return res.status(403).send(
+                "Acesso negado. Apenas administradores."
+            );
+        }
+
+        req.usuarioLogado = usuario;
+        req.tipoLogado = "usuario";
+
+        next();
+    }
+
+    async verificarFuncionarioOuAdmin(req, res, next) {
+
+        if (!req.cookies.usuarioLogado) {
+            return res.redirect("/login");
+        }
+
+        let usuarioModel = new UsuarioModel();
+
+        let usuario = await usuarioModel.obter(
+            req.cookies.usuarioLogado
+        );
+
+        if (!usuario) {
+            return res.redirect("/login");
+        }
+
+        if (
+            Number(usuario.perfilId) !== 1 &&
+            Number(usuario.perfilId) !== 2
+        ) {
+            return res.status(403).send(
+                "Acesso negado."
+            );
+        }
+
+        req.usuarioLogado = usuario;
+        req.tipoLogado = "usuario";
+
+        next();
+    }
+
 }
 
 module.exports = AuthMiddleware;

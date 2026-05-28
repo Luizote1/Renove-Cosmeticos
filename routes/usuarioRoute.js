@@ -10,16 +10,40 @@ let ctrl = new UsuarioController();
 
 let auth = new AuthMiddleware();
 
-router.get("/",auth.verificarUsuarioLogado.bind(auth),ctrl.listarView);
+router.get(
+    "/",
+    auth.verificarFuncionarioOuAdmin.bind(auth),
+    ctrl.listarView.bind(ctrl)
+);
 
-router.get("/cadastrar",auth.verificarUsuarioLogado.bind(auth),ctrl.cadastrarView);
+router.get(
+    "/cadastrar",
+    auth.verificarAdministrador.bind(auth),
+    ctrl.cadastrarView.bind(ctrl)
+);
 
-router.get("/alterar/:idAlteracao",auth.verificarUsuarioLogado.bind(auth),ctrl.alterarView);
+router.post(
+    "/cadastrar",
+    auth.verificarAdministrador.bind(auth),
+    ctrl.cadastrar.bind(ctrl)
+);
 
-router.post("/cadastrar",auth.verificarUsuarioLogado.bind(auth),ctrl.cadastrar);
+router.get(
+    "/alterar/:idAlteracao",
+    auth.verificarFuncionarioOuAdmin.bind(auth),
+    ctrl.alterarView.bind(ctrl)
+);
 
-router.post("/alterar",auth.verificarUsuarioLogado.bind(auth),ctrl.alterar);
+router.post(
+    "/alterar",
+    auth.verificarFuncionarioOuAdmin.bind(auth),
+    ctrl.alterar.bind(ctrl)
+);
 
-router.post("/deletar",auth.verificarUsuarioLogado.bind(auth),ctrl.deletar);
+router.post(
+    "/deletar",
+    auth.verificarFuncionarioOuAdmin.bind(auth),
+    ctrl.deletar.bind(ctrl)
+);
 
 module.exports = router;
