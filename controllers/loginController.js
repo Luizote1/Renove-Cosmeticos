@@ -45,7 +45,7 @@ class LoginController {
                     httpOnly: true
                 });
 
-                return res.redirect("/usuario");
+                return res.redirect("/");
             }
 
             let clienteModel = new ClienteModel();
