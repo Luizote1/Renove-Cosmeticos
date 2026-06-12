@@ -523,6 +523,66 @@
         }
       }
     }
+
+    .menu-dropdown {
+      margin: 0;
+    }
+
+    .menu-toggle {
+      cursor: pointer;
+    }
+
+    .seta-menu {
+      margin-left: auto;
+      font-size: 12px !important;
+      transition: transform .2s ease;
+    }
+
+    .menu-dropdown.open .seta-menu {
+      transform: rotate(180deg);
+    }
+
+    .submenu-custom {
+      list-style: none;
+      padding: 0;
+      margin: 0 14px 8px 46px;
+      display: none;
+    }
+
+    .menu-dropdown.open .submenu-custom {
+      display: block;
+    }
+
+    .submenu-link {
+      color: #cbd6e6;
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .submenu-link:hover {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .submenu-link i {
+      width: 18px;
+      text-align: center;
+      color: #7fb4ff;
+    }
+
+    .sidebar-collapsed .submenu-custom {
+      display: none !important;
+    }
+
+    .sidebar-collapsed .seta-menu {
+      display: none;
+    }
   </style>
 </head>
 
@@ -562,26 +622,39 @@
         </a>
       </li>
 
-      <li>
-        <a href="/produtos/listar" class="menu-link">
+      <li class="menu-dropdown">
+
+        <a href="#" class="menu-link menu-toggle">
           <i class="fas fa-box-open"></i>
           <span>Produtos</span>
+          <i class="fas fa-chevron-down seta-menu"></i>
         </a>
-      </li>
 
+        <ul class="submenu-custom">
 
-      <li>
-        <a href="/tipoproduto" class="menu-link">
-          <i class="fas fa-tags"></i>
-          <span>Tipo de Produto</span>
-        </a>
-      </li>
+          <li>
+            <a href="/produtos/listar" class="submenu-link">
+              <i class="fas fa-box"></i>
+              <span>Produtos</span>
+            </a>
+          </li>
 
-      <li>
-        <a href="/categoria" class="menu-link">
-          <i class="fas fa-layer-group"></i>
-          <span>categoria</span>
-        </a>
+          <li>
+            <a href="/categoria" class="submenu-link">
+              <i class="fas fa-layer-group"></i>
+              <span>Categorias</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="/tipoproduto" class="submenu-link">
+              <i class="fas fa-tags"></i>
+              <span>Tipos de Produto</span>
+            </a>
+          </li>
+
+        </ul>
+
       </li>
 
       <li>
@@ -709,6 +782,10 @@
 
       document.querySelectorAll(".menu-link").forEach(function (link) {
         link.addEventListener("click", function () {
+          if (link.classList.contains("menu-toggle")) {
+            return;
+          }
+
           if (isMobile()) {
             body.classList.remove("mobile-sidebar-open");
           }
@@ -719,6 +796,16 @@
         if (!isMobile()) {
           body.classList.remove("mobile-sidebar-open");
         }
+      });
+    });
+
+    document.querySelectorAll(".menu-toggle").forEach(function (toggle) {
+      toggle.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const dropdown = this.closest(".menu-dropdown");
+        dropdown.classList.toggle("open");
       });
     });
   </script>

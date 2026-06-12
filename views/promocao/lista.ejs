@@ -13,6 +13,7 @@
         </div>
 
         <div class="card-body">
+
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -25,35 +26,64 @@
                 </thead>
 
                 <tbody>
-                    <% for(let i = 0; i < proximosVencimento.length; i++) { %>
-                        <tr>
-                            <td><%= proximosVencimento[i].pro_codigo %></td>
-                            <td><%= proximosVencimento[i].pro_nome %></td>
-                            <td>R$ <%= Number(proximosVencimento[i].pro_preco).toFixed(2).replace(".", ",") %></td>
-                            <td><%= proximosVencimento[i].pro_estoque %></td>
-                            <td><%= proximosVencimento[i].pro_data_validade %></td>
-                        </tr>
-                    <% } %>
 
-                    <% if(proximosVencimento.length == 0) { %>
+                    <% if(proximosVencimento.length > 0) { %>
+
+                        <% for(let i = 0; i < proximosVencimento.length; i++) { %>
+
+                            <tr>
+                                <td><%= proximosVencimento[i].pro_codigo %></td>
+
+                                <td>
+                                    <%= proximosVencimento[i].pro_nome %>
+                                </td>
+
+                                <td>
+                                    R$
+                                    <%= Number(proximosVencimento[i].pro_preco)
+                                        .toFixed(2)
+                                        .replace(".", ",") %>
+                                </td>
+
+                                <td>
+                                    <%= proximosVencimento[i].pro_estoque %>
+                                </td>
+
+                                <td>
+                                    <%= new Date(proximosVencimento[i].pro_data_validade)
+                                        .toLocaleDateString("pt-BR") %>
+                                </td>
+                            </tr>
+
+                        <% } %>
+
+                    <% } else { %>
+
                         <tr>
                             <td colspan="5" class="text-center">
                                 Nenhum produto próximo ao vencimento.
                             </td>
                         </tr>
+
                     <% } %>
+
                 </tbody>
             </table>
+
         </div>
     </div>
 
+
     <div class="card">
+
         <div class="card-header">
             <strong>Promoções cadastradas</strong>
         </div>
 
         <div class="card-body">
+
             <table class="table table-striped">
+
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -69,55 +99,113 @@
                 </thead>
 
                 <tbody>
-                    <% for(let i = 0; i < lista.length; i++) { %>
-                        <tr>
-                            <td><%= lista[i].prom_id %></td>
-                            <td><%= lista[i].pro_nome %></td>
-                            <td>R$ <%= Number(lista[i].pro_preco).toFixed(2).replace(".", ",") %></td>
-                            <td><%= Number(lista[i].prom_desconto).toFixed(2).replace(".", ",") %>%</td>
 
-                            <td>
-                                R$
-                                <%= 
-                                    (
+                    <% if(lista.length > 0) { %>
+
+                        <% for(let i = 0; i < lista.length; i++) { %>
+
+                            <tr>
+
+                                <td>
+                                    <%= lista[i].prom_id %>
+                                </td>
+
+                                <td>
+                                    <%= lista[i].pro_nome %>
+                                </td>
+
+                                <td>
+                                    R$
+                                    <%= Number(lista[i].pro_preco)
+                                        .toFixed(2)
+                                        .replace(".", ",") %>
+                                </td>
+
+                                <td>
+                                    <%= Number(lista[i].prom_desconto)
+                                        .toFixed(2)
+                                        .replace(".", ",") %>%
+                                </td>
+
+                                <td>
+                                    R$
+                                    <%= (
                                         Number(lista[i].pro_preco) -
-                                        (Number(lista[i].pro_preco) * Number(lista[i].prom_desconto) / 100)
-                                    ).toFixed(2).replace(".", ",")
-                                %>
-                            </td>
+                                        (
+                                            Number(lista[i].pro_preco) *
+                                            Number(lista[i].prom_desconto) / 100
+                                        )
+                                    ).toFixed(2).replace(".", ",") %>
+                                </td>
 
-                            <td><%= lista[i].prom_data_inicio %></td>
-                            <td><%= lista[i].prom_data_fim %></td>
+                                <td>
+                                    <%= new Date(lista[i].prom_data_inicio)
+                                        .toLocaleDateString("pt-BR") %>
+                                </td>
 
-                            <td>
-                                <% if(lista[i].prom_ativo == "s") { %>
-                                    <span class="badge bg-success">Sim</span>
-                                <% } else { %>
-                                    <span class="badge bg-secondary">Não</span>
-                                <% } %>
-                            </td>
+                                <td>
+                                    <%= new Date(lista[i].prom_data_fim)
+                                        .toLocaleDateString("pt-BR") %>
+                                </td>
 
-                            <td>
-                                <a href="/promocao/alterar/<%= lista[i].prom_id %>" class="btn btn-primary">
-                                    <i class="fas fa-pen"></i>
-                                </a>
+                                <td>
 
-                                <button data-id="<%= lista[i].prom_id %>" class="btn btn-danger btnExcluir">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    <% } %>
+                                    <% if(lista[i].prom_ativo == "s") { %>
 
-                    <% if(lista.length == 0) { %>
+                                        <span class="badge bg-success">
+                                            Sim
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="badge bg-secondary">
+                                            Não
+                                        </span>
+
+                                    <% } %>
+
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        href="/promocao/alterar/<%= lista[i].prom_id %>"
+                                        class="btn btn-primary">
+
+                                        <i class="fas fa-pen"></i>
+
+                                    </a>
+
+                                    <button
+                                        data-id="<%= lista[i].prom_id %>"
+                                        class="btn btn-danger btnExcluir">
+
+                                        <i class="fas fa-trash"></i>
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        <% } %>
+
+                    <% } else { %>
+
                         <tr>
                             <td colspan="9" class="text-center">
                                 Nenhuma promoção cadastrada.
                             </td>
                         </tr>
+
                     <% } %>
+
                 </tbody>
+
             </table>
+
         </div>
+
     </div>
+
 </div>
