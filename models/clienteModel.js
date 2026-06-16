@@ -233,7 +233,21 @@ class ClienteModel {
 
         let rows = await banco.ExecutaComando(sql, [cpf]);
 
-        return rows.length > 0;
+        if (rows.length > 0) {
+            return new ClienteModel(
+                rows[0]["cli_id"],
+                rows[0]["cli_nome"],
+                rows[0]["cli_cpf"],
+                rows[0]["cli_nascimento"],
+                rows[0]["cli_genero"],
+                rows[0]["cli_telefone"],
+                rows[0]["cli_email"],
+                rows[0]["cli_senha"],
+                rows[0]["cli_ativo"]
+            );
+        }
+
+        return null;
     }
 
     static async buscarPorEmail(email) {
@@ -244,7 +258,21 @@ class ClienteModel {
 
         let rows = await banco.ExecutaComando(sql, [email]);
 
-        return rows.length > 0;
+        if (rows.length > 0) {
+            return new ClienteModel(
+                rows[0]["cli_id"],
+                rows[0]["cli_nome"],
+                rows[0]["cli_cpf"],
+                rows[0]["cli_nascimento"],
+                rows[0]["cli_genero"],
+                rows[0]["cli_telefone"],
+                rows[0]["cli_email"],
+                rows[0]["cli_senha"],
+                rows[0]["cli_ativo"]
+            );
+        }
+
+        return null;
     }
 
     async atualizarPerfil() {

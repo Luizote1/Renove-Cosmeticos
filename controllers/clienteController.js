@@ -167,6 +167,32 @@ class ClienteController {
                 let cpfLimpo =
                     req.body.cpf.replace(/\D/g, "");
 
+                let cpfExiste =
+                    await ClienteModel.buscarPorCpf(cpfLimpo);
+
+                if (
+                    cpfExiste &&
+                    Number(cpfExiste.cliId) !== Number(req.body.id)
+                ) {
+                    return res.send({
+                        ok: false,
+                        msg: "Este CPF já está cadastrado para outro cliente."
+                    });
+                }
+
+                let emailExiste =
+                    await ClienteModel.buscarPorEmail(req.body.email);
+
+                if (
+                    emailExiste &&
+                    Number(emailExiste.cliId) !== Number(req.body.id)
+                ) {
+                    return res.send({
+                        ok: false,
+                        msg: "Este e-mail já está cadastrado para outro cliente."
+                    });
+                }
+
                 let cliente = new ClienteModel(
                     req.body.id,
                     req.body.nome,
@@ -183,17 +209,13 @@ class ClienteController {
                     await cliente.atualizar();
 
                 if (result) {
-
                     ok = true;
                     msg = "Cliente alterado com sucesso!";
-
                 } else {
-
                     msg = "Não foi possível alterar o cliente.";
                 }
 
             } else {
-
                 msg = "Preencha corretamente todos os campos.";
             }
 
