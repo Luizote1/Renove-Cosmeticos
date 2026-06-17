@@ -7,6 +7,8 @@ class PromocaoController {
         try {
             let model = new PromocaoModel();
 
+            await model.criarPromocoesAutomaticasVencimento();
+
             let lista = await model.listar();
             let proximosVencimento = await model.listarProdutosProximosVencimento();
 
@@ -54,8 +56,25 @@ class PromocaoController {
                 req.body.dataInicio &&
                 req.body.dataFim
             ) {
-                let dataInicio = new Date(req.body.dataInicio);
-                let dataFim = new Date(req.body.dataFim);
+                let dataInicio = new Date(req.body.dataInicio + "T00:00:00");
+                let dataFim = new Date(req.body.dataFim + "T00:00:00");
+
+                let hoje = new Date();
+                hoje.setHours(0, 0, 0, 0);
+
+                if (dataInicio < hoje) {
+                    return res.send({
+                        ok: false,
+                        msg: "A data de início não pode ser anterior ao dia atual."
+                    });
+                }
+
+                if (dataFim < hoje) {
+                    return res.send({
+                        ok: false,
+                        msg: "A data de fim não pode ser anterior ao dia atual."
+                    });
+                }
 
                 if (Number(req.body.desconto) <= 0 || Number(req.body.desconto) > 100) {
                     return res.send({
@@ -141,8 +160,18 @@ class PromocaoController {
                 req.body.dataInicio &&
                 req.body.dataFim
             ) {
-                let dataInicio = new Date(req.body.dataInicio);
-                let dataFim = new Date(req.body.dataFim);
+                let dataInicio = new Date(req.body.dataInicio + "T00:00:00");
+                let dataFim = new Date(req.body.dataFim + "T00:00:00");
+
+                let hoje = new Date();
+                hoje.setHours(0, 0, 0, 0);
+
+                if (dataInicio < hoje || dataFim < hoje) {
+                    return res.send({
+                        ok: false,
+                        msg: "Não é possível alterar promoção para data anterior ao dia atual."
+                    });
+                }
 
                 if (Number(req.body.desconto) <= 0 || Number(req.body.desconto) > 100) {
                     return res.send({

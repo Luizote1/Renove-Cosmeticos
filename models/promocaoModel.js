@@ -66,10 +66,16 @@ class PromocaoModel {
 
     async cadastrar() {
         let sql = `
-            INSERT INTO tb_promocao
-            (pro_codigo, prom_desconto, prom_data_inicio, prom_data_fim, prom_ativo)
-            VALUES (?, ?, ?, ?, ?)
-        `;
+        INSERT INTO tb_promocao
+        (
+            pro_codigo,
+            prom_desconto,
+            prom_data_inicio,
+            prom_data_fim,
+            prom_ativo
+        )
+        VALUES (?, ?, ?, ?, ?)
+    `;
 
         let valores = [
             this.#proCodigo,
@@ -80,6 +86,7 @@ class PromocaoModel {
         ];
 
         let banco = new Database();
+
         return await banco.ExecutaComandoNonQuery(sql, valores);
     }
 
@@ -150,6 +157,58 @@ class PromocaoModel {
 
         let banco = new Database();
         return await banco.ExecutaComando(sql);
+    }
+
+    async existePromocaoAtivaProduto(codigo) {
+        let sql = `
+        select count(*) as total
+        from tb_promocao
+        where pro_codigo = ?
+          and prom_ativo = 's'
+          and curdate() between prom_data_inicio and prom_data_fim
+    `;
+
+        let banco = new Database();
+        let rows = await banco.ExecutaComando(sql, [codigo]);
+
+        return rows[0].total > 0;
+    }
+
+    async criarPromocoesAutomaticasVencimento() {
+        let produtos = await this.listarProdutosProximosVencimento();
+
+        for (let i = 0; i < produtos.length; i++) {
+
+            let produto = produtos[i];
+
+            let jaTemPromocao =
+                await this.existePromocaoAtivaProduto(produto.pro_codigo);
+
+            if (!jaTemPromocao) {
+
+                let sql = `
+                insert into tb_promocao
+                (
+                    pro_codigo,
+                    prom_desconto,
+                    prom_data_inicio,
+                    prom_data_fim,
+                    prom_ativo
+                )
+                values (?, ?, curdate(), ?, 's')
+            `;
+
+                let banco = new Database();
+
+                await banco.ExecutaComandoNonQuery(sql, [
+                    produto.pro_codigo,
+                    20,
+                    produto.pro_data_validade
+                ]);
+            }
+        }
+
+        return true;
     }
 }
 
