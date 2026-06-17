@@ -6,12 +6,78 @@
         <h1>Produtos cadastrados</h1>
 
         <a class="btn btn-primary" href="/produtos/cadastrar">
-            <i class="fas fa-plus"></i> Cadastrar Produto
+            <i class="fas fa-plus"></i>
+            Cadastrar Produto
         </a>
     </div>
 
+    <form method="GET" action="/produtos/listar" class="mb-4">
+
+        <div class="row g-3 align-items-end">
+
+            <div class="col-md-6">
+                <label for="busca" class="form-label">
+                    Buscar por código ou nome
+                </label>
+
+                <input id="busca" name="busca" type="text" class="form-control"
+                    placeholder="Digite o código ou nome do produto" value="<%= busca || '' %>">
+            </div>
+
+            <div class="col-md-3">
+                <label for="ativo" class="form-label">
+                    Status
+                </label>
+
+                <select id="ativo" name="ativo" class="form-select">
+
+                    <option value="" <%=ativo=="" ? "selected" : "" %>>
+                        Todos
+                    </option>
+
+                    <option value="s" <%=ativo=="s" ? "selected" : "" %>>
+                        Ativos
+                    </option>
+
+                    <option value="n" <%=ativo=="n" ? "selected" : "" %>>
+                        Inativos
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="col-md-3 d-flex gap-2">
+
+                <button type="submit" class="btn btn-primary">
+
+                    <i class="fas fa-search"></i>
+                    Buscar
+
+                </button>
+
+                <a href="/produtos/listar" class="btn btn-secondary">
+
+                    Limpar
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <div class="mb-3">
+        <strong>
+            Total encontrado:
+            <%= lista.length %>
+        </strong>
+    </div>
+
     <div class="table-responsive tabela-scroll">
+
         <table class="table table-striped table-hover align-middle tabela-sistema">
+
             <thead>
                 <tr>
                     <th>Código</th>
@@ -28,61 +94,101 @@
             </thead>
 
             <tbody>
-                <% for(let i=0; i < lista.length; i++) { %>
-                    <tr>
-                        <td>
-                            <%= lista[i].proCodigo %>
-                        </td>
-                        <td>
-                            <%= lista[i].proNome %>
-                        </td>
 
-                        <td>
-                            R$ <%= Number(lista[i].proPreco).toFixed(2).replace(".", "," ) %>
-                        </td>
+                <% if(lista.length> 0) { %>
 
-                        <td>
-                            <%= lista[i].proEstoque %>
-                        </td>
+                    <% for(let i=0; i < lista.length; i++) { %>
 
-                        <td>
-                            <%= lista[i].proDataValidade ? new
-                                Date(lista[i].proDataValidade).toLocaleDateString("pt-BR") : "---" %>
-                        </td>
+                        <tr>
 
-                        <td>
-                            <% if(lista[i].proAtivo=="s" ) { %>
-                                <span class="badge bg-success">Sim</span>
-                                <% } else { %>
-                                    <span class="badge bg-danger">Não</span>
-                                    <% } %>
-                        </td>
+                            <td>
+                                <%= lista[i].proCodigo %>
+                            </td>
 
-                        <td>
-                            <%= lista[i].catDescricao || "---" %>
-                        </td>
-                        <td>
-                            <%= lista[i].tipDescricao || "---" %>
-                        </td>
-                        <td>
-                            <%= lista[i].labNome || "---" %>
-                        </td>
+                            <td>
+                                <%= lista[i].proNome %>
+                            </td>
 
-                        <td>
-                            <div class="acoes">
-                                <a href="/produtos/alterar/<%= lista[i].proCodigo %>" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-pen"></i>
-                                </a>
+                            <td>
+                                R$
+                                <%= Number(lista[i].proPreco) .toFixed(2) .replace(".", "," ) %>
+                            </td>
 
-                                <button data-codigo="<%= lista[i].proCodigo %>" class="btn btn-danger btn-sm btnExcluir" type="button">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <% } %>
+                            <td>
+                                <%= lista[i].proEstoque %>
+                            </td>
+
+                            <td>
+                                <%= lista[i].proDataValidade ? new
+                                    Date(lista[i].proDataValidade).toLocaleDateString("pt-BR") : "---" %>
+                            </td>
+
+                            <td>
+                                <% if(lista[i].proAtivo=="s" ) { %>
+
+                                    <span class="badge bg-success">
+                                        Sim
+                                    </span>
+
+                                    <% } else { %>
+
+                                        <span class="badge bg-danger">
+                                            Não
+                                        </span>
+
+                                        <% } %>
+                            </td>
+
+                            <td>
+                                <%= lista[i].catDescricao || "---" %>
+                            </td>
+
+                            <td>
+                                <%= lista[i].tipDescricao || "---" %>
+                            </td>
+
+                            <td>
+                                <%= lista[i].labNome || "---" %>
+                            </td>
+
+                            <td>
+                                <div class="acoes">
+
+                                    <a href="/produtos/alterar/<%= lista[i].proCodigo %>"
+                                        class="btn btn-primary btn-sm">
+
+                                        <i class="fas fa-pen"></i>
+
+                                    </a>
+
+                                    <button data-codigo="<%= lista[i].proCodigo %>"
+                                        class="btn btn-danger btn-sm btnExcluir" type="button">
+
+                                        <i class="fas fa-trash"></i>
+
+                                    </button>
+
+                                </div>
+                            </td>
+
+                        </tr>
+
+                        <% } %>
+
+                            <% } else { %>
+
+                                <tr>
+                                    <td colspan="10" class="text-center">
+                                        Nenhum produto encontrado.
+                                    </td>
+                                </tr>
+
+                                <% } %>
+
             </tbody>
+
         </table>
+
     </div>
 
 </div>

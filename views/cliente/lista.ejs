@@ -6,8 +6,64 @@
         <h1>Clientes cadastrados</h1>
 
         <a class="btn btn-primary" href="/cliente/cadastrar">
-            <i class="fas fa-plus"></i> Cadastrar Cliente
+            <i class="fas fa-plus"></i>
+            Cadastrar Cliente
         </a>
+    </div>
+
+    <form method="GET" action="/cliente" class="mb-4">
+
+        <div class="row g-3 align-items-end">
+
+            <div class="col-md-6">
+                <label for="busca" class="form-label">
+                    Buscar por ID, nome, CPF ou e-mail
+                </label>
+
+                <input id="busca" name="busca" type="text" class="form-control"
+                    placeholder="Digite ID, nome, CPF ou e-mail" value="<%= busca || '' %>">
+            </div>
+
+            <div class="col-md-3">
+                <label for="ativo" class="form-label">
+                    Status
+                </label>
+
+                <select id="ativo" name="ativo" class="form-select">
+                    <option value="" <%=ativo=="" ? "selected" : "" %>>
+                        Todos
+                    </option>
+
+                    <option value="s" <%=ativo=="s" ? "selected" : "" %>>
+                        Ativos
+                    </option>
+
+                    <option value="n" <%=ativo=="n" ? "selected" : "" %>>
+                        Inativos
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                    Buscar
+                </button>
+
+                <a href="/cliente" class="btn btn-secondary">
+                    Limpar
+                </a>
+            </div>
+
+        </div>
+
+    </form>
+
+    <div class="mb-3">
+        <strong>
+            Total encontrado:
+            <%= lista.length %>
+        </strong>
     </div>
 
     <div class="table-responsive tabela-scroll">
@@ -27,41 +83,71 @@
             </thead>
 
             <tbody>
-                <% for(let i = 0; i < lista.length; i++) { %>
-                    <tr>
-                        <td><%= lista[i].cliId %></td>
-                        <td><%= lista[i].cliNome %></td>
-                        <td><%= lista[i].cliCpf %></td>
 
-                        <td>
-                            <%= lista[i].cliNascimento ? new Date(lista[i].cliNascimento).toLocaleDateString("pt-BR") : "---" %>
-                        </td>
+                <% if(lista.length> 0) { %>
 
-                        <td><%= lista[i].cliGenero %></td>
-                        <td><%= lista[i].cliTelefone %></td>
-                        <td><%= lista[i].cliEmail %></td>
+                    <% for(let i=0; i < lista.length; i++) { %>
+                        <tr>
+                            <td>
+                                <%= lista[i].cliId %>
+                            </td>
+                            <td>
+                                <%= lista[i].cliNome %>
+                            </td>
+                            <td>
+                                <%= lista[i].cliCpf %>
+                            </td>
 
-                        <td>
-                            <% if(lista[i].cliAtivo == "s") { %>
-                                <span class="badge bg-success">Sim</span>
+                            <td>
+                                <%= lista[i].cliNascimento ? new
+                                    Date(lista[i].cliNascimento).toLocaleDateString("pt-BR") : "---" %>
+                            </td>
+
+                            <td>
+                                <%= lista[i].cliGenero %>
+                            </td>
+                            <td>
+                                <%= lista[i].cliTelefone %>
+                            </td>
+                            <td>
+                                <%= lista[i].cliEmail %>
+                            </td>
+
+                            <td>
+                                <% if(lista[i].cliAtivo=="s" ) { %>
+                                    <span class="badge bg-success">Sim</span>
+                                    <% } else { %>
+                                        <span class="badge bg-danger">Não</span>
+                                        <% } %>
+                            </td>
+
+                            <td>
+                                <div class="acoes">
+                                    <a href="/cliente/alterar/<%= lista[i].cliId %>" class="btn btn-primary btn-sm">
+
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+
+                                    <button data-id="<%= lista[i].cliId %>" class="btn btn-danger btn-sm btnExcluir"
+                                        type="button">
+
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <% } %>
+
                             <% } else { %>
-                                <span class="badge bg-danger">Não</span>
-                            <% } %>
-                        </td>
 
-                        <td>
-                            <div class="acoes">
-                                <a href="/cliente/alterar/<%= lista[i].cliId %>" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-pen"></i>
-                                </a>
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        Nenhum cliente encontrado.
+                                    </td>
+                                </tr>
 
-                                <button data-id="<%= lista[i].cliId %>" class="btn btn-danger btn-sm btnExcluir" type="button">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                <% } %>
+                                <% } %>
+
             </tbody>
         </table>
     </div>

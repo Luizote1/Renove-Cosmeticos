@@ -6,12 +6,21 @@ class ClienteController {
 
         try {
 
+            let busca = req.query.busca || "";
+            let ativo = req.query.ativo || "";
+
             let model = new ClienteModel();
-            let lista = await model.listar();
+
+            let lista = await model.listarSistema(
+                busca,
+                ativo
+            );
 
             res.render("cliente/lista", {
                 layout: "layout",
-                lista: lista
+                lista: lista,
+                busca: busca,
+                ativo: ativo
             });
 
         } catch (erro) {
@@ -20,7 +29,9 @@ class ClienteController {
 
             res.render("cliente/lista", {
                 layout: "layout",
-                lista: []
+                lista: [],
+                busca: "",
+                ativo: ""
             });
         }
     }
@@ -279,6 +290,8 @@ class ClienteController {
             });
         }
     }
+
+
 }
 
 module.exports = ClienteController;

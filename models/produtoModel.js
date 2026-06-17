@@ -460,6 +460,75 @@ class ProdutoModel {
         return lista;
     }
 
+    async listarSistema(busca = "", ativo = "") {
+        let sql = `
+        select
+            p.*,
+            c.cat_descricao,
+            t.tip_descricao,
+            l.lab_nome
+        from tb_produto p
+        inner join tb_categoria c on p.cat_id = c.cat_id
+        inner join tb_tipo_produto t on p.tip_id = t.tip_id
+        inner join tb_laboratorio l on p.lab_id = l.lab_id
+        where 1 = 1
+    `;
+
+        let valores = [];
+
+        if (busca && busca.trim() !== "") {
+            sql += `
+            and (
+                p.pro_codigo like ?
+                or p.pro_nome like ?
+            )
+        `;
+
+            valores.push("%" + busca.trim() + "%");
+            valores.push("%" + busca.trim() + "%");
+        }
+
+        if (ativo && ativo !== "") {
+            sql += `
+            and p.pro_ativo = ?
+        `;
+
+            valores.push(ativo);
+        }
+
+        sql += `
+        order by p.pro_codigo
+    `;
+
+        let banco = new Database();
+        let rows = await banco.ExecutaComando(sql, valores);
+
+        let lista = [];
+
+        for (let i = 0; i < rows.length; i++) {
+            let imagem = this.montarImagem(rows[i]["pro_imagem"]);
+
+            lista.push(new ProdutoModel(
+                rows[i]["pro_codigo"],
+                rows[i]["pro_nome"],
+                rows[i]["pro_descricao"],
+                rows[i]["pro_preco"],
+                rows[i]["pro_estoque"],
+                rows[i]["pro_data_validade"],
+                rows[i]["pro_ativo"],
+                imagem,
+                rows[i]["cat_id"],
+                rows[i]["tip_id"],
+                rows[i]["lab_id"],
+                rows[i]["cat_descricao"],
+                rows[i]["tip_descricao"],
+                rows[i]["lab_nome"]
+            ));
+        }
+
+        return lista;
+    }
+
     toJSON() {
         return {
             proCodigo: this.#proCodigo,

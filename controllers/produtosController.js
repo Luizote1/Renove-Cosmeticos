@@ -32,12 +32,18 @@ class ProdutosController {
 
     async listar(req, res) {
         try {
+            let busca = req.query.busca || "";
+            let ativo = req.query.ativo || "";
+
             let produtoModel = new ProdutoModel();
-            let lista = await produtoModel.listar();
+
+            let lista = await produtoModel.listarSistema(busca, ativo);
 
             res.render("produto/lista", {
                 layout: "layout",
-                lista: lista
+                lista: lista,
+                busca: busca,
+                ativo: ativo
             });
 
         } catch (erro) {
@@ -45,7 +51,9 @@ class ProdutosController {
 
             res.render("produto/lista", {
                 layout: "layout",
-                lista: []
+                lista: [],
+                busca: "",
+                ativo: ""
             });
         }
     }

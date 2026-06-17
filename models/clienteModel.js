@@ -299,6 +299,88 @@ class ClienteModel {
 
         return await banco.ExecutaComandoNonQuery(sql, valores);
     }
+
+    async listarSistema(busca = "", ativo = "") {
+
+        let sql = `
+        select *
+        from tb_cliente
+        where 1 = 1
+    `;
+
+        let valores = [];
+
+        if (busca && busca.trim() !== "") {
+
+            let buscaLimpa = busca.trim();
+            let buscaNumeros = busca.replace(/\D/g, "");
+
+            if (/^\d+$/.test(buscaLimpa)) {
+
+                if (buscaLimpa.length <= 3) {
+                    sql += `
+                and cli_id = ?
+            `;
+
+                    valores.push(buscaLimpa);
+                } else {
+                    sql += `
+                and cli_cpf like ?
+            `;
+
+                    valores.push("%" + buscaNumeros + "%");
+                }
+
+            } else {
+
+                sql += `
+            and (
+                cli_nome like ?
+                or cli_email like ?
+            )
+        `;
+
+                valores.push("%" + buscaLimpa + "%");
+                valores.push("%" + buscaLimpa + "%");
+            }
+        }
+
+        if (ativo && ativo !== "") {
+
+            sql += `
+            and cli_ativo = ?
+        `;
+
+            valores.push(ativo);
+        }
+
+        sql += `
+        order by cli_id asc
+    `;
+
+        let banco = new Database();
+
+        let rows = await banco.ExecutaComando(sql, valores);
+
+        let lista = [];
+
+        for (let i = 0; i < rows.length; i++) {
+
+            lista.push(new ClienteModel(
+                rows[i]["cli_id"],
+                rows[i]["cli_nome"],
+                rows[i]["cli_cpf"],
+                rows[i]["cli_nascimento"],
+                rows[i]["cli_genero"],
+                rows[i]["cli_telefone"],
+                rows[i]["cli_email"],
+                rows[i]["cli_senha"],
+                rows[i]["cli_ativo"]
+            ));
+        }
+
+        return lista;
+    }
 }
 
 module.exports = ClienteModel;
