@@ -221,6 +221,19 @@ class AgendamentoModel {
         return await banco.ExecutaComandoNonQuery(sql, [id]);
     }
 
+    async concluir(id) {
+        let sql = `
+        UPDATE tb_agendamento
+        SET age_status = 'Finalizado'
+        WHERE age_id = ?
+          AND age_status <> 'Finalizado'
+    `;
+
+        let banco = new Database();
+
+        return await banco.ExecutaComandoNonQuery(sql, [id]);
+    }
+
     toCalendarJson() {
         let dataFormatada = "";
 

@@ -41,7 +41,7 @@ class ServicoController {
 
                 eventos.push(
                     agendamentos[i]
-                    .toCalendarJson()
+                        .toCalendarJson()
                 );
 
             }
@@ -133,7 +133,7 @@ class ServicoController {
                         0,
 
                         req.body.descricao
-                        .trim(),
+                            .trim(),
 
                         req.body.detalhes
                         || "",
@@ -273,7 +273,7 @@ class ServicoController {
                 req.body.descricao &&
 
                 req.body.descricao
-                .trim() != "" &&
+                    .trim() != "" &&
 
                 req.body.valor &&
 
@@ -287,7 +287,7 @@ class ServicoController {
                         req.body.id,
 
                         req.body.descricao
-                        .trim(),
+                            .trim(),
 
                         req.body.detalhes
                         || "",
@@ -308,7 +308,7 @@ class ServicoController {
 
                 let result =
                     await model
-                    .atualizar();
+                        .atualizar();
 
 
                 if (result) {
@@ -358,6 +358,41 @@ class ServicoController {
 
         }
 
+    }
+
+    async concluirAgendamento(req, res) {
+        try {
+            if (!req.body.id) {
+                return res.send({
+                    ok: false,
+                    msg: "ID do agendamento não informado."
+                });
+            }
+
+            let model = new AgendamentoModel();
+
+            let result = await model.concluir(req.body.id);
+
+            if (result) {
+                return res.send({
+                    ok: true,
+                    msg: "Serviço concluído com sucesso!"
+                });
+            }
+
+            return res.send({
+                ok: false,
+                msg: "Não foi possível concluir este agendamento."
+            });
+
+        } catch (erro) {
+            console.log("ERRO AO CONCLUIR AGENDAMENTO:", erro);
+
+            return res.send({
+                ok: false,
+                msg: "Erro interno ao concluir agendamento."
+            });
+        }
     }
 
 
@@ -450,14 +485,22 @@ class ServicoController {
                 req.body.cliente &&
 
                 req.body.cliente
-                .trim() != "" &&
+                    .trim() != "" &&
 
                 req.body.data &&
 
                 req.body.hora
 
             ) {
+                let dataHoraSelecionada = new Date(req.body.data + "T" + req.body.hora);
+                let agora = new Date();
 
+                if (dataHoraSelecionada <= agora) {
+                    return res.send({
+                        ok: false,
+                        msg: "Não é possível agendar para data ou horário que já passou."
+                    });
+                }
                 let agendamento =
                     new AgendamentoModel(
 
@@ -468,7 +511,7 @@ class ServicoController {
                         req.body.profissional,
 
                         req.body.cliente
-                        .trim(),
+                            .trim(),
 
                         req.body.telefone
                         || "",
@@ -487,7 +530,7 @@ class ServicoController {
 
                 let result =
                     await agendamento
-                    .cadastrar();
+                        .cadastrar();
 
 
                 if (result) {
