@@ -24,12 +24,13 @@
 
             <div class="form-group">
                 <label>Quantidade</label>
-                <input id="quantidade" type="number" class="form-control" value="<%= descarte.des_quantidade %>">
-            </div>
-
-            <div class="form-group">
-                <label>Data</label>
-                <input id="data" type="date" class="form-control" value="<%= descarte.des_data %>">
+                <input
+                    id="quantidade"
+                    type="number"
+                    min="1"
+                    step="1"
+                    class="form-control"
+                    value="<%= descarte.des_quantidade %>">
             </div>
 
             <div class="form-group">

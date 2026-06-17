@@ -36,6 +36,23 @@ class DescarteModel {
         this.#desObservacao = desObservacao;
     }
 
+    async obterEstoqueProduto(codigoProduto) {
+        let sql = `
+        SELECT pro_estoque
+        FROM tb_produto
+        WHERE pro_codigo = ?
+    `;
+
+        let banco = new Database();
+        let rows = await banco.ExecutaComando(sql, [codigoProduto]);
+
+        if (rows.length > 0) {
+            return Number(rows[0].pro_estoque);
+        }
+
+        return null;
+    }
+
     async listar() {
         let sql = `
             SELECT 

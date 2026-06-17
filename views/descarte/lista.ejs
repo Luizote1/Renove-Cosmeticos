@@ -23,14 +23,26 @@
                 </thead>
 
                 <tbody>
-                    <% for(let i = 0; i < lista.length; i++) { %>
+                    <% for(let i=0; i < lista.length; i++) { %>
                         <tr>
-                            <td><%= lista[i].des_id %></td>
-                            <td><%= lista[i].pro_nome %></td>
-                            <td><%= lista[i].des_quantidade %></td>
-                            <td><%= lista[i].des_data %></td>
-                            <td><%= lista[i].des_motivo %></td>
-                            <td><%= lista[i].des_observacao || "---" %></td>
+                            <td>
+                                <%= lista[i].des_id %>
+                            </td>
+                            <td>
+                                <%= lista[i].pro_nome %>
+                            </td>
+                            <td>
+                                <%= lista[i].des_quantidade %>
+                            </td>
+                            <td>
+                                <%= lista[i].des_data ? new Date(lista[i].des_data).toLocaleString("pt-BR") : "---" %>
+                            </td>
+                            <td>
+                                <%= lista[i].des_motivo %>
+                            </td>
+                            <td>
+                                <%= lista[i].des_observacao || "---" %>
+                            </td>
 
                             <td>
                                 <a href="/descarte/alterar/<%= lista[i].des_id %>" class="btn btn-primary">
@@ -42,7 +54,7 @@
                                 </button>
                             </td>
                         </tr>
-                    <% } %>
+                        <% } %>
                 </tbody>
             </table>
         </div>

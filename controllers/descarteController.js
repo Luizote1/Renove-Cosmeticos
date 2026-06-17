@@ -47,14 +47,24 @@ class DescarteController {
             if (
                 req.body.produto &&
                 req.body.quantidade &&
-                req.body.data &&
                 req.body.motivo
             ) {
+                let quantidade = Number(req.body.quantidade);
+
+                if (!Number.isInteger(quantidade) || quantidade <= 0) {
+                    return res.send({
+                        ok: false,
+                        msg: "A quantidade do descarte deve ser um número inteiro maior que zero."
+                    });
+                }
+
+                let dataAtual = new Date();
+
                 let model = new DescarteModel(
                     0,
                     req.body.produto,
-                    req.body.quantidade,
-                    req.body.data,
+                    quantidade,
+                    dataAtual,
                     req.body.motivo,
                     req.body.observacao
                 );
@@ -117,49 +127,115 @@ class DescarteController {
 
     async alterar(req, res) {
         try {
-            let ok = false;
-            let msg = "";
-
             if (
-                req.body.id &&
-                req.body.produto &&
-                req.body.quantidade &&
-                req.body.data &&
-                req.body.motivo
+                !req.body.id ||
+                !req.body.produto ||
+                !req.body.quantidade ||
+                !req.body.motivo
             ) {
-                let model = new DescarteModel(
-                    req.body.id,
-                    req.body.produto,
-                    req.body.quantidade,
-                    req.body.data,
-                    req.body.motivo,
-                    req.body.observacao
-                );
-
-                let result = await model.atualizar();
-
-                if (result) {
-                    ok = true;
-                    msg = "Descarte alterado com sucesso!";
-                } else {
-                    msg = "Não foi possível alterar o descarte.";
-                }
-
-            } else {
-                msg = "Preencha todos os campos obrigatórios.";
+                return res.send({
+                    ok: false,
+                    msg: "Preencha todos os campos obrigatórios."
+                });
             }
 
-            res.send({ ok, msg });
+            let quantidade = Number(req.body.quantidade);
+
+            if (!Number.isInteger(quantidade) || quantidade <= 0) {
+                return res.send({
+                    ok: false,
+                    msg: "A quantidade deve ser um número inteiro maior que zero."
+                });
+            }
+
+            let modelBusca = new DescarteModel();
+
+            let descarteAntigo = await modelBusca.obter(req.body.id);
+
+            if (!descarteAntigo) {
+                return res.send({
+                    ok: false,
+                    msg: "Descarte não encontrado."
+                });
+            }
+
+            let estoqueAtual = await modelBusca.obterEstoqueProduto(req.body.produto);
+
+            if (estoqueAtual === null) {
+                return res.send({
+                    ok: false,
+                    msg: "Produto não encontrado."
+                });
+            }
+
+            if (quantidade > estoqueAtual) {
+                return res.send({
+                    ok: false,
+                    msg: "Estoque insuficiente. Você só pode descartar até " + estoqueAtual + " unidades."
+                });
+            }
+
+            let modelAntigo = new DescarteModel(
+                descarteAntigo.des_id,
+                descarteAntigo.pro_codigo,
+                descarteAntigo.des_quantidade,
+                descarteAntigo.des_data,
+                descarteAntigo.des_motivo,
+                descarteAntigo.des_observacao
+            );
+
+            await modelAntigo.devolverEstoque(
+                descarteAntigo.des_quantidade,
+                descarteAntigo.pro_codigo
+            );
+
+            let modelNovo = new DescarteModel(
+                req.body.id,
+                req.body.produto,
+                quantidade,
+                descarteAntigo.des_data,
+                req.body.motivo,
+                req.body.observacao
+            );
+
+            let baixou = await modelNovo.baixarEstoque();
+
+            if (!baixou || baixou.affectedRows <= 0) {
+                await modelAntigo.baixarEstoque();
+
+                return res.send({
+                    ok: false,
+                    msg: "Estoque insuficiente para alterar este descarte."
+                });
+            }
+
+            let result = await modelNovo.atualizar();
+
+            if (result) {
+                return res.send({
+                    ok: true,
+                    msg: "Descarte alterado com sucesso! O estoque foi ajustado."
+                });
+            }
+
+            await modelNovo.devolverEstoque(quantidade, req.body.produto);
+            await modelAntigo.baixarEstoque();
+
+            return res.send({
+                ok: false,
+                msg: "Não foi possível alterar o descarte."
+            });
 
         } catch (erro) {
             console.log("ERRO AO ALTERAR DESCARTE:", erro);
 
-            res.send({
+            return res.send({
                 ok: false,
                 msg: "Erro interno ao alterar descarte."
             });
         }
     }
+
 
     async deletar(req, res) {
         return res.send({
