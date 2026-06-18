@@ -38,8 +38,10 @@ class DevolucaoModel {
                 c.cli_nome,
                 p.pro_nome
             FROM tb_devolucao d
-            INNER JOIN tb_cliente c ON d.cli_id = c.cli_id
-            INNER JOIN tb_produto p ON d.pro_codigo = p.pro_codigo
+            INNER JOIN tb_cliente c
+                ON d.cli_id = c.cli_id
+            INNER JOIN tb_produto p
+                ON d.pro_codigo = p.pro_codigo
             ORDER BY d.dev_data DESC
         `;
 
@@ -48,34 +50,60 @@ class DevolucaoModel {
         return await banco.ExecutaComando(sql);
     }
 
-    async listarPedidos() {
+    async listarPedidos(busca = "") {
+
         let sql = `
-        SELECT 
-            p.ped_id,
-            p.cli_id,
-            p.ped_data,
-            p.ped_valortotal,
-            p.ped_pagamento,
-            p.ped_status,
-            c.cli_nome
-        FROM tb_pedido p
-        INNER JOIN tb_cliente c
-            ON p.cli_id = c.cli_id
-        ORDER BY p.ped_id DESC
-    `;
+            SELECT 
+                p.ped_id,
+                p.cli_id,
+                p.ped_data,
+                p.ped_valortotal,
+                p.ped_pagamento,
+                p.ped_status,
+                c.cli_nome,
+                c.cli_cpf
+            FROM tb_pedido p
+            INNER JOIN tb_cliente c
+                ON p.cli_id = c.cli_id
+            WHERE p.ped_status <> 'Devolvido'
+        `;
+
+        let valores = [];
+
+        if (busca && busca.trim() !== "") {
+
+            sql += `
+                AND (
+                    CAST(p.ped_id AS CHAR) = ?
+                    OR c.cli_nome LIKE ?
+                    OR c.cli_cpf LIKE ?
+                )
+            `;
+
+            valores.push(busca.trim());
+            valores.push("%" + busca.trim() + "%");
+            valores.push("%" + busca.replace(/\D/g, "") + "%");
+        }
+
+        sql += `
+            ORDER BY p.ped_id DESC
+            LIMIT 50
+        `;
 
         let banco = new Database();
 
-        return await banco.ExecutaComando(sql);
+        return await banco.ExecutaComando(sql, valores);
     }
 
     async listarItensPedido(pedId) {
+
         let sql = `
             SELECT
                 i.*,
                 p.pro_nome
             FROM tb_pedidoitens i
-            INNER JOIN tb_produto p ON i.pro_codigo = p.pro_codigo
+            INNER JOIN tb_produto p
+                ON i.pro_codigo = p.pro_codigo
             WHERE i.ped_id = ?
         `;
 
@@ -85,6 +113,7 @@ class DevolucaoModel {
     }
 
     async obterPedido(pedId) {
+
         let sql = `
             SELECT *
             FROM tb_pedido
@@ -103,6 +132,7 @@ class DevolucaoModel {
     }
 
     async cadastrar() {
+
         let sql = `
             INSERT INTO tb_devolucao
             (
@@ -133,6 +163,7 @@ class DevolucaoModel {
     }
 
     async devolverEstoque() {
+
         let sql = `
             UPDATE tb_produto
             SET pro_estoque = pro_estoque + ?
@@ -148,6 +179,7 @@ class DevolucaoModel {
     }
 
     async atualizarStatusPedido(pedId, status) {
+
         let sql = `
             UPDATE tb_pedido
             SET ped_status = ?

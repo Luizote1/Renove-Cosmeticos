@@ -23,6 +23,7 @@
 
                     <tr>
                         <th>ID</th>
+                        <th>Pedido</th>
                         <th>Cliente</th>
                         <th>Produto</th>
                         <th>Quantidade</th>
@@ -35,38 +36,54 @@
 
                 <tbody>
 
-                    <% for(let i = 0; i < lista.length; i++) { %>
+                    <% if(lista.length > 0) { %>
+
+                        <% for(let i = 0; i < lista.length; i++) { %>
+
+                            <tr>
+
+                                <td>
+                                    <%= lista[i].dev_id %>
+                                </td>
+
+                                <td>
+                                    #<%= lista[i].ped_id %>
+                                </td>
+
+                                <td>
+                                    <%= lista[i].cli_nome %>
+                                </td>
+
+                                <td>
+                                    <%= lista[i].pro_nome %>
+                                </td>
+
+                                <td>
+                                    <%= lista[i].dev_quantidade %>
+                                </td>
+
+                                <td>
+                                    <%= lista[i].dev_motivo %>
+                                </td>
+
+                                <td>
+                                    <%= new Date(lista[i].dev_data).toLocaleString("pt-BR") %>
+                                </td>
+
+                                <td>
+                                    <%= lista[i].dev_observacao || "---" %>
+                                </td>
+
+                            </tr>
+
+                        <% } %>
+
+                    <% } else { %>
 
                         <tr>
-
-                            <td>
-                                <%= lista[i].dev_id %>
+                            <td colspan="8" class="text-center">
+                                Nenhuma devolução registrada.
                             </td>
-
-                            <td>
-                                <%= lista[i].cli_nome %>
-                            </td>
-
-                            <td>
-                                <%= lista[i].pro_nome %>
-                            </td>
-
-                            <td>
-                                <%= lista[i].dev_quantidade %>
-                            </td>
-
-                            <td>
-                                <%= lista[i].dev_motivo %>
-                            </td>
-
-                            <td>
-                                <%= new Date(lista[i].dev_data).toLocaleString("pt-BR") %>
-                            </td>
-
-                            <td>
-                                <%= lista[i].dev_observacao || "---" %>
-                            </td>
-
                         </tr>
 
                     <% } %>

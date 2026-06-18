@@ -6,6 +6,28 @@
     <div class="card">
         <div class="card-body">
 
+            <form method="GET" action="/devolucao/cadastrar" class="mb-4">
+                <label>Buscar Pedido</label>
+
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input
+                        type="text"
+                        name="busca"
+                        class="form-control"
+                        placeholder="Digite ID do pedido, nome ou CPF"
+                        value="<%= busca || '' %>">
+
+                    <button type="submit" class="btn btn-primary" style="width:140px;">
+                        <i class="fas fa-search"></i>
+                        Buscar
+                    </button>
+
+                    <a href="/devolucao/cadastrar" class="btn btn-secondary" style="width:110px;">
+                        Limpar
+                    </a>
+                </div>
+            </form>
+
             <div class="form-group mb-3">
                 <label>Pedido</label>
 
@@ -13,35 +35,19 @@
                     <option value="">Selecione</option>
 
                     <% for(let i = 0; i < pedidos.length; i++) { %>
-
                         <option value="<%= pedidos[i].ped_id %>">
                             Pedido #<%= pedidos[i].ped_id %> -
                             <%= pedidos[i].cli_nome %> -
-                            R$ <%= Number(pedidos[i].ped_valortotal).toFixed(2).replace(".", ",") %>
+                            R$ <%= Number(pedidos[i].ped_valortotal || 0).toFixed(2).replace(".", ",") %>
                         </option>
-
                     <% } %>
-
                 </select>
-            </div>
 
-            <div class="form-group mb-3">
-                <label>Produto do Pedido</label>
-
-                <select id="produto" class="form-control">
-                    <option value="">Selecione primeiro um pedido</option>
-                </select>
-            </div>
-
-            <div class="form-group mb-3">
-                <label>Quantidade</label>
-
-                <input
-                    type="number"
-                    id="quantidade"
-                    class="form-control"
-                    min="1"
-                >
+                <% if(pedidos.length == 0) { %>
+                    <small class="text-danger">
+                        Nenhum pedido encontrado.
+                    </small>
+                <% } %>
             </div>
 
             <div class="form-group mb-3">
@@ -49,62 +55,34 @@
 
                 <select id="motivo" class="form-control">
                     <option value="">Selecione</option>
-
-                    <option value="Produto com defeito">
-                        Produto com defeito
-                    </option>
-
-                    <option value="Produto danificado">
-                        Produto danificado
-                    </option>
-
-                    <option value="Produto incorreto">
-                        Produto incorreto
-                    </option>
-
-                    <option value="Arrependimento da compra">
-                        Arrependimento da compra
-                    </option>
-
-                    <option value="Outro">
-                        Outro
-                    </option>
+                    <option value="Produto com defeito">Produto com defeito</option>
+                    <option value="Produto danificado">Produto danificado</option>
+                    <option value="Produto errado">Produto errado</option>
+                    <option value="Arrependimento">Arrependimento</option>
+                    <option value="Outro">Outro</option>
                 </select>
             </div>
 
             <div class="form-group mb-3">
                 <label>Observação</label>
-
-                <textarea
-                    id="observacao"
-                    class="form-control"
-                    rows="4"
-                ></textarea>
+                <textarea id="observacao" class="form-control" rows="4"></textarea>
             </div>
 
-            <div class="form-group mb-3">
+            <div class="form-group mb-4">
                 <label>Data da Devolução</label>
 
                 <input
                     type="text"
                     class="form-control"
                     value="<%= new Date().toLocaleString('pt-BR') %>"
-                    readonly
-                >
+                    readonly>
             </div>
 
-            <button
-                type="button"
-                id="btnGravar"
-                class="btn btn-primary"
-            >
+            <button id="btnGravar" type="button" class="btn btn-primary">
                 Gravar
             </button>
 
-            <a
-                href="/devolucao"
-                class="btn btn-secondary"
-            >
+            <a href="/devolucao" class="btn btn-secondary">
                 Voltar
             </a>
 
