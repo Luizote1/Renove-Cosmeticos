@@ -31,6 +31,7 @@ const recebimentoRoute = require("./routes/recebimentoRoute");
 const descarteRoute = require("./routes/descarteRoute");
 const promocaoRoute = require("./routes/promocaoRoute");
 const pedidoRoute = require("./routes/pedidoRoute");
+const devolucaoRoute = require("./routes/devolucaoRoute");
 
 
 // ==============================
@@ -109,6 +110,7 @@ server.use("/recebimento", recebimentoRoute);
 server.use("/descarte", descarteRoute);
 server.use("/promocao", promocaoRoute);
 server.use("/pedido", pedidoRoute);
+server.use("/devolucao", devolucaoRoute);
 
 
 // ==============================

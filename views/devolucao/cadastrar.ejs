@@ -1,0 +1,113 @@
+<script src="/js/devolucao/cadastrar.js"></script>
+
+<div>
+    <h1>Nova Devolução</h1>
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="form-group mb-3">
+                <label>Pedido</label>
+
+                <select id="pedido" class="form-control">
+                    <option value="">Selecione</option>
+
+                    <% for(let i = 0; i < pedidos.length; i++) { %>
+
+                        <option value="<%= pedidos[i].ped_id %>">
+                            Pedido #<%= pedidos[i].ped_id %> -
+                            <%= pedidos[i].cli_nome %> -
+                            R$ <%= Number(pedidos[i].ped_valortotal).toFixed(2).replace(".", ",") %>
+                        </option>
+
+                    <% } %>
+
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Produto do Pedido</label>
+
+                <select id="produto" class="form-control">
+                    <option value="">Selecione primeiro um pedido</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Quantidade</label>
+
+                <input
+                    type="number"
+                    id="quantidade"
+                    class="form-control"
+                    min="1"
+                >
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Motivo</label>
+
+                <select id="motivo" class="form-control">
+                    <option value="">Selecione</option>
+
+                    <option value="Produto com defeito">
+                        Produto com defeito
+                    </option>
+
+                    <option value="Produto danificado">
+                        Produto danificado
+                    </option>
+
+                    <option value="Produto incorreto">
+                        Produto incorreto
+                    </option>
+
+                    <option value="Arrependimento da compra">
+                        Arrependimento da compra
+                    </option>
+
+                    <option value="Outro">
+                        Outro
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Observação</label>
+
+                <textarea
+                    id="observacao"
+                    class="form-control"
+                    rows="4"
+                ></textarea>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Data da Devolução</label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    value="<%= new Date().toLocaleString('pt-BR') %>"
+                    readonly
+                >
+            </div>
+
+            <button
+                type="button"
+                id="btnGravar"
+                class="btn btn-primary"
+            >
+                Gravar
+            </button>
+
+            <a
+                href="/devolucao"
+                class="btn btn-secondary"
+            >
+                Voltar
+            </a>
+
+        </div>
+    </div>
+</div>
